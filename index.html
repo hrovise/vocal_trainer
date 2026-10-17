@@ -304,8 +304,48 @@
     const history = [];
     const maxHistory = 120;
 
-    // Instant Mobile Audio Synth (Bulletproof iOS / Android)
-    function playTone(freq, label) {
+    let activeOsc = null;
+    let activeGain = null;
+    let currentActiveBtn = null;
+
+    function stopContinuousTone() {
+      if (activeOsc) {
+        try {
+          const now = synthCtx.currentTime;
+          activeGain.gain.setValueAtTime(activeGain.gain.value, now);
+          activeGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
+          setTimeout(() => {
+            try { activeOsc.stop(); } catch(e){}
+            activeOsc = null;
+            activeGain = null;
+          }, 120);
+        } catch (e) {
+          activeOsc = null;
+          activeGain = null;
+        }
+      }
+      if (currentActiveBtn) {
+        currentActiveBtn.classList.remove('playing');
+        currentActiveBtn = null;
+      }
+      playingNote.textContent = '';
+    }
+
+    function toggleContinuousTone(btn) {
+      const freq = parseFloat(btn.dataset.freq);
+      const label = btn.dataset.label;
+
+      // If clicked on already active button -> stop it
+      if (currentActiveBtn === btn) {
+        stopContinuousTone();
+        badge.textContent = `⏹️ Звук выключен`;
+        badge.className = 'badge';
+        return;
+      }
+
+      // Stop previous playing tone if any
+      stopContinuousTone();
+
       try {
         if (!synthCtx) {
           synthCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -315,26 +355,25 @@
         }
 
         const now = synthCtx.currentTime;
-        const osc = synthCtx.createOscillator();
-        const gain = synthCtx.createGain();
+        activeOsc = synthCtx.createOscillator();
+        activeGain = synthCtx.createGain();
 
-        osc.type = 'triangle'; // warm, clearly audible on mobile phone speakers!
-        osc.frequency.setValueAtTime(freq, now);
+        activeOsc.type = 'triangle'; // warm, comfortable continuous tone
+        activeOsc.frequency.setValueAtTime(freq, now);
 
-        gain.gain.setValueAtTime(0.001, now);
-        gain.gain.linearRampToValueAtTime(0.65, now + 0.04);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+        activeGain.gain.setValueAtTime(0.001, now);
+        activeGain.gain.linearRampToValueAtTime(0.5, now + 0.05);
 
-        osc.connect(gain);
-        gain.connect(synthCtx.destination);
+        activeOsc.connect(activeGain);
+        activeGain.connect(synthCtx.destination);
 
-        osc.start(now);
-        osc.stop(now + 1.2);
+        activeOsc.start(now);
 
-        badge.textContent = `🔊 Эталон: ${label}`;
-        badge.className = 'badge';
-        playingNote.textContent = `▶ ${label}`;
-        setTimeout(() => { if (playingNote.textContent.includes(label)) playingNote.textContent = ''; }, 1300);
+        currentActiveBtn = btn;
+        btn.classList.add('playing');
+        badge.textContent = `🔊 Звучит: ${label} (нажми ещё раз, чтобы выключить)`;
+        badge.className = 'badge perfect';
+        playingNote.textContent = `🔊 ${label}`;
       } catch (e) {
         console.error(e);
       }
@@ -344,11 +383,7 @@
     document.querySelectorAll('.p-key').forEach(btn => {
       const trigger = (e) => {
         e.preventDefault();
-        const freq = parseFloat(btn.dataset.freq);
-        const label = btn.dataset.label;
-        btn.classList.add('playing');
-        setTimeout(() => btn.classList.remove('playing'), 250);
-        playTone(freq, label);
+        toggleContinuousTone(btn);
       };
 
       btn.addEventListener('touchstart', trigger, { passive: false });
