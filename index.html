@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0f111a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Вокальный Тренажёр</title>
+  <title>Вокал & Дикция — Тренажёр</title>
   <style>
     * { 
       box-sizing: border-box; 
@@ -24,72 +24,112 @@
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      padding: 12px;
+      padding: 10px 12px 24px;
       overflow-x: hidden;
     }
-    
-    .top-bar {
+
+    /* Tabs Navigation Bar */
+    .nav-tabs {
       width: 100%;
       max-width: 600px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 12px;
+      gap: 4px;
     }
-    .app-title { font-size: 18px; font-weight: 800; color: #58a6ff; }
-    
-    /* Big Start Button */
-    .btn-main {
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #8b949e;
+      padding: 10px 6px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease-in-out;
+      touch-action: manipulation;
+    }
+    .tab-btn.active {
+      background: #21262d;
+      color: #58a6ff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    /* Tab Contents */
+    .tab-content {
       width: 100%;
       max-width: 600px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+    .tab-content.active {
+      display: flex;
+    }
+
+    /* === TAB 1: PITCH TRAINER STYLES === */
+    .top-bar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .app-title { font-size: 16px; font-weight: 800; color: #58a6ff; }
+    
+    .btn-main {
+      width: 100%;
       background: #238636;
       color: white;
       border: none;
-      padding: 16px;
-      font-size: 18px;
+      padding: 14px;
+      font-size: 16px;
       font-weight: bold;
       border-radius: 12px;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       box-shadow: 0 4px 14px rgba(35, 134, 54, 0.4);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       transition: transform 0.1s, background-color 0.2s;
       touch-action: manipulation;
     }
     .btn-main:active { transform: scale(0.97); }
     .btn-main.stop { background: #da3633; box-shadow: 0 4px 14px rgba(218, 54, 51, 0.4); }
 
-    /* Results Header */
     .info-card {
       width: 100%;
-      max-width: 600px;
       background: #161b22;
       border: 1px solid #30363d;
-      border-radius: 14px;
-      padding: 10px 16px;
-      margin-bottom: 10px;
+      border-radius: 12px;
+      padding: 8px 14px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .note-info {
-      display: flex;
-      flex-direction: column;
-    }
+    .note-info { display: flex; flex-direction: column; }
     .note-val {
-      font-size: 38px;
+      font-size: 34px;
       font-weight: 900;
       color: #2ea043;
       line-height: 1;
       letter-spacing: 0.5px;
     }
     .freq-val {
-      font-size: 13px;
+      font-size: 12px;
       color: #8b949e;
-      margin-top: 4px;
+      margin-top: 3px;
       font-weight: 600;
     }
     
@@ -97,13 +137,13 @@
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      gap: 6px;
+      gap: 4px;
     }
     .badge {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: bold;
-      padding: 6px 12px;
-      border-radius: 16px;
+      padding: 5px 10px;
+      border-radius: 14px;
       background: #21262d;
       color: #8b949e;
       text-align: right;
@@ -113,16 +153,11 @@
     .badge.too-high { background: #d29922; color: #fff; }
     .badge.too-low { background: #1f6feb; color: #fff; }
 
-    /* VU Meter */
-    .vu-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .vu-wrapper { display: flex; align-items: center; gap: 6px; }
     .vu-label { font-size: 11px; color: #8b949e; }
     .vu-bg {
-      width: 70px;
-      height: 8px;
+      width: 60px;
+      height: 7px;
       background: #21262d;
       border-radius: 4px;
       overflow: hidden;
@@ -134,21 +169,19 @@
       transition: width 0.05s ease-out;
     }
 
-    /* Piano Reference Buttons: 2 rows of touch-friendly keys */
     .piano-section {
       width: 100%;
-      max-width: 600px;
       background: #161b22;
       border: 1px solid #30363d;
       border-radius: 12px;
-      padding: 10px;
-      margin-bottom: 10px;
+      padding: 8px;
+      margin-bottom: 8px;
     }
     .piano-title {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: bold;
       color: #8b949e;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       display: flex;
       justify-content: space-between;
     }
@@ -161,7 +194,7 @@
       background: #21262d;
       border: 1px solid #30363d;
       color: #e6edf3;
-      padding: 12px 6px;
+      padding: 10px 4px;
       border-radius: 8px;
       font-size: 13px;
       font-weight: 800;
@@ -179,100 +212,318 @@
     }
     .p-key small {
       display: block;
-      font-size: 10px;
+      font-size: 9px;
       font-weight: normal;
       color: #8b949e;
-      margin-top: 2px;
+      margin-top: 1px;
     }
     .p-key:active small, .p-key.playing small { color: #d0e2ff; }
 
-    /* Canvas Graph */
     .canvas-container {
       width: 100%;
-      max-width: 600px;
-      height: 380px;
+      height: 340px;
       background: #090d13;
       border: 1px solid #30363d;
-      border-radius: 14px;
+      border-radius: 12px;
       position: relative;
       overflow: hidden;
       box-shadow: 0 6px 18px rgba(0,0,0,0.4);
     }
-    canvas {
+    canvas { width: 100%; height: 100%; display: block; }
+
+    /* === TAB 2: DICTION & WORKOUT STYLES === */
+    .diction-wrap {
       width: 100%;
-      height: 100%;
-      display: block;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+    .ex-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .ex-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ex-title {
+      font-size: 15px;
+      font-weight: bold;
+      color: #58a6ff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ex-time {
+      font-size: 11px;
+      font-weight: bold;
+      color: #2ea043;
+      background: #12281a;
+      border: 1px solid #238636;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+    .ex-desc {
+      font-size: 13px;
+      color: #c9d1d9;
+      line-height: 1.45;
+    }
+    
+    /* Interactive Tongue Twisters / Syllables */
+    .syllables-box {
+      background: #0d1117;
+      border: 1px dashed #388bfd;
+      border-radius: 8px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 14px;
+      font-weight: bold;
+      color: #79c0ff;
+      text-align: center;
+      letter-spacing: 1px;
+      line-height: 1.6;
+    }
+    .speech-text {
+      background: #0d1117;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-style: italic;
+      color: #e6edf3;
+      border-left: 3px solid #2ea043;
+      line-height: 1.4;
     }
 
-    .tip-box {
-      width: 100%;
-      max-width: 600px;
-      margin-top: 10px;
+    /* Built-in Training Timer */
+    .timer-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #21262d;
       padding: 8px 12px;
+      border-radius: 8px;
+      margin-top: 4px;
+    }
+    .timer-display {
+      font-size: 18px;
+      font-weight: 900;
+      font-family: monospace;
+      color: #f0883e;
+    }
+    .timer-btn {
+      background: #30363d;
+      color: #fff;
+      border: 1px solid #484f58;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .timer-btn:active { background: #58a6ff; }
+
+    /* Metronome / Pace clicker */
+    .metronome-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       background: #161b22;
       border: 1px solid #30363d;
       border-radius: 10px;
-      font-size: 11px;
-      color: #8b949e;
-      line-height: 1.4;
-      text-align: center;
+      padding: 10px 14px;
     }
-    .tip-box b { color: #58a6ff; }
+    .metro-btn {
+      background: #1f6feb;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .metro-btn.active { background: #da3633; }
   </style>
 </head>
 <body>
 
-  <div class="top-bar">
-    <div class="app-title">🎙️ Вокальный Тренажёр</div>
-    <div class="vu-wrapper">
-      <span class="vu-label">Микр:</span>
-      <div class="vu-bg"><div class="vu-fill" id="vuFill"></div></div>
+  <!-- Navigation Tabs -->
+  <div class="nav-tabs">
+    <button class="tab-btn active" id="tabBtn1" onclick="switchTab(1)">
+      <span>🎙️ Тюнер & Эталоны</span>
+    </button>
+    <button class="tab-btn" id="tabBtn2" onclick="switchTab(2)">
+      <span>🗣️ Дикция & Разминка</span>
+    </button>
+  </div>
+
+  <!-- TAB 1: PITCH TRAINER -->
+  <div class="tab-content active" id="tabContent1">
+    <div class="top-bar">
+      <div class="app-title">Вокальный Тренажёр</div>
+      <div class="vu-wrapper">
+        <span class="vu-label">Микр:</span>
+        <div class="vu-bg"><div class="vu-fill" id="vuFill"></div></div>
+      </div>
+    </div>
+
+    <button class="btn-main" id="toggleBtn">
+      <span>Включить микрофон</span>
+    </button>
+
+    <div class="info-card">
+      <div class="note-info">
+        <div class="note-val" id="noteVal">—</div>
+        <div class="freq-val" id="freqVal">Пой любую гласную</div>
+      </div>
+      <div class="status-col">
+        <div class="badge" id="badge">Жду голос...</div>
+      </div>
+    </div>
+
+    <!-- Piano Grid -->
+    <div class="piano-section">
+      <div class="piano-title">
+        <span>🎹 ЭТАЛОН НОТ (нажми для звука):</span>
+        <span id="playingNote" style="color: #58a6ff;"></span>
+      </div>
+      <div class="piano-grid">
+        <button class="p-key" data-freq="130.81" data-label="ДО 3">ДО<small>131 Hz</small></button>
+        <button class="p-key" data-freq="146.83" data-label="РЕ 3">РЕ<small>147 Hz</small></button>
+        <button class="p-key" data-freq="164.81" data-label="МИ 3">МИ<small>165 Hz</small></button>
+        <button class="p-key" data-freq="174.61" data-label="ФА 3">ФА<small>175 Hz</small></button>
+        <button class="p-key" data-freq="196.00" data-label="СОЛЬ 3">СОЛЬ<small>196 Hz</small></button>
+        <button class="p-key" data-freq="220.00" data-label="ЛЯ 3">ЛЯ<small>220 Hz</small></button>
+        <button class="p-key" data-freq="246.94" data-label="СИ 3">СИ<small>247 Hz</small></button>
+        <button class="p-key" data-freq="261.63" data-label="ДО 4">ДО 4<small>262 Hz</small></button>
+      </div>
+    </div>
+
+    <div class="canvas-container">
+      <canvas id="graph"></canvas>
     </div>
   </div>
 
-  <button class="btn-main" id="toggleBtn">
-    <span>Включить микрофон</span>
-  </button>
+  <!-- TAB 2: DICTION EXERCISES -->
+  <div class="tab-content" id="tabContent2">
+    <div class="diction-wrap">
+      
+      <!-- 1. Cork / Pencil -->
+      <div class="ex-card">
+        <div class="ex-header">
+          <div class="ex-title">🍾 1. Метод винной пробки / карандаша</div>
+          <div class="ex-time">2 мин</div>
+        </div>
+        <div class="ex-desc">
+          Зажми винную пробку (или карандаш) передними зубами на 1–1.5 см. Читай текст вслух, преодолевая сопротивление, максимально четко работая губами и языком.
+        </div>
+        <div class="speech-text">
+          «Круговая порука мажет как копоть,<br>
+          Я беру чью-то руку, а чувствую локоть.<br>
+          Я ищу сколько глаз, а чувствую взгляд,<br>
+          Где выше один — там все промолчат...»
+        </div>
+        <div class="timer-bar">
+          <span>Таймер читки:</span>
+          <span class="timer-display" id="corkTimerDisplay">02:00</span>
+          <button class="timer-btn" id="corkTimerBtn" onclick="toggleTimer()">Старт 2 мин</button>
+        </div>
+      </div>
 
-  <div class="info-card">
-    <div class="note-info">
-      <div class="note-val" id="noteVal">—</div>
-      <div class="freq-val" id="freqVal">Пой любую гласную</div>
-    </div>
-    <div class="status-col">
-      <div class="badge" id="badge">Жду голос...</div>
-    </div>
-  </div>
+      <!-- 2. Explosive Consonants -->
+      <div class="ex-card">
+        <div class="ex-header">
+          <div class="ex-title">💥 2. Взрывные дикторские слоги</div>
+          <div class="ex-time">1 мин</div>
+        </div>
+        <div class="ex-desc">
+          Стреляй звуком! Произноси слоги энергично, акцентируя каждый согласный ударными губами:
+        </div>
+        <div class="syllables-box">
+          ПТКУ — ПТКО — ПТКА — ПТКЭ — ПТКИ — ПТКЫ<br>
+          БДГУ — БДГО — БДГА — БДГЭ — БДГИ — БДГЫ
+        </div>
+      </div>
 
-  <!-- Touch-friendly Piano Grid (Large targets for thumb) -->
-  <div class="piano-section">
-    <div class="piano-title">
-      <span>🔊 ЭТАЛОН НОТ (нажми пальцем):</span>
-      <span id="playingNote" style="color: #58a6ff;"></span>
-    </div>
-    <div class="piano-grid">
-      <button class="p-key" data-freq="130.81" data-label="ДО 3">ДО<small>131 Hz</small></button>
-      <button class="p-key" data-freq="146.83" data-label="РЕ 3">РЕ<small>147 Hz</small></button>
-      <button class="p-key" data-freq="164.81" data-label="МИ 3">МИ<small>165 Hz</small></button>
-      <button class="p-key" data-freq="174.61" data-label="ФА 3">ФА<small>175 Hz</small></button>
-      <button class="p-key" data-freq="196.00" data-label="СОЛЬ 3">СОЛЬ<small>196 Hz</small></button>
-      <button class="p-key" data-freq="220.00" data-label="ЛЯ 3">ЛЯ<small>220 Hz</small></button>
-      <button class="p-key" data-freq="246.94" data-label="СИ 3">СИ<small>247 Hz</small></button>
-      <button class="p-key" data-freq="261.63" data-label="ДО 4">ДО 4<small>262 Hz</small></button>
-    </div>
-  </div>
+      <!-- 3. Tongue & Jaw Warmup -->
+      <div class="ex-card">
+        <div class="ex-header">
+          <div class="ex-title">🗡️ 3. Разминка челюсти и «Укол шпаги»</div>
+          <div class="ex-time">1.5 мин</div>
+        </div>
+        <div class="ex-desc">
+          <b>• Укол шпаги:</b> Кончиком языка с силой упрись изнутри в правую щеку (держи 3 сек), затем в левую. По 10 повторов.<br>
+          <b>• Снятие зажима челюсти:</b> Широко зевни с закрытым ртом (ощущение «горячей картошки»), затем плавно опусти нижнюю челюсть вниз до упора.
+        </div>
+      </div>
 
-  <div class="canvas-container">
-    <canvas id="graph"></canvas>
-  </div>
+      <!-- 4. Vocal Warming -->
+      <div class="ex-card">
+        <div class="ex-header">
+          <div class="ex-title">🐝 4. Хамминг и трель губами («Бр-р-р»)</div>
+          <div class="ex-time">2 мин</div>
+        </div>
+        <div class="ex-desc">
+          <b>• Хамминг («М-м-м»):</b> Закрой рот, мягко помычи мелодию, фокусируя вибрацию на губах и переносице. Снимает зажим горла.<br>
+          <b>• Трель губами:</b> Выдувай воздух через расслабленные губы со звуком моторчика («бр-р-р-р»), поднимая и опуская тон.
+        </div>
+      </div>
 
-  <div class="tip-box">
-    💡 <b>Подсказка:</b> Тапни по ноте выше (например, РЕ или МИ) — послушай эталон и повтори голосом!
+    </div>
   </div>
 
   <script>
+    // Tab Switching
+    function switchTab(tabIndex) {
+      document.getElementById('tabBtn1').classList.toggle('active', tabIndex === 1);
+      document.getElementById('tabBtn2').classList.toggle('active', tabIndex === 2);
+      document.getElementById('tabContent1').classList.toggle('active', tabIndex === 1);
+      document.getElementById('tabContent2').classList.toggle('active', tabIndex === 2);
+      if (tabIndex === 1) {
+        resizeCanvas();
+      }
+    }
+
+    // Timer Logic for Cork Exercise
+    let timerInterval = null;
+    let timeLeft = 120;
+    function toggleTimer() {
+      const btn = document.getElementById('corkTimerBtn');
+      const disp = document.getElementById('corkTimerDisplay');
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        btn.textContent = 'Старт 2 мин';
+        timeLeft = 120;
+        disp.textContent = '02:00';
+      } else {
+        timeLeft = 120;
+        btn.textContent = 'Стоп';
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+          const s = String(timeLeft % 60).padStart(2, '0');
+          disp.textContent = `${m}:${s}`;
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            btn.textContent = 'Готово! 🎉';
+            disp.textContent = '00:00';
+          }
+        }, 1000);
+      }
+    }
+
+    // PITCH TRACKER LOGIC
     const NOTE_NAMES = ["ДО (C)", "ДО#", "РЕ (D)", "РЕ#", "МИ (E)", "ФА (F)", "ФА#", "СОЛЬ (G)", "СОЛЬ#", "ЛЯ (A)", "ЛЯ#", "СИ (B)"];
-    
     const MIN_MIDI = 36; // C2 (65.4 Hz)
     const MAX_MIDI = 60; // C4 (261.6 Hz)
 
@@ -326,7 +577,6 @@
       playingNote.textContent = '';
     }
 
-    // Warm, Rich Acoustic Harmonic Tone that SUSTAINS INFINITELY until toggled off
     function startSustainedPianoTone(freq) {
       if (!synthCtx) {
         synthCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -336,17 +586,14 @@
       }
 
       const now = synthCtx.currentTime;
-
-      // 5 acoustic harmonic overtones creating a warm grand piano / electric piano timbre
       const harmonics = [
-        { mult: 1.0,  gain: 0.50 },  // Root fundamental
-        { mult: 2.0,  gain: 0.22 },  // Octave warm body
-        { mult: 3.0,  gain: 0.10 },  // Fifth overtone
-        { mult: 4.0,  gain: 0.04 },  // High octave
-        { mult: 5.0,  gain: 0.02 }   // Warm acoustic shimmer
+        { mult: 1.0,  gain: 0.50 },
+        { mult: 2.0,  gain: 0.22 },
+        { mult: 3.0,  gain: 0.10 },
+        { mult: 4.0,  gain: 0.04 },
+        { mult: 5.0,  gain: 0.02 }
       ];
 
-      // Warm acoustic low-pass filter (removes any 8-bit digital harshness)
       const filter = synthCtx.createBiquadFilter();
       filter.type = 'lowpass';
       filter.frequency.setValueAtTime(Math.min(2200, freq * 5), now);
@@ -356,12 +603,10 @@
         const osc = synthCtx.createOscillator();
         const gain = synthCtx.createGain();
 
-        osc.type = 'sine'; // pure acoustic harmonics
-        // Gentle detune for acoustic depth
+        osc.type = 'sine';
         const detune = (Math.random() - 0.5) * 2.0;
         osc.frequency.setValueAtTime(freq * h.mult + detune, now);
 
-        // Soft attack, then STABLE continuous sustain (does NOT die out!)
         gain.gain.setValueAtTime(0.001, now);
         gain.gain.linearRampToValueAtTime(h.gain, now + 0.08);
 
@@ -392,22 +637,18 @@
       badge.className = 'badge perfect';
       playingNote.textContent = `🎹 ${label}`;
 
-      // Start infinite continuous acoustic tone
       startSustainedPianoTone(freq);
     }
 
-    // Attach ultra-fast touch and pointer events to piano keys
     document.querySelectorAll('.p-key').forEach(btn => {
       const trigger = (e) => {
         e.preventDefault();
         toggleContinuousTone(btn);
       };
-
       btn.addEventListener('touchstart', trigger, { passive: false });
       btn.addEventListener('mousedown', trigger);
     });
 
-    // Start / Stop Microphone
     toggleBtn.addEventListener('click', async () => {
       if (isRunning) {
         stopAudio();
@@ -531,7 +772,6 @@
 
       ctx.clearRect(0, 0, w, h);
 
-      // Grid lines
       ctx.lineWidth = 1;
       for (let m = MIN_MIDI; m <= MAX_MIDI; m++) {
         const y = h - ((m - MIN_MIDI) / (MAX_MIDI - MIN_MIDI)) * (h - 40) - 20;
@@ -551,7 +791,6 @@
         ctx.fillText(`${NOTE_NAMES[noteIndex]} ${octave}`, 64, y + 4);
       }
 
-      // Voice history curve
       ctx.lineWidth = 3.5;
       ctx.lineJoin = "round";
       ctx.lineCap = "round";
@@ -579,7 +818,6 @@
       ctx.stroke();
       ctx.shadowBlur = 0;
 
-      // Current note text update
       if (currentMidi !== null && pitch > 55) {
         const roundedMidi = Math.round(currentMidi);
         const cents = (currentMidi - roundedMidi) * 100;
