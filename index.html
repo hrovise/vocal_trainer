@@ -305,21 +305,16 @@
     const maxHistory = 120;
 
     let activeNodes = [];
-    let pianoTimer = null;
     let currentActiveBtn = null;
 
     function stopContinuousTone() {
-      if (pianoTimer) {
-        clearInterval(pianoTimer);
-        pianoTimer = null;
-      }
       if (activeNodes.length > 0) {
         const now = synthCtx ? synthCtx.currentTime : 0;
         activeNodes.forEach(({ osc, gain }) => {
           try {
             gain.gain.setValueAtTime(gain.gain.value, now);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
-            setTimeout(() => { try { osc.stop(); } catch(e){} }, 120);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+            setTimeout(() => { try { osc.stop(); } catch(e){} }, 180);
           } catch(e){}
         });
         activeNodes = [];
@@ -331,8 +326,8 @@
       playingNote.textContent = '';
     }
 
-    // Acoustic Piano Strike synthesis (Harmonic overtones + strike decay)
-    function playPianoKeyStrike(freq) {
+    // Warm, Rich Acoustic Harmonic Tone that SUSTAINS INFINITELY until toggled off
+    function startSustainedPianoTone(freq) {
       if (!synthCtx) {
         synthCtx = new (window.AudioContext || window.webkitAudioContext)();
       }
@@ -342,54 +337,40 @@
 
       const now = synthCtx.currentTime;
 
-      // Real piano harmonic profile (fundamental + overtones with acoustic ratios)
+      // 5 acoustic harmonic overtones creating a warm grand piano / electric piano timbre
       const harmonics = [
-        { mult: 1.0,  gain: 0.65, decay: 3.2 },  // Fundamental note
-        { mult: 2.0,  gain: 0.35, decay: 2.4 },  // 1st overtone (octave)
-        { mult: 3.0,  gain: 0.18, decay: 1.7 },  // 2nd overtone (fifth)
-        { mult: 4.0,  gain: 0.09, decay: 1.2 },  // 3rd overtone
-        { mult: 5.0,  gain: 0.04, decay: 0.8 },  // 4th overtone
-        { mult: 6.0,  gain: 0.02, decay: 0.5 }   // Metallic hammer brightness
+        { mult: 1.0,  gain: 0.50 },  // Root fundamental
+        { mult: 2.0,  gain: 0.22 },  // Octave warm body
+        { mult: 3.0,  gain: 0.10 },  // Fifth overtone
+        { mult: 4.0,  gain: 0.04 },  // High octave
+        { mult: 5.0,  gain: 0.02 }   // Warm acoustic shimmer
       ];
 
-      // Felt hammer impact low-pass filter
+      // Warm acoustic low-pass filter (removes any 8-bit digital harshness)
       const filter = synthCtx.createBiquadFilter();
       filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(Math.min(4000, freq * 7), now);
-      filter.frequency.exponentialRampToValueAtTime(Math.max(200, freq * 1.5), now + 1.5);
+      filter.frequency.setValueAtTime(Math.min(2200, freq * 5), now);
       filter.connect(synthCtx.destination);
 
       harmonics.forEach(h => {
         const osc = synthCtx.createOscillator();
         const gain = synthCtx.createGain();
 
-        // Sine wave harmonics combine into a realistic piano string timbre
-        osc.type = 'sine';
-        // Slight natural detune (chorus effect of 2-3 piano strings inside grand piano)
-        const detune = (Math.random() - 0.5) * 3.5;
+        osc.type = 'sine'; // pure acoustic harmonics
+        // Gentle detune for acoustic depth
+        const detune = (Math.random() - 0.5) * 2.0;
         osc.frequency.setValueAtTime(freq * h.mult + detune, now);
 
-        // Piano envelope: sharp percussive attack (3ms), then realistic acoustic decay
-        gain.gain.setValueAtTime(0.0001, now);
-        gain.gain.linearRampToValueAtTime(h.gain, now + 0.008);
-        gain.gain.exponentialRampToValueAtTime(h.gain * 0.4, now + 0.3);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + h.decay);
+        // Soft attack, then STABLE continuous sustain (does NOT die out!)
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(h.gain, now + 0.08);
 
         osc.connect(gain);
         gain.connect(filter);
 
         osc.start(now);
-        osc.stop(now + h.decay + 0.1);
-
         activeNodes.push({ osc, gain });
       });
-
-      // Prune dead nodes
-      setTimeout(() => {
-        activeNodes = activeNodes.filter(n => {
-          try { return n.osc.playbackState !== undefined; } catch(e){ return false; }
-        });
-      }, 3500);
     }
 
     function toggleContinuousTone(btn) {
@@ -407,21 +388,12 @@
 
       currentActiveBtn = btn;
       btn.classList.add('playing');
-      badge.textContent = `🎹 Пианино: ${label} (нажми ещё раз для стопа)`;
+      badge.textContent = `🎹 Играет: ${label} (нажми для стопа)`;
       badge.className = 'badge perfect';
       playingNote.textContent = `🎹 ${label}`;
 
-      // Play first natural piano strike immediately
-      playPianoKeyStrike(freq);
-
-      // Repeat gentle natural key strike every 2.6 seconds so it sings continuously like a real grand piano
-      pianoTimer = setInterval(() => {
-        if (currentActiveBtn === btn) {
-          playPianoKeyStrike(freq);
-        } else {
-          clearInterval(pianoTimer);
-        }
-      }, 2600);
+      // Start infinite continuous acoustic tone
+      startSustainedPianoTone(freq);
     }
 
     // Attach ultra-fast touch and pointer events to piano keys
