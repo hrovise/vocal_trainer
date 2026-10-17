@@ -304,25 +304,25 @@
     const history = [];
     const maxHistory = 120;
 
-    let activeOsc = null;
-    let activeGain = null;
+    let activeNodes = [];
+    let pianoTimer = null;
     let currentActiveBtn = null;
 
     function stopContinuousTone() {
-      if (activeOsc) {
-        try {
-          const now = synthCtx.currentTime;
-          activeGain.gain.setValueAtTime(activeGain.gain.value, now);
-          activeGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
-          setTimeout(() => {
-            try { activeOsc.stop(); } catch(e){}
-            activeOsc = null;
-            activeGain = null;
-          }, 120);
-        } catch (e) {
-          activeOsc = null;
-          activeGain = null;
-        }
+      if (pianoTimer) {
+        clearInterval(pianoTimer);
+        pianoTimer = null;
+      }
+      if (activeNodes.length > 0) {
+        const now = synthCtx ? synthCtx.currentTime : 0;
+        activeNodes.forEach(({ osc, gain }) => {
+          try {
+            gain.gain.setValueAtTime(gain.gain.value, now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
+            setTimeout(() => { try { osc.stop(); } catch(e){} }, 120);
+          } catch(e){}
+        });
+        activeNodes = [];
       }
       if (currentActiveBtn) {
         currentActiveBtn.classList.remove('playing');
@@ -331,11 +331,71 @@
       playingNote.textContent = '';
     }
 
+    // Acoustic Piano Strike synthesis (Harmonic overtones + strike decay)
+    function playPianoKeyStrike(freq) {
+      if (!synthCtx) {
+        synthCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (synthCtx.state === 'suspended') {
+        synthCtx.resume();
+      }
+
+      const now = synthCtx.currentTime;
+
+      // Real piano harmonic profile (fundamental + overtones with acoustic ratios)
+      const harmonics = [
+        { mult: 1.0,  gain: 0.65, decay: 3.2 },  // Fundamental note
+        { mult: 2.0,  gain: 0.35, decay: 2.4 },  // 1st overtone (octave)
+        { mult: 3.0,  gain: 0.18, decay: 1.7 },  // 2nd overtone (fifth)
+        { mult: 4.0,  gain: 0.09, decay: 1.2 },  // 3rd overtone
+        { mult: 5.0,  gain: 0.04, decay: 0.8 },  // 4th overtone
+        { mult: 6.0,  gain: 0.02, decay: 0.5 }   // Metallic hammer brightness
+      ];
+
+      // Felt hammer impact low-pass filter
+      const filter = synthCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(Math.min(4000, freq * 7), now);
+      filter.frequency.exponentialRampToValueAtTime(Math.max(200, freq * 1.5), now + 1.5);
+      filter.connect(synthCtx.destination);
+
+      harmonics.forEach(h => {
+        const osc = synthCtx.createOscillator();
+        const gain = synthCtx.createGain();
+
+        // Sine wave harmonics combine into a realistic piano string timbre
+        osc.type = 'sine';
+        // Slight natural detune (chorus effect of 2-3 piano strings inside grand piano)
+        const detune = (Math.random() - 0.5) * 3.5;
+        osc.frequency.setValueAtTime(freq * h.mult + detune, now);
+
+        // Piano envelope: sharp percussive attack (3ms), then realistic acoustic decay
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.linearRampToValueAtTime(h.gain, now + 0.008);
+        gain.gain.exponentialRampToValueAtTime(h.gain * 0.4, now + 0.3);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + h.decay);
+
+        osc.connect(gain);
+        gain.connect(filter);
+
+        osc.start(now);
+        osc.stop(now + h.decay + 0.1);
+
+        activeNodes.push({ osc, gain });
+      });
+
+      // Prune dead nodes
+      setTimeout(() => {
+        activeNodes = activeNodes.filter(n => {
+          try { return n.osc.playbackState !== undefined; } catch(e){ return false; }
+        });
+      }, 3500);
+    }
+
     function toggleContinuousTone(btn) {
       const freq = parseFloat(btn.dataset.freq);
       const label = btn.dataset.label;
 
-      // If clicked on already active button -> stop it
       if (currentActiveBtn === btn) {
         stopContinuousTone();
         badge.textContent = `⏹️ Звук выключен`;
@@ -343,40 +403,25 @@
         return;
       }
 
-      // Stop previous playing tone if any
       stopContinuousTone();
 
-      try {
-        if (!synthCtx) {
-          synthCtx = new (window.AudioContext || window.webkitAudioContext)();
+      currentActiveBtn = btn;
+      btn.classList.add('playing');
+      badge.textContent = `🎹 Пианино: ${label} (нажми ещё раз для стопа)`;
+      badge.className = 'badge perfect';
+      playingNote.textContent = `🎹 ${label}`;
+
+      // Play first natural piano strike immediately
+      playPianoKeyStrike(freq);
+
+      // Repeat gentle natural key strike every 2.6 seconds so it sings continuously like a real grand piano
+      pianoTimer = setInterval(() => {
+        if (currentActiveBtn === btn) {
+          playPianoKeyStrike(freq);
+        } else {
+          clearInterval(pianoTimer);
         }
-        if (synthCtx.state === 'suspended') {
-          synthCtx.resume();
-        }
-
-        const now = synthCtx.currentTime;
-        activeOsc = synthCtx.createOscillator();
-        activeGain = synthCtx.createGain();
-
-        activeOsc.type = 'triangle'; // warm, comfortable continuous tone
-        activeOsc.frequency.setValueAtTime(freq, now);
-
-        activeGain.gain.setValueAtTime(0.001, now);
-        activeGain.gain.linearRampToValueAtTime(0.5, now + 0.05);
-
-        activeOsc.connect(activeGain);
-        activeGain.connect(synthCtx.destination);
-
-        activeOsc.start(now);
-
-        currentActiveBtn = btn;
-        btn.classList.add('playing');
-        badge.textContent = `🔊 Звучит: ${label} (нажми ещё раз, чтобы выключить)`;
-        badge.className = 'badge perfect';
-        playingNote.textContent = `🔊 ${label}`;
-      } catch (e) {
-        console.error(e);
-      }
+      }, 2600);
     }
 
     // Attach ultra-fast touch and pointer events to piano keys
