@@ -8,7 +8,14 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Вокальный Тренажёр</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      -webkit-tap-highlight-color: transparent; 
+      user-select: none;
+      -webkit-user-select: none;
+    }
     body {
       background: #0f111a;
       color: #e6edf3;
@@ -48,10 +55,11 @@
       align-items: center;
       gap: 10px;
       box-shadow: 0 4px 14px rgba(35, 134, 54, 0.4);
-      margin-bottom: 12px;
-      transition: all 0.2s;
+      margin-bottom: 10px;
+      transition: transform 0.1s, background-color 0.2s;
+      touch-action: manipulation;
     }
-    .btn-main:active { transform: scale(0.98); }
+    .btn-main:active { transform: scale(0.97); }
     .btn-main.stop { background: #da3633; box-shadow: 0 4px 14px rgba(218, 54, 51, 0.4); }
 
     /* Results Header */
@@ -61,7 +69,7 @@
       background: #161b22;
       border: 1px solid #30363d;
       border-radius: 14px;
-      padding: 12px 16px;
+      padding: 10px 16px;
       margin-bottom: 10px;
       display: flex;
       align-items: center;
@@ -126,30 +134,57 @@
       transition: width 0.05s ease-out;
     }
 
-    /* Piano Reference horizontal scroll */
-    .piano-scroll {
+    /* Piano Reference Buttons: 2 rows of touch-friendly keys */
+    .piano-section {
       width: 100%;
       max-width: 600px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 10px;
       margin-bottom: 10px;
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-      scrollbar-width: none;
     }
-    .piano-scroll::-webkit-scrollbar { display: none; }
+    .piano-title {
+      font-size: 12px;
+      font-weight: bold;
+      color: #8b949e;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .piano-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
     .p-key {
-      flex: 0 0 auto;
       background: #21262d;
       border: 1px solid #30363d;
-      color: #c9d1d9;
-      padding: 8px 12px;
+      color: #e6edf3;
+      padding: 12px 6px;
       border-radius: 8px;
       font-size: 13px;
-      font-weight: bold;
+      font-weight: 800;
+      text-align: center;
       cursor: pointer;
+      touch-action: manipulation;
+      transition: transform 0.08s, background-color 0.15s, border-color 0.15s;
     }
-    .p-key:active { background: #1f6feb; color: white; }
+    .p-key:active, .p-key.playing {
+      background: #1f6feb !important;
+      color: #ffffff !important;
+      border-color: #58a6ff !important;
+      transform: scale(0.94);
+      box-shadow: 0 0 10px rgba(31, 111, 235, 0.6);
+    }
+    .p-key small {
+      display: block;
+      font-size: 10px;
+      font-weight: normal;
+      color: #8b949e;
+      margin-top: 2px;
+    }
+    .p-key:active small, .p-key.playing small { color: #d0e2ff; }
 
     /* Canvas Graph */
     .canvas-container {
@@ -173,11 +208,11 @@
       width: 100%;
       max-width: 600px;
       margin-top: 10px;
-      padding: 10px 14px;
+      padding: 8px 12px;
       background: #161b22;
       border: 1px solid #30363d;
       border-radius: 10px;
-      font-size: 12px;
+      font-size: 11px;
       color: #8b949e;
       line-height: 1.4;
       text-align: center;
@@ -188,7 +223,7 @@
 <body>
 
   <div class="top-bar">
-    <div class="app-title">🎙️ Мобильный Тренажёр</div>
+    <div class="app-title">🎙️ Вокальный Тренажёр</div>
     <div class="vu-wrapper">
       <span class="vu-label">Микр:</span>
       <div class="vu-bg"><div class="vu-fill" id="vuFill"></div></div>
@@ -209,15 +244,22 @@
     </div>
   </div>
 
-  <!-- Piano Sound Reference -->
-  <div class="piano-scroll">
-    <button class="p-key" onclick="playTone(130.8, 'ДО 3')">ДО (131 Hz)</button>
-    <button class="p-key" onclick="playTone(146.8, 'РЕ 3')">РЕ (147 Hz)</button>
-    <button class="p-key" onclick="playTone(164.8, 'МИ 3')">МИ (165 Hz)</button>
-    <button class="p-key" onclick="playTone(174.6, 'ФА 3')">ФА (175 Hz)</button>
-    <button class="p-key" onclick="playTone(196.0, 'СОЛЬ 3')">СОЛЬ (196 Hz)</button>
-    <button class="p-key" onclick="playTone(220.0, 'ЛЯ 3')">ЛЯ (220 Hz)</button>
-    <button class="p-key" onclick="playTone(246.9, 'СИ 3')">СИ (247 Hz)</button>
+  <!-- Touch-friendly Piano Grid (Large targets for thumb) -->
+  <div class="piano-section">
+    <div class="piano-title">
+      <span>🔊 ЭТАЛОН НОТ (нажми пальцем):</span>
+      <span id="playingNote" style="color: #58a6ff;"></span>
+    </div>
+    <div class="piano-grid">
+      <button class="p-key" data-freq="130.81" data-label="ДО 3">ДО<small>131 Hz</small></button>
+      <button class="p-key" data-freq="146.83" data-label="РЕ 3">РЕ<small>147 Hz</small></button>
+      <button class="p-key" data-freq="164.81" data-label="МИ 3">МИ<small>165 Hz</small></button>
+      <button class="p-key" data-freq="174.61" data-label="ФА 3">ФА<small>175 Hz</small></button>
+      <button class="p-key" data-freq="196.00" data-label="СОЛЬ 3">СОЛЬ<small>196 Hz</small></button>
+      <button class="p-key" data-freq="220.00" data-label="ЛЯ 3">ЛЯ<small>220 Hz</small></button>
+      <button class="p-key" data-freq="246.94" data-label="СИ 3">СИ<small>247 Hz</small></button>
+      <button class="p-key" data-freq="261.63" data-label="ДО 4">ДО 4<small>262 Hz</small></button>
+    </div>
   </div>
 
   <div class="canvas-container">
@@ -225,7 +267,7 @@
   </div>
 
   <div class="tip-box">
-    💡 <b>Для леса:</b> Нажми кнопку, начни тянуть «А-а-а». Старайся, чтобы зелёная линия шла ровно горизонтально!
+    💡 <b>Подсказка:</b> Тапни по ноте выше (например, РЕ или МИ) — послушай эталон и повтори голосом!
   </div>
 
   <script>
@@ -238,17 +280,17 @@
     let analyser = null;
     let micStream = null;
     let isRunning = false;
-    let playAudioCtx = null;
+    let synthCtx = null;
 
     const toggleBtn = document.getElementById('toggleBtn');
     const vuFill = document.getElementById('vuFill');
     const noteVal = document.getElementById('noteVal');
     const freqVal = document.getElementById('freqVal');
     const badge = document.getElementById('badge');
+    const playingNote = document.getElementById('playingNote');
     const canvas = document.getElementById('graph');
     const ctx = canvas.getContext('2d');
 
-    // Handle high DPI on mobile phones
     function resizeCanvas() {
       const rect = canvas.getBoundingClientRect();
       const dpr = window.devicePixelRatio || 1;
@@ -262,39 +304,58 @@
     const history = [];
     const maxHistory = 120;
 
-    async function playTone(freq, label) {
+    // Instant Mobile Audio Synth (Bulletproof iOS / Android)
+    function playTone(freq, label) {
       try {
-        if (!playAudioCtx) {
-          playAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (!synthCtx) {
+          synthCtx = new (window.AudioContext || window.webkitAudioContext)();
         }
-        if (playAudioCtx.state === 'suspended') {
-          await playAudioCtx.resume();
+        if (synthCtx.state === 'suspended') {
+          synthCtx.resume();
         }
 
-        const now = playAudioCtx.currentTime;
-        const osc = playAudioCtx.createOscillator();
-        const gain = playAudioCtx.createGain();
+        const now = synthCtx.currentTime;
+        const osc = synthCtx.createOscillator();
+        const gain = synthCtx.createGain();
 
-        osc.type = 'sine';
+        osc.type = 'triangle'; // warm, clearly audible on mobile phone speakers!
         osc.frequency.setValueAtTime(freq, now);
 
         gain.gain.setValueAtTime(0.001, now);
-        gain.gain.linearRampToValueAtTime(0.6, now + 0.05);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.4);
+        gain.gain.linearRampToValueAtTime(0.65, now + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
 
         osc.connect(gain);
-        gain.connect(playAudioCtx.destination);
+        gain.connect(synthCtx.destination);
 
         osc.start(now);
-        osc.stop(now + 1.4);
+        osc.stop(now + 1.2);
 
         badge.textContent = `🔊 Эталон: ${label}`;
         badge.className = 'badge';
+        playingNote.textContent = `▶ ${label}`;
+        setTimeout(() => { if (playingNote.textContent.includes(label)) playingNote.textContent = ''; }, 1300);
       } catch (e) {
         console.error(e);
       }
     }
 
+    // Attach ultra-fast touch and pointer events to piano keys
+    document.querySelectorAll('.p-key').forEach(btn => {
+      const trigger = (e) => {
+        e.preventDefault();
+        const freq = parseFloat(btn.dataset.freq);
+        const label = btn.dataset.label;
+        btn.classList.add('playing');
+        setTimeout(() => btn.classList.remove('playing'), 250);
+        playTone(freq, label);
+      };
+
+      btn.addEventListener('touchstart', trigger, { passive: false });
+      btn.addEventListener('mousedown', trigger);
+    });
+
+    // Start / Stop Microphone
     toggleBtn.addEventListener('click', async () => {
       if (isRunning) {
         stopAudio();
@@ -319,7 +380,7 @@
         source.connect(analyser);
 
         isRunning = true;
-        toggleBtn.innerHTML = '<span>⏹️ Остановить</span>';
+        toggleBtn.innerHTML = '<span>⏹️ Остановить микрофон</span>';
         toggleBtn.classList.add('stop');
         requestAnimationFrame(update);
       } catch (err) {
