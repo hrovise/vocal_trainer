@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0f111a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Вокальный Тренажёр</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      background: #0f111a;
+      color: #e6edf3;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 12px;
+      overflow-x: hidden;
+    }
+    
+    .top-bar {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .app-title { font-size: 18px; font-weight: 800; color: #58a6ff; }
+    
+    /* Big Start Button */
+    .btn-main {
+      width: 100%;
+      max-width: 600px;
+      background: #238636;
+      color: white;
+      border: none;
+      padding: 16px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 14px rgba(35, 134, 54, 0.4);
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+    .btn-main:active { transform: scale(0.98); }
+    .btn-main.stop { background: #da3633; box-shadow: 0 4px 14px rgba(218, 54, 51, 0.4); }
+
+    /* Results Header */
+    .info-card {
+      width: 100%;
+      max-width: 600px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .note-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .note-val {
+      font-size: 38px;
+      font-weight: 900;
+      color: #2ea043;
+      line-height: 1;
+      letter-spacing: 0.5px;
+    }
+    .freq-val {
+      font-size: 13px;
+      color: #8b949e;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+    
+    .status-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+    .badge {
+      font-size: 13px;
+      font-weight: bold;
+      padding: 6px 12px;
+      border-radius: 16px;
+      background: #21262d;
+      color: #8b949e;
+      text-align: right;
+      max-width: 190px;
+    }
+    .badge.perfect { background: #238636; color: #fff; box-shadow: 0 0 10px rgba(35,134,54,0.5); }
+    .badge.too-high { background: #d29922; color: #fff; }
+    .badge.too-low { background: #1f6feb; color: #fff; }
+
+    /* VU Meter */
+    .vu-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .vu-label { font-size: 11px; color: #8b949e; }
+    .vu-bg {
+      width: 70px;
+      height: 8px;
+      background: #21262d;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .vu-fill {
+      height: 100%;
+      width: 0%;
+      background: #2ea043;
+      transition: width 0.05s ease-out;
+    }
+
+    /* Piano Reference horizontal scroll */
+    .piano-scroll {
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 10px;
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .piano-scroll::-webkit-scrollbar { display: none; }
+    .p-key {
+      flex: 0 0 auto;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #c9d1d9;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .p-key:active { background: #1f6feb; color: white; }
+
+    /* Canvas Graph */
+    .canvas-container {
+      width: 100%;
+      max-width: 600px;
+      height: 380px;
+      background: #090d13;
+      border: 1px solid #30363d;
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    }
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .tip-box {
+      width: 100%;
+      max-width: 600px;
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      font-size: 12px;
+      color: #8b949e;
+      line-height: 1.4;
+      text-align: center;
+    }
+    .tip-box b { color: #58a6ff; }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <div class="app-title">🎙️ Мобильный Тренажёр</div>
+    <div class="vu-wrapper">
+      <span class="vu-label">Микр:</span>
+      <div class="vu-bg"><div class="vu-fill" id="vuFill"></div></div>
+    </div>
+  </div>
+
+  <button class="btn-main" id="toggleBtn">
+    <span>Включить микрофон</span>
+  </button>
+
+  <div class="info-card">
+    <div class="note-info">
+      <div class="note-val" id="noteVal">—</div>
+      <div class="freq-val" id="freqVal">Пой любую гласную</div>
+    </div>
+    <div class="status-col">
+      <div class="badge" id="badge">Жду голос...</div>
+    </div>
+  </div>
+
+  <!-- Piano Sound Reference -->
+  <div class="piano-scroll">
+    <button class="p-key" onclick="playTone(130.8, 'ДО 3')">ДО (131 Hz)</button>
+    <button class="p-key" onclick="playTone(146.8, 'РЕ 3')">РЕ (147 Hz)</button>
+    <button class="p-key" onclick="playTone(164.8, 'МИ 3')">МИ (165 Hz)</button>
+    <button class="p-key" onclick="playTone(174.6, 'ФА 3')">ФА (175 Hz)</button>
+    <button class="p-key" onclick="playTone(196.0, 'СОЛЬ 3')">СОЛЬ (196 Hz)</button>
+    <button class="p-key" onclick="playTone(220.0, 'ЛЯ 3')">ЛЯ (220 Hz)</button>
+    <button class="p-key" onclick="playTone(246.9, 'СИ 3')">СИ (247 Hz)</button>
+  </div>
+
+  <div class="canvas-container">
+    <canvas id="graph"></canvas>
+  </div>
+
+  <div class="tip-box">
+    💡 <b>Для леса:</b> Нажми кнопку, начни тянуть «А-а-а». Старайся, чтобы зелёная линия шла ровно горизонтально!
+  </div>
+
+  <script>
+    const NOTE_NAMES = ["ДО (C)", "ДО#", "РЕ (D)", "РЕ#", "МИ (E)", "ФА (F)", "ФА#", "СОЛЬ (G)", "СОЛЬ#", "ЛЯ (A)", "ЛЯ#", "СИ (B)"];
+    
+    const MIN_MIDI = 36; // C2 (65.4 Hz)
+    const MAX_MIDI = 60; // C4 (261.6 Hz)
+
+    let audioCtx = null;
+    let analyser = null;
+    let micStream = null;
+    let isRunning = false;
+    let playAudioCtx = null;
+
+    const toggleBtn = document.getElementById('toggleBtn');
+    const vuFill = document.getElementById('vuFill');
+    const noteVal = document.getElementById('noteVal');
+    const freqVal = document.getElementById('freqVal');
+    const badge = document.getElementById('badge');
+    const canvas = document.getElementById('graph');
+    const ctx = canvas.getContext('2d');
+
+    // Handle high DPI on mobile phones
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const history = [];
+    const maxHistory = 120;
+
+    async function playTone(freq, label) {
+      try {
+        if (!playAudioCtx) {
+          playAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (playAudioCtx.state === 'suspended') {
+          await playAudioCtx.resume();
+        }
+
+        const now = playAudioCtx.currentTime;
+        const osc = playAudioCtx.createOscillator();
+        const gain = playAudioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.6, now + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.4);
+
+        osc.connect(gain);
+        gain.connect(playAudioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + 1.4);
+
+        badge.textContent = `🔊 Эталон: ${label}`;
+        badge.className = 'badge';
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    toggleBtn.addEventListener('click', async () => {
+      if (isRunning) {
+        stopAudio();
+      } else {
+        await startAudio();
+      }
+    });
+
+    async function startAudio() {
+      try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        micStream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            echoCancellation: true,
+            autoGainControl: true,
+            noiseSuppression: false
+          }
+        });
+        const source = audioCtx.createMediaStreamSource(micStream);
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 2048;
+        source.connect(analyser);
+
+        isRunning = true;
+        toggleBtn.innerHTML = '<span>⏹️ Остановить</span>';
+        toggleBtn.classList.add('stop');
+        requestAnimationFrame(update);
+      } catch (err) {
+        alert('Разрешите микрофон в браузере: ' + err.message);
+      }
+    }
+
+    function stopAudio() {
+      isRunning = false;
+      if (micStream) micStream.getTracks().forEach(t => t.stop());
+      if (audioCtx) audioCtx.close();
+      toggleBtn.innerHTML = '<span>Включить микрофон</span>';
+      toggleBtn.classList.remove('stop');
+      vuFill.style.width = '0%';
+      noteVal.textContent = '—';
+      freqVal.textContent = 'Остановлено';
+      badge.textContent = 'Жду голос...';
+      badge.className = 'badge';
+    }
+
+    function autoCorrelate(buf, sampleRate) {
+      const SIZE = buf.length;
+      let rms = 0;
+      for (let i = 0; i < SIZE; i++) {
+        const val = buf[i];
+        rms += val * val;
+      }
+      rms = Math.sqrt(rms / SIZE);
+
+      const vuPercent = Math.min(100, Math.round((rms / 0.12) * 100));
+      vuFill.style.width = vuPercent + '%';
+
+      if (rms < 0.007) return -1;
+
+      let r1 = 0, r2 = SIZE - 1, thres = 0.15;
+      for (let i = 0; i < SIZE / 2; i++) {
+        if (Math.abs(buf[i]) < thres) { r1 = i; break; }
+      }
+      for (let i = 1; i < SIZE / 2; i++) {
+        if (Math.abs(buf[SIZE - i]) < thres) { r2 = SIZE - i; break; }
+      }
+      const trimmed = buf.slice(r1, r2);
+      const trimmedSize = trimmed.length;
+
+      const c = new Float32Array(trimmedSize);
+      for (let i = 0; i < trimmedSize; i++) {
+        for (let j = 0; j < trimmedSize - i; j++) {
+          c[i] = c[i] + trimmed[j] * trimmed[j + i];
+        }
+      }
+
+      let d = 0;
+      while (c[d] > c[d + 1]) d++;
+      let maxval = -1, maxpos = -1;
+      for (let i = d; i < trimmedSize; i++) {
+        if (c[i] > maxval) {
+          maxval = c[i];
+          maxpos = i;
+        }
+      }
+      let T0 = maxpos;
+      if (T0 <= 0) return -1;
+
+      const x1 = c[T0 - 1], x2 = c[T0], x3 = c[T0 + 1];
+      const a = (x1 + x3 - 2 * x2) / 2;
+      const b = (x3 - x1) / 2;
+      if (a) T0 = T0 - b / (2 * a);
+
+      return sampleRate / T0;
+    }
+
+    const buf = new Float32Array(2048);
+
+    function update() {
+      if (!isRunning) return;
+
+      analyser.getFloatTimeDomainData(buf);
+      const pitch = autoCorrelate(buf, audioCtx.sampleRate);
+
+      let currentMidi = null;
+      if (pitch > 55 && pitch < 450) {
+        currentMidi = 12 * Math.log2(pitch / 440) + 69;
+      }
+
+      history.push(currentMidi);
+      if (history.length > maxHistory) history.shift();
+
+      render(currentMidi, pitch);
+      requestAnimationFrame(update);
+    }
+
+    function render(currentMidi, pitch) {
+      const rect = canvas.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Grid lines
+      ctx.lineWidth = 1;
+      for (let m = MIN_MIDI; m <= MAX_MIDI; m++) {
+        const y = h - ((m - MIN_MIDI) / (MAX_MIDI - MIN_MIDI)) * (h - 40) - 20;
+        const noteIndex = m % 12;
+        const octave = Math.floor(m / 12) - 1;
+        const isWhite = [0, 2, 4, 5, 7, 9, 11].includes(noteIndex);
+
+        ctx.strokeStyle = isWhite ? "#262c36" : "#14181f";
+        ctx.beginPath();
+        ctx.moveTo(70, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+
+        ctx.fillStyle = isWhite ? "#8b949e" : "#383f47";
+        ctx.font = isWhite ? "bold 11px sans-serif" : "9px sans-serif";
+        ctx.textAlign = "right";
+        ctx.fillText(`${NOTE_NAMES[noteIndex]} ${octave}`, 64, y + 4);
+      }
+
+      // Voice history curve
+      ctx.lineWidth = 3.5;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+
+      let drawing = false;
+      ctx.beginPath();
+      for (let i = 0; i < history.length; i++) {
+        const m = history[i];
+        const x = 75 + (i / maxHistory) * (w - 95);
+        if (m !== null && m >= MIN_MIDI && m <= MAX_MIDI) {
+          const y = h - ((m - MIN_MIDI) / (MAX_MIDI - MIN_MIDI)) * (h - 40) - 20;
+          if (!drawing) {
+            ctx.moveTo(x, y);
+            drawing = true;
+          } else {
+            ctx.lineTo(x, y);
+          }
+        } else {
+          drawing = false;
+        }
+      }
+      ctx.strokeStyle = "#2ea043";
+      ctx.shadowColor = "#2ea043";
+      ctx.shadowBlur = 8;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Current note text update
+      if (currentMidi !== null && pitch > 55) {
+        const roundedMidi = Math.round(currentMidi);
+        const cents = (currentMidi - roundedMidi) * 100;
+        const noteIdx = roundedMidi % 12;
+        const octave = Math.floor(roundedMidi / 12) - 1;
+
+        noteVal.textContent = `${NOTE_NAMES[noteIdx]}`;
+        freqVal.textContent = `${pitch.toFixed(1)} Hz (${octave} окт)`;
+
+        if (Math.abs(cents) < 20) {
+          badge.textContent = `🎯 В яблочко!`;
+          badge.className = "badge perfect";
+        } else if (cents > 20) {
+          badge.textContent = `🔻 Чуть выше`;
+          badge.className = "badge too-high";
+        } else {
+          badge.textContent = `🔺 Чуть ниже`;
+          badge.className = "badge too-low";
+        }
+
+        if (currentMidi >= MIN_MIDI && currentMidi <= MAX_MIDI) {
+          const currY = h - ((currentMidi - MIN_MIDI) / (MAX_MIDI - MIN_MIDI)) * (h - 40) - 20;
+          ctx.fillStyle = "#fff";
+          ctx.beginPath();
+          ctx.arc(w - 15, currY, 6, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      } else {
+        badge.textContent = "Пой гласную...";
+        badge.className = "badge";
+      }
+    }
+  </script>
+</body>
+</html>
