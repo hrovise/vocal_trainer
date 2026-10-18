@@ -593,12 +593,22 @@
     <!-- Piano Grid Section -->
     <div class="piano-section">
       <div class="piano-title">
-        <span>🎹 ЭТАЛОН НОТ (нажми для звука):</span>
+        <span>🎯 РАСПЕВКА ПОД ГОЛОС:</span>
         <span id="playingNote" style="color: #58a6ff;"></span>
       </div>
 
-      <!-- Octave selector -->
-      <div class="octave-bar">
+      <!-- Voice Preset Selector Pills -->
+      <div style="display: flex; gap: 4px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 6px;">
+        <button class="oct-btn active" id="vPresetBaritone" onclick="setWarmupPreset('baritone')">🎙️ Баритон</button>
+        <button class="oct-btn" id="vPresetTenor" onclick="setWarmupPreset('tenor')">🎺 Тенор</button>
+        <button class="oct-btn" id="vPresetBass" onclick="setWarmupPreset('bass')">🧔 Бас</button>
+        <button class="oct-btn" id="vPresetMezzo" onclick="setWarmupPreset('mezzo')">🌸 Меццо</button>
+        <button class="oct-btn" id="vPresetSoprano" onclick="setWarmupPreset('soprano')">💎 Сопрано</button>
+        <button class="oct-btn" id="vPresetOctaves" onclick="setWarmupPreset('octaves')">🎹 По октавам</button>
+      </div>
+
+      <!-- Octave selector (shown only in 'octaves' mode) -->
+      <div class="octave-bar" id="octaveBarRow" style="display: none;">
         <span class="oct-label">Октава:</span>
         <button class="oct-btn" id="octBtn2" onclick="setOctave(2)">Бас (C2)</button>
         <button class="oct-btn active" id="octBtn3" onclick="setOctave(3)">Речь (C3)</button>
@@ -736,6 +746,10 @@
             <span class="target-notes" id="recResDrill"></span>
           </div>
 
+          <button class="btn-main" onclick="applyVoiceToTuner(lastMatchedVoiceId)" style="background: #1f6feb; margin-bottom: 8px; font-size: 13px;">
+            <span>🎯 Настроить Тюнер под этот голос & Распеваться</span>
+          </button>
+
           <div style="display: flex; gap: 8px;">
             <button class="timer-btn" style="flex: 1;" onclick="resetVoiceRecorder()">Записать заново</button>
             <button class="btn-step-next" style="flex: 2;" onclick="saveVoiceRecordToHistory()">💾 Сохранить в «ДО / ПОСЛЕ»</button>
@@ -834,22 +848,116 @@
     }
 
     // Dynamic Piano Grid for Octave
+    const WARMUP_PRESETS = {
+      baritone: {
+        title: '🎙️ Баритон (110–330 Гц)',
+        keys: [
+          { label: 'ЛЯ 2', freq: 110.00, title: 'ЛЯ 2' },
+          { label: 'ДО 3', freq: 130.81, title: 'ДО 3' },
+          { label: 'РЕ 3', freq: 146.83, title: 'РЕ 3' },
+          { label: 'МИ 3', freq: 164.81, title: 'МИ 3' },
+          { label: 'СОЛЬ 3', freq: 196.00, title: 'СОЛЬ 3' },
+          { label: 'ЛЯ 3', freq: 220.00, title: 'ЛЯ 3' },
+          { label: 'ДО 4', freq: 261.63, title: 'ДО 4' },
+          { label: 'МИ 4', freq: 329.63, title: 'МИ 4' }
+        ]
+      },
+      tenor: {
+        title: '🎺 Тенор (131–440 Гц)',
+        keys: [
+          { label: 'ДО 3', freq: 130.81, title: 'ДО 3' },
+          { label: 'РЕ 3', freq: 146.83, title: 'РЕ 3' },
+          { label: 'МИ 3', freq: 164.81, title: 'МИ 3' },
+          { label: 'СОЛЬ 3', freq: 196.00, title: 'СОЛЬ 3' },
+          { label: 'ЛЯ 3', freq: 220.00, title: 'ЛЯ 3' },
+          { label: 'ДО 4', freq: 261.63, title: 'ДО 4' },
+          { label: 'МИ 4', freq: 329.63, title: 'МИ 4' },
+          { label: 'ЛЯ 4', freq: 440.00, title: 'ЛЯ 4' }
+        ]
+      },
+      bass: {
+        title: '🧔 Бас (82–196 Гц)',
+        keys: [
+          { label: 'МИ 2', freq: 82.41, title: 'МИ 2' },
+          { label: 'ФА 2', freq: 87.31, title: 'ФА 2' },
+          { label: 'СОЛЬ 2', freq: 98.00, title: 'СОЛЬ 2' },
+          { label: 'ЛЯ 2', freq: 110.00, title: 'ЛЯ 2' },
+          { label: 'СИ 2', freq: 123.47, title: 'СИ 2' },
+          { label: 'ДО 3', freq: 130.81, title: 'ДО 3' },
+          { label: 'РЕ 3', freq: 146.83, title: 'РЕ 3' },
+          { label: 'СОЛЬ 3', freq: 196.00, title: 'СОЛЬ 3' }
+        ]
+      },
+      mezzo: {
+        title: '🌸 Меццо / Контральто (175–523 Гц)',
+        keys: [
+          { label: 'ФА 3', freq: 174.61, title: 'ФА 3' },
+          { label: 'СОЛЬ 3', freq: 196.00, title: 'СОЛЬ 3' },
+          { label: 'ЛЯ 3', freq: 220.00, title: 'ЛЯ 3' },
+          { label: 'ДО 4', freq: 261.63, title: 'ДО 4' },
+          { label: 'РЕ 4', freq: 293.66, title: 'РЕ 4' },
+          { label: 'МИ 4', freq: 329.63, title: 'МИ 4' },
+          { label: 'ФА 4', freq: 349.23, title: 'ФА 4' },
+          { label: 'ДО 5', freq: 523.25, title: 'ДО 5' }
+        ]
+      },
+      soprano: {
+        title: '💎 Сопрано (220–659 Гц)',
+        keys: [
+          { label: 'ЛЯ 3', freq: 220.00, title: 'ЛЯ 3' },
+          { label: 'ДО 4', freq: 261.63, title: 'ДО 4' },
+          { label: 'РЕ 4', freq: 293.66, title: 'РЕ 4' },
+          { label: 'МИ 4', freq: 329.63, title: 'МИ 4' },
+          { label: 'ФА 4', freq: 349.23, title: 'ФА 4' },
+          { label: 'СОЛЬ 4', freq: 392.00, title: 'СОЛЬ 4' },
+          { label: 'ЛЯ 4', freq: 440.00, title: 'ЛЯ 4' },
+          { label: 'МИ 5', freq: 659.25, title: 'МИ 5' }
+        ]
+      }
+    };
+
+    let currentWarmupPreset = 'baritone';
+
+    function setWarmupPreset(presetId) {
+      stopContinuousTone();
+      currentWarmupPreset = presetId;
+
+      const pills = ['Baritone', 'Tenor', 'Bass', 'Mezzo', 'Soprano', 'Octaves'];
+      pills.forEach(p => {
+        const el = document.getElementById('vPreset' + p);
+        if (el) el.classList.toggle('active', presetId.toLowerCase() === p.toLowerCase());
+      });
+
+      const octRow = document.getElementById('octaveBarRow');
+      if (octRow) {
+        octRow.style.display = (presetId === 'octaves') ? 'flex' : 'none';
+      }
+      renderPianoGrid();
+    }
+
     function renderPianoGrid() {
       const grid = document.getElementById('pianoGrid');
       grid.innerHTML = '';
-      const mult = Math.pow(2, currentOctave - 3);
-      const nextOct = currentOctave + 1;
 
-      const keysData = [
-        { label: `ДО ${currentOctave}`, freq: 130.81 * mult, title: 'ДО' },
-        { label: `РЕ ${currentOctave}`, freq: 146.83 * mult, title: 'РЕ' },
-        { label: `МИ ${currentOctave}`, freq: 164.81 * mult, title: 'МИ' },
-        { label: `ФА ${currentOctave}`, freq: 174.61 * mult, title: 'ФА' },
-        { label: `СОЛЬ ${currentOctave}`, freq: 196.00 * mult, title: 'СОЛЬ' },
-        { label: `ЛЯ ${currentOctave}`, freq: 220.00 * mult, title: 'ЛЯ' },
-        { label: `СИ ${currentOctave}`, freq: 246.94 * mult, title: 'СИ' },
-        { label: `ДО ${nextOct}`, freq: 261.63 * mult, title: `ДО ${nextOct}` },
-      ];
+      let keysData = [];
+
+      if (currentWarmupPreset === 'octaves') {
+        const mult = Math.pow(2, currentOctave - 3);
+        const nextOct = currentOctave + 1;
+        keysData = [
+          { label: `ДО ${currentOctave}`, freq: 130.81 * mult, title: 'ДО' },
+          { label: `РЕ ${currentOctave}`, freq: 146.83 * mult, title: 'РЕ' },
+          { label: `МИ ${currentOctave}`, freq: 164.81 * mult, title: 'МИ' },
+          { label: `ФА ${currentOctave}`, freq: 174.61 * mult, title: 'ФА' },
+          { label: `СОЛЬ ${currentOctave}`, freq: 196.00 * mult, title: 'СОЛЬ' },
+          { label: `ЛЯ ${currentOctave}`, freq: 220.00 * mult, title: 'ЛЯ' },
+          { label: `СИ ${currentOctave}`, freq: 246.94 * mult, title: 'СИ' },
+          { label: `ДО ${nextOct}`, freq: 261.63 * mult, title: `ДО ${nextOct}` },
+        ];
+      } else {
+        const preset = WARMUP_PRESETS[currentWarmupPreset] || WARMUP_PRESETS.baritone;
+        keysData = preset.keys;
+      }
 
       keysData.forEach(k => {
         const btn = document.createElement('button');
@@ -1340,12 +1448,29 @@
                 🎹 Нажми ноту для распевки (Rhodes sustain):
               </div>
               <div>${notesHtml}</div>
+              <button class="btn-tone" style="width: 100%; margin-top: 8px; font-size: 11px; padding: 7px; background: #238636;" onclick="applyVoiceToTuner('${v.id}')">
+                🎯 Настроить распевку в Тюнере под ${v.name}
+              </button>
             </div>
           </div>
         `;
       }).join('');
     }
     renderAtlas();
+
+    let lastMatchedVoiceId = 'dramatic_baritone';
+
+    function applyVoiceToTuner(voiceId) {
+      let targetPreset = 'baritone';
+      if (!voiceId) voiceId = 'dramatic_baritone';
+      if (voiceId.includes('tenor')) targetPreset = 'tenor';
+      else if (voiceId.includes('bass') && !voiceId.includes('baritone')) targetPreset = 'bass';
+      else if (voiceId.includes('soprano') && !voiceId.includes('mezzo')) targetPreset = 'soprano';
+      else if (voiceId.includes('mezzo') || voiceId.includes('contralto')) targetPreset = 'mezzo';
+
+      setWarmupPreset(targetPreset);
+      switchTab(1);
+    }
 
     function analyzeRecordedVoice() {
       document.getElementById('recPlayerBox').style.display = 'block';
@@ -1386,6 +1511,7 @@
       const desc = matched.desc;
       const advice = matched.advice;
       const drill = '🎯 Опорные ноты распевки: ' + matched.notes.map(n => n.name).join(', ');
+      lastMatchedVoiceId = matched.id;
 
       lastVoiceRecordData = {
         voiceType, title, desc, advice, drill,
