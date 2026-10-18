@@ -896,6 +896,213 @@
       user-select: none;
     }
 
+  
+    /* === SPACE RANGERS 2 / SCI-FI ENCYCLOPEDIA STYLES === */
+    #neuroWikiModal {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 12, 0.88);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      transition: opacity 0.2s ease;
+    }
+    #neuroWikiModal.hide {
+      display: none !important;
+    }
+    .wiki-window {
+      width: 95vw;
+      max-width: 1100px;
+      height: 88vh;
+      max-height: 850px;
+      background: #0d1520;
+      border: 1px solid #1e3146;
+      border-radius: 12px;
+      box-shadow: 0 24px 65px rgba(0, 0, 0, 0.95), 0 0 25px rgba(0, 229, 255, 0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      color: #cfd8dc;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    .wiki-header {
+      background: #111b29;
+      border-bottom: 1px solid #1e3146;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .wiki-header-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 800;
+      color: #00e5ff;
+      letter-spacing: 0.02em;
+    }
+    .wiki-header-badge {
+      background: rgba(0, 229, 255, 0.12);
+      color: #80deea;
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .wiki-search-box {
+      background: #080e16;
+      border: 1px solid #24384e;
+      border-radius: 6px;
+      color: #eceff1;
+      padding: 6px 12px;
+      font-size: 12px;
+      width: 220px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .wiki-search-box:focus {
+      border-color: #00e5ff;
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.25);
+    }
+    .wiki-close-btn {
+      background: #1a2736;
+      border: 1px solid #2e445d;
+      color: #b0bec5;
+      font-size: 15px;
+      font-weight: 700;
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .wiki-close-btn:hover {
+      background: #d32f2f;
+      color: #ffffff;
+      border-color: #ef5350;
+    }
+    .wiki-body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      min-height: 0;
+    }
+    .wiki-content-pane {
+      flex: 1;
+      overflow-y: auto;
+      padding: 22px 28px;
+      background: #090f17;
+      line-height: 1.6;
+    }
+    .wiki-nav-pane {
+      width: 280px;
+      border-left: 1px solid #1e3146;
+      background: #0c141f;
+      overflow-y: auto;
+      padding: 12px 8px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .wiki-nav-group-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #546e7a;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin: 12px 8px 4px;
+    }
+    .wiki-nav-group-title:first-child { margin-top: 2px; }
+    .wiki-nav-item {
+      padding: 8px 12px;
+      font-size: 13px;
+      color: #90a4ae;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .wiki-nav-item:hover {
+      background: #14202e;
+      color: #e0f7fa;
+    }
+    .wiki-nav-item.active {
+      background: #0288d1;
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 2px 10px rgba(2, 136, 209, 0.45);
+    }
+    .wiki-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+    .wiki-badge.rule-brain {
+      background: rgba(88, 166, 255, 0.15);
+      color: #58a6ff;
+      border: 1px solid rgba(88, 166, 255, 0.4);
+    }
+    .wiki-badge.rule-voice {
+      background: rgba(240, 136, 62, 0.15);
+      color: #f0883e;
+      border: 1px solid rgba(240, 136, 62, 0.4);
+    }
+    .wiki-badge.rule-guide {
+      background: rgba(63, 185, 80, 0.15);
+      color: #3fb950;
+      border: 1px solid rgba(63, 185, 80, 0.4);
+    }
+    .wiki-card {
+      background: #0f1824;
+      border: 1px solid #1c2b3d;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 12px 0;
+    }
+    .wiki-card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #80deea;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .wiki-memo-box {
+      background: rgba(0, 229, 255, 0.05);
+      border-left: 3px solid #00e5ff;
+      border-radius: 0 8px 8px 0;
+      padding: 10px 14px;
+      margin: 12px 0;
+      font-size: 12px;
+      color: #e0f7fa;
+    }
+    @media (max-width: 768px) {
+      .wiki-window { width: 100vw; height: 100vh; border-radius: 0; }
+      .wiki-body { flex-direction: column-reverse; }
+      .wiki-nav-pane { width: 100%; height: 160px; border-left: none; border-top: 1px solid #1e3146; }
+      .wiki-content-pane { padding: 16px; }
+      .wiki-search-box { width: 140px; }
+    }
+
   </style>
 </head>
 <body>
@@ -916,6 +1123,9 @@
     </button>
     <button class="tab-btn" id="tabBtn4" onclick="switchTab(4)">
       <span>📊 Диапазон</span>
+    </button>
+    <button class="tab-btn" id="btnOpenWiki" onclick="openNeuroWiki()" style="color: #00e5ff; border: 1px solid rgba(0, 229, 255, 0.3);">
+      <span>📖 Справка</span>
     </button>
   </div>
 
@@ -1446,10 +1656,33 @@
           Нажми «Начать запись», протяни гласную («А-а-а-а») или прочти скороговорку. Ты сможешь <b>сразу послушать себя со стороны</b>, а алгоритм определит твой диапазон и тип голоса.
         </div>
 
-        <!-- Big Record Button -->
-        <button class="btn-main" id="btnVoiceRecord" onclick="toggleVoiceRecording()" style="background: #da3633; box-shadow: 0 4px 14px rgba(218, 54, 51, 0.4);">
-          <span id="recBtnIcon">🔴</span>
-          <span id="recBtnText">Начать запись своего голоса</span>
+        <!-- Baseline Status Banner -->
+        <div id="baselineStatusBanner" style="background: #090d13; border: 1px solid #30363d; border-radius: 10px; padding: 10px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 20px;" id="baselineIcon">📌</span>
+            <div>
+              <div style="font-size: 13px; font-weight: bold; color: #fff;" id="baselineTitle">Эталонный голос не записан</div>
+              <div style="font-size: 11px; color: #8b949e;" id="baselineSub">Запиши эталон (до 30 сек), чтобы отслеживать прогресс</div>
+            </div>
+          </div>
+          <button class="btn-secondary" id="btnResetBaseline" style="display: none; font-size: 10px; padding: 4px 8px; border-color: #da3633; color: #f85149;" onclick="resetBaselineVoice()">
+            Перезаписать ↺
+          </button>
+        </div>
+
+        <!-- 2 Recording Buttons: Baseline & Verify Test -->
+        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+          <button class="btn-main" id="btnRecordBaseline" onclick="startVoiceRecordingMode('baseline')" style="flex: 1; background: #1f6feb; box-shadow: 0 4px 14px rgba(31, 111, 235, 0.35);">
+            <span>📌 1. Записать Эталон</span>
+          </button>
+          <button class="btn-main" id="btnRecordTest" onclick="startVoiceRecordingMode('test')" style="flex: 1; background: #238636; box-shadow: 0 4px 14px rgba(35, 134, 54, 0.35);">
+            <span>🔬 2. Проверяющий тест</span>
+          </button>
+        </div>
+
+        <!-- Unified Stop Button during record -->
+        <button class="btn-main" id="btnStopRecordVoice" onclick="stopVoiceRecording()" style="display: none; background: #da3633; margin-bottom: 8px;">
+          <span>⏹️ Остановить запись (до 30 сек)</span>
         </button>
 
         <!-- Live Recording Status Bar -->
@@ -1469,6 +1702,31 @@
             🎧 Твоя аудиозапись готова — послушай себя:
           </div>
           <audio id="voiceAudioPlayer" controls style="width: 100%; border-radius: 8px; margin-bottom: 10px;"></audio>
+          
+          <!-- COMPARATIVE INFOGRAPHIC (ЭТАЛОН vs ПРОВЕРКА) -->
+          <div id="voiceComparisonCard" style="display: none; background: #090e17; border: 1.5px solid #388bfd; border-radius: 10px; padding: 12px; margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 13px; font-weight: 800; color: #58a6ff;">📊 СРАВНЕНИЕ С ЭТАЛОНОМ:</span>
+              <span class="badge-pill" id="voiceDiffBadge" style="background: rgba(35, 134, 54, 0.2); color: #3fb950; border-color: #3fb950;">+0% прогресс</span>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px;">
+              <div style="background: #111a24; padding: 8px; border-radius: 6px; border: 1px solid #1e3146;">
+                <div style="color: #8b949e; font-size: 10px; text-transform: uppercase;">📌 Твой Эталон:</div>
+                <div style="font-weight: 800; color: #fff; margin-top: 2px;" id="compBaseType">—</div>
+                <div style="color: #58a6ff; font-size: 11px;" id="compBaseRange">—</div>
+                <div style="color: #8b949e; font-size: 10px; margin-top: 2px;" id="compBaseDate">—</div>
+              </div>
+              <div style="background: #111a24; padding: 8px; border-radius: 6px; border: 1px solid #1e3146;">
+                <div style="color: #8b949e; font-size: 10px; text-transform: uppercase;">🔬 Свежий замер:</div>
+                <div style="font-weight: 800; color: #3fb950; margin-top: 2px;" id="compTestType">—</div>
+                <div style="color: #3fb950; font-size: 11px;" id="compTestRange">—</div>
+                <div style="color: #8b949e; font-size: 10px; margin-top: 2px;" id="compTestDate">Сейчас</div>
+              </div>
+            </div>
+
+            <div id="compAnalysisText" style="margin-top: 8px; font-size: 11px; color: #e6edf3; line-height: 1.4; border-top: 1px solid #1e3146; padding-top: 6px;"></div>
+          </div>
 
           <!-- Automatic Analysis from Recording -->
           <div class="result-banner" id="recResultBanner" style="margin-bottom: 10px;">
@@ -1954,9 +2212,9 @@
         voiceRecordAudioCtx = null;
       }
 
-      document.getElementById('btnVoiceRecord').style.background = '#da3633';
-      document.getElementById('recBtnIcon').textContent = '🔴';
-      document.getElementById('recBtnText').textContent = 'Записать ещё один дубль';
+      document.getElementById('btnRecordBaseline').style.display = 'flex';
+      document.getElementById('btnRecordTest').style.display = 'flex';
+      document.getElementById('btnStopRecordVoice').style.display = 'none';
       document.getElementById('recStatusBox').style.display = 'none';
     }
 
@@ -2283,6 +2541,64 @@
         octaves: octaves.toFixed(1), semitones,
         date: new Date().toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
       };
+
+      // Handle Baseline vs Check Test
+      if (voiceRecordingMode === 'baseline') {
+        localStorage.setItem(BASELINE_KEY, JSON.stringify(lastVoiceRecordData));
+        initBaselineVoiceUI();
+        document.getElementById('voiceComparisonCard').style.display = 'none';
+        alert(`🎉 Эталон успешно сохранён: ${lastVoiceRecordData.voiceType} (${lastVoiceRecordData.minNote} ➔ ${lastVoiceRecordData.maxNote})! Теперь тренируйся и делай «Проверяющий тест»!`);
+      } else {
+        // Mode is 'test' -> compare with Baseline if exists
+        const rawBase = localStorage.getItem(BASELINE_KEY);
+        const compCard = document.getElementById('voiceComparisonCard');
+        if (rawBase && compCard) {
+          try {
+            const base = JSON.parse(rawBase);
+            compCard.style.display = 'block';
+
+            document.getElementById('compBaseType').textContent = base.voiceType;
+            document.getElementById('compBaseRange').textContent = `${base.minNote} ➔ ${base.maxNote} (${base.octaves} окт)`;
+            document.getElementById('compBaseDate').textContent = base.date;
+
+            document.getElementById('compTestType').textContent = lastVoiceRecordData.voiceType;
+            document.getElementById('compTestRange').textContent = `${lastVoiceRecordData.minNote} ➔ ${lastVoiceRecordData.maxNote} (${lastVoiceRecordData.octaves} окт)`;
+            document.getElementById('compTestDate').textContent = 'Только что';
+
+            const baseSemitones = parseInt(base.semitones, 10) || 18;
+            const testSemitones = parseInt(lastVoiceRecordData.semitones, 10) || 18;
+            const diffSemitones = testSemitones - baseSemitones;
+            const badge = document.getElementById('voiceDiffBadge');
+            const analysisText = document.getElementById('compAnalysisText');
+
+            if (diffSemitones > 0) {
+              const pct = Math.round((diffSemitones / baseSemitones) * 100);
+              badge.textContent = `+${pct}% расширение (+${diffSemitones} пт)`;
+              badge.style.color = '#3fb950';
+              badge.style.borderColor = '#3fb950';
+              badge.style.background = 'rgba(35, 134, 54, 0.2)';
+              analysisText.innerHTML = `🚀 <b>Отличный прогресс!</b> Твой рабочий диапазон расширился на <b>+${diffSemitones} полутонов</b> (+${pct}%) по сравнению со стартовым эталоном. Связки стали более эластичными и послушными!`;
+            } else if (diffSemitones === 0) {
+              badge.textContent = `Стабильно (100%)`;
+              badge.style.color = '#58a6ff';
+              badge.style.borderColor = '#58a6ff';
+              badge.style.background = 'rgba(88, 166, 255, 0.2)';
+              analysisText.innerHTML = `🎯 <b>Идеальная стабильность:</b> Диапазон точно соответствует эталону (${testSemitones} полутонов). Твой голос держит форму без просадок.`;
+            } else {
+              const drop = Math.abs(diffSemitones);
+              badge.textContent = `-${drop} пт усталость`;
+              badge.style.color = '#f0883e';
+              badge.style.borderColor = '#f0883e';
+              badge.style.background = 'rgba(240, 136, 62, 0.2)';
+              analysisText.innerHTML = `☕ <b>Легкая усталость связок:</b> Сейчас зафиксировано на ${drop} полутона меньше эталона. Сделай упражнение «сброс зажима (Бр-р-р)», попей тёплой воды и дай голосу 15 минут отдыха.`;
+            }
+          } catch(e) {
+            compCard.style.display = 'none';
+          }
+        } else if (compCard) {
+          compCard.style.display = 'none';
+        }
+      }
 
       document.getElementById('recResTitle').textContent = title;
       document.getElementById('recResSpan').textContent = `Диапазон связок: ${octaves.toFixed(1)} окт (${semitones} полутонов)`;
@@ -2613,6 +2929,273 @@
 
     
     
+    
+    /* === SPACE RANGERS 2 STYLE ENCYCLOPEDIA & MEMO ENGINE === */
+    const NEURO_WIKI_ARTICLES = [
+      {
+        id: "overview",
+        group: "1. Общая Концепция",
+        badge: "Концепция",
+        title: "🌌 Зачем объединять Мозг, Голос и Дикцию?",
+        summary: "Нейробиологическое обоснование связи когнитивных процессов, голосовых связок и артикуляции.",
+        content: `
+          <div class="wiki-memo-box">
+            <b>Принцип космического рейнджера:</b> Мозг пилота, дыхание и четкость доклада в эфир — единый орган боеготовности.
+          </div>
+          <p>В неврологии и логопедии хорошо известен факт: зоны мозга, отвечающие за <b>кратковременную память</b> (дорсолатеральная префронтальная кора), <b>речь и артикуляцию</b> (зона Брока) и <b>голосовые связки</b> (моторная кора и ядро блуждающего нерва), тесно переплетены нейронными путями.</p>
+          <div class="wiki-card">
+            <div class="wiki-card-title">🔬 Что даёт синергия трёх направлений:</div>
+            <ul>
+              <li><b>Кислородное насыщение:</b> Вокальное дыхание на диафрагме увеличивает приток кислорода к коре головного мозга на 20–25%.</li>
+              <li><b>Нейропластичность:</b> Переключение между устным счётом, пространственной памятью и речевой моторикой заставляет мозг выстраивать новые синаптические мостики (коллатерали).</li>
+              <li><b>Снятие спазмов:</b> При неврологических нагрузках и рассеянном склерозе речевой аппарат часто спазмируется. Разминка челюсти и распевка нормализуют тонус блуждающего нерва.</li>
+            </ul>
+          </div>
+        `
+      },
+      {
+        id: "memory_ayumu",
+        group: "2. Тренировка Памяти",
+        badge: "Brain Gym",
+        title: "🐒 Тест Аюму: Феномен шимпанзе и оперативная память",
+        summary: "Как устроена мгновенная фотографическая фиксация и почему приматы превосходят человека.",
+        content: `
+          <div class="wiki-memo-box">
+            В 2007 году в Киотском университете шимпанзе по имени <b>Аюму</b> поразил научный мир: за 0.2 секунды он запоминал расположение цифр от 1 до 9 и безошибочно нажимал их по памяти в закрытых квадратах.
+          </div>
+          <p>Человеческий мозг эволюционно пожертвовал частью иконической (фотографической) памяти в пользу абстрактного мышления и сложной речи. Однако эту способность можно тренировать!</p>
+          <div class="wiki-card">
+            <div class="wiki-card-title">🎯 Практическая польза упражнения:</div>
+            <ul>
+              <li><b>Увеличение «буфера захвата»:</b> Ты учишься схватывать сложную визуальную картину за доли секунды без проговаривания словами.</li>
+              <li><b>Скорость реакции:</b> Тренируется зрительный нерв и теменная кора, ответственная за пространственные координаты.</li>
+              <li><b>Как тренироваться:</b> Начинай с 4–5 цифр на скорости 1.2 с. Дойдя до стабильных 90% точности, переключайся на 0.7 с и 0.4 с.</li>
+            </ul>
+          </div>
+        `
+      },
+      {
+        id: "memory_math",
+        group: "2. Тренировка Памяти",
+        badge: "BigInt Math",
+        title: "🧮 Устный счёт вслепую: Умножение многозначных чисел",
+        summary: "Сверхнагрузка на рабочую память через удержание промежуточных разрядов столбика.",
+        content: `
+          <div class="wiki-memo-box">
+            <b>Умножение вслепую</b> — это предельная «тяжёлая атлетика» для лобных долей мозга.
+          </div>
+          <p>Когда числа скрыты точками (например, <code>•••• × ••••</code>), мозгу приходится одновременно:</p>
+          <ol>
+            <li>Удерживать в памяти образы двух исходных чисел;</li>
+            <li>Вычислять построчные произведения (таблицу умножения с переносом десятков);</li>
+            <li>Сдвигать разряды на десятки, сотни и тысячи;</li>
+            <li>Суммировать промежуточные строки в уме.</li>
+          </ol>
+          <div class="wiki-card">
+            <div class="wiki-card-title">🛡️ Зачем нужны фильтры цифр (0, 1, 2)?</div>
+            <ul>
+              <li><b>Без 1 и 2:</b> Исключает элементарные строки удвоения, заставляя мозг производить нетривиальные умножения на 7, 8, 9 с постоянным переносом в уме.</li>
+              <li><b>Без 0:</b> Исключает пропуски строк в столбике, требуя расчёта всех разрядов подряд.</li>
+              <li><b>Без дублей:</b> Убирает паттерны вроде <code>777</code>, которые мозг пытается просчитать по шаблону.</li>
+            </ul>
+          </div>
+        `
+      },
+      {
+        id: "voice_tuning",
+        group: "3. Голос и Связки",
+        badge: "Акустика",
+        title: "🎙️ Точное интонирование и Тюнер центов",
+        summary: "Физика голоса: полутона, центы, вибрато и опора дыхания.",
+        content: `
+          <div class="wiki-memo-box">
+            <b>Что такое цент (¢)?</b> Полутон делится ровно на 100 центов. Отклонение менее 15 центов человеческое ухо воспринимает как идеальное чистое попадание в ноту.
+          </div>
+          <p>Когда стрелка тюнера находится в зелёной зоне (±15¢), твои голосовые складки вибрируют в идеальном резонансе с костными резонаторами черепа и грудины. Это даёт объёмный, бархатный и убедительный звук без напряжения горла.</p>
+          <div class="wiki-card">
+            <div class="wiki-card-title">💡 Советы для идеального звука:</div>
+            <ul>
+              <li><b>Зевок:</b> Пой на ощущении мягкого полузевка — это опускает гортань и освобождает связки от зажима.</li>
+              <li><b>Опора:</b> Не толкай звук связками — звук должен опираться на упругое сопротивление мышц живота (диафрагму).</li>
+            </ul>
+          </div>
+        `
+      },
+      {
+        id: "diction_cork",
+        group: "4. Сценическая Речь",
+        badge: "Дикция",
+        title: "🍾 Метод пробки и взрывные согласные",
+        summary: "Методика театральных училищ: почему тренировка с сопротивлением творит чудеса.",
+        content: `
+          <div class="wiki-memo-box">
+            <b>Классический приём дикторов Гостелерадио:</b> Чтение скороговорок с винной пробкой в зубах перед каждым важным эфиром.
+          </div>
+          <p>Винная пробка, зажатая резцами на 1–1.5 см, блокирует свободное движение челюсти. В результате языку, губам и мягкому нёбу приходится работать с двойной амплитудой и силой.</p>
+          <div class="wiki-card">
+            <div class="wiki-card-title">🏆 Эффект после 2 минут читки:</div>
+            <p>Когда ты вынимаешь пробку, речевой аппарат ощущает невероятную свободу и лёгкость (эффект «снятых гантелей»). Звуки произносятся остро, кристально чисто, а дикция становится «дикторской» без каши во рту.</p>
+          </div>
+        `
+      },
+      {
+        id: "storage_memo",
+        group: "5. Памятка Системы",
+        badge: "Памятка",
+        title: "💾 Памятка: Локальное хранилище и 7-дневный цикл",
+        summary: "Правила работы с профилем, эталонным голосом и приватностью.",
+        content: `
+          <div class="wiki-memo-box">
+            <b>100% On-Device & Zero Cloud:</b> Ни один звук твоего голоса, ни один математический результат не покидает твоего браузера.
+          </div>
+          <div class="wiki-card">
+            <div class="wiki-card-title">📌 Краткая памятка рейнджера:</div>
+            <ul>
+              <li><b>Скользящее 7-дневное окно:</b> Каждое посещение сайта продлевает жизнь твоей статистики ещё на 7 дней.</li>
+              <li><b>Запись Эталона:</b> Зафиксируй свой стартовый уровень связок. Затем делай проверяющие замеры после распевки и скороговорок.</li>
+              <li><b>Кнопка «Очистить кэш»:</b> Доступна на Главной странице для полного ручного сброса истории.</li>
+            </ul>
+          </div>
+        `
+      }
+    ];
+
+    let activeWikiArticleId = "overview";
+
+    function openNeuroWiki(articleId) {
+      const modal = document.getElementById('neuroWikiModal');
+      if (!modal) return;
+      if (articleId) activeWikiArticleId = articleId;
+      modal.classList.remove('hide');
+      renderWikiNav();
+      renderWikiArticle(activeWikiArticleId);
+      const search = document.getElementById('wikiSearchInput');
+      if (search) {
+        search.value = '';
+        search.focus();
+      }
+    }
+
+    function closeNeuroWiki() {
+      const modal = document.getElementById('neuroWikiModal');
+      if (modal) modal.classList.add('hide');
+    }
+
+    function onWikiSearchInput(val) {
+      renderWikiNav(val);
+    }
+
+    function renderWikiNav(filterQuery = "") {
+      const navPane = document.getElementById('wikiNavPane');
+      if (!navPane) return;
+      navPane.innerHTML = "";
+      const q = filterQuery.trim().toLowerCase();
+
+      let currentGroup = "";
+      NEURO_WIKI_ARTICLES.forEach((art) => {
+        const matches = !q || art.title.toLowerCase().includes(q) || art.summary.toLowerCase().includes(q) || art.group.toLowerCase().includes(q);
+        if (!matches) return;
+
+        if (art.group !== currentGroup) {
+          currentGroup = art.group;
+          const gTitle = document.createElement("div");
+          gTitle.className = "wiki-nav-group-title";
+          gTitle.textContent = currentGroup;
+          navPane.appendChild(gTitle);
+        }
+
+        const item = document.createElement("div");
+        item.className = "wiki-nav-item" + (art.id === activeWikiArticleId ? " active" : "");
+        item.innerHTML = `<span>${art.title.replace(/^[^a-zA-Zа-яА-Я0-9]+/, '')}</span>`;
+        item.onclick = () => {
+          activeWikiArticleId = art.id;
+          renderWikiNav(filterQuery);
+          renderWikiArticle(art.id);
+        };
+        navPane.appendChild(item);
+      });
+    }
+
+    function renderWikiArticle(id) {
+      const pane = document.getElementById('wikiContentPane');
+      if (!pane) return;
+      const art = NEURO_WIKI_ARTICLES.find(a => a.id === id) || NEURO_WIKI_ARTICLES[0];
+      activeWikiArticleId = art.id;
+
+      pane.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; flex-wrap: wrap;">
+          <div>
+            <h2 style="margin: 0 0 6px 0; color: #00e5ff; font-size: 20px; display: flex; align-items: center; gap: 8px;">
+              ${art.title}
+            </h2>
+            <div style="color: #90a4ae; font-size: 13px;">${art.summary}</div>
+          </div>
+          <span class="wiki-badge rule-guide">${art.badge}</span>
+        </div>
+        <div style="border-top: 1px solid #1e3146; padding-top: 14px;">
+          ${art.content}
+        </div>
+      `;
+      pane.scrollTop = 0;
+    }
+
+    // Keyboard shortcut Escape for Wiki
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeNeuroWiki();
+    });
+
+
+    /* === BASELINE VOICE vs CHECK TEST COMPARATIVE ENGINE === */
+    let voiceRecordingMode = 'test'; // 'baseline' or 'test'
+    const BASELINE_KEY = 'neuro_atlas_baseline_voice';
+
+    function initBaselineVoiceUI() {
+      try {
+        const raw = localStorage.getItem(BASELINE_KEY);
+        const titleEl = document.getElementById('baselineTitle');
+        const subEl = document.getElementById('baselineSub');
+        const iconEl = document.getElementById('baselineIcon');
+        const resetBtn = document.getElementById('btnResetBaseline');
+
+        if (raw) {
+          const base = JSON.parse(raw);
+          if (titleEl) titleEl.innerHTML = `Эталон: <b style="color: #58a6ff;">${base.voiceType}</b> (${base.minNote} ➔ ${base.maxNote})`;
+          if (subEl) subEl.textContent = `Записан: ${base.date} • Диапазон: ${base.octaves} окт (${base.semitones} полутонов)`;
+          if (iconEl) iconEl.textContent = '✅';
+          if (resetBtn) resetBtn.style.display = 'inline-block';
+        } else {
+          if (titleEl) titleEl.textContent = 'Эталонный голос не записан';
+          if (subEl) subEl.textContent = 'Запиши эталон (до 30 сек), чтобы система могла сравнивать твой прогресс';
+          if (iconEl) iconEl.textContent = '📌';
+          if (resetBtn) resetBtn.style.display = 'none';
+        }
+      } catch(e) {}
+    }
+
+    function resetBaselineVoice() {
+      if (confirm('Сбросить текущий эталон голоса и записать новый?')) {
+        localStorage.removeItem(BASELINE_KEY);
+        initBaselineVoiceUI();
+        document.getElementById('voiceComparisonCard').style.display = 'none';
+        alert('📌 Эталон сброшен. Нажми «1. Записать Эталон» для нового замера.');
+      }
+    }
+
+    function startVoiceRecordingMode(mode) {
+      voiceRecordingMode = mode;
+      document.getElementById('btnRecordBaseline').style.display = 'none';
+      document.getElementById('btnRecordTest').style.display = 'none';
+      document.getElementById('btnStopRecordVoice').style.display = 'flex';
+      
+      if (mode === 'baseline') {
+        document.getElementById('recBtnText').textContent = '📌 ИДЁТ ЗАПИСЬ ЭТАЛОНА (до 30 сек)...';
+      } else {
+        document.getElementById('recBtnText').textContent = '🔬 ИДЁТ ПРОВЕРЯЮЩИЙ ТЕСТ (до 30 сек)...';
+      }
+      startVoiceRecording();
+    }
+
+
     /* === 7-DAY ROLLING LOCAL STORAGE & NEURO-PROGRESS ENGINE === */
     const STORAGE_KEY = 'neuro_atlas_user_profile';
     const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
@@ -2726,6 +3309,7 @@
     // Call loadUserProfile on startup
     window.addEventListener('DOMContentLoaded', () => {
       loadUserProfile();
+      initBaselineVoiceUI();
     });
 
 
@@ -3394,5 +3978,27 @@
     });
 
   </script>
+
+  <!-- SPACE RANGERS 2 STYLE ENCYCLOPEDIA & MEMO MODAL -->
+  <div id="neuroWikiModal" class="hide" onclick="closeNeuroWiki()">
+    <div class="wiki-window" onclick="event.stopPropagation();">
+      <div class="wiki-header">
+        <div class="wiki-header-title">
+          <span>🌌</span>
+          <span>База Знаний & Памятка Нейро-Атласа</span>
+          <span class="wiki-header-badge">Space Rangers Guide</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <input type="text" id="wikiSearchInput" class="wiki-search-box" placeholder="🔍 Поиск по справке..." oninput="onWikiSearchInput(this.value)">
+          <button type="button" class="wiki-close-btn" onclick="closeNeuroWiki()" title="Закрыть (Esc)">✕</button>
+        </div>
+      </div>
+      <div class="wiki-body">
+        <div class="wiki-content-pane" id="wikiContentPane"></div>
+        <div class="wiki-nav-pane" id="wikiNavPane"></div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
