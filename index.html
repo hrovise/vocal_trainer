@@ -1283,9 +1283,9 @@
   <!-- TAB 1: PITCH TRAINER -->
   <div class="tab-content" id="tabContent1">
     <div class="top-bar">
-      <div class="app-title">Вокальный Тренажёр</div>
+      <div class="app-title" id="vocalTitle">Вокальный Тренажёр</div>
       <div class="vu-wrapper">
-        <span class="vu-label">Микр:</span>
+        <span class="vu-label" id="vuLabelText">Микр:</span>
         <div class="vu-bg"><div class="vu-fill" id="vuFill"></div></div>
       </div>
     </div>
@@ -1307,7 +1307,7 @@
     <!-- Piano Grid Section -->
     <div class="piano-section">
       <div class="piano-title">
-        <span>🎯 РАСПЕВКА ПОД ГОЛОС:</span>
+        <span id="pianoWarmupTitle">🎯 РАСПЕВКА ПОД ГОЛОС:</span>
         <span id="playingNote" style="color: #58a6ff;"></span>
       </div>
 
@@ -1323,7 +1323,7 @@
 
       <!-- Octave selector (shown only in 'octaves' mode) -->
       <div class="octave-bar" id="octaveBarRow" style="display: none;">
-        <span class="oct-label">Октава:</span>
+        <span class="oct-label" id="octLabelText">Октава:</span>
         <button class="oct-btn" id="octBtn2" onclick="setOctave(2)">Бас (C2)</button>
         <button class="oct-btn active" id="octBtn3" onclick="setOctave(3)">Речь (C3)</button>
         <button class="oct-btn" id="octBtn4" onclick="setOctave(4)">Высокий (C4)</button>
@@ -1705,8 +1705,8 @@
           <!-- Persistent Baseline Audio Player -->
           <div id="baselineAudioPlayerWrap" style="display: none; margin-top: 10px; padding-top: 8px; border-top: 1px solid #21262d;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-              <span style="font-size: 11px; font-weight: bold; color: #58a6ff;">🎧 Твой сохранённый эталон (в LocalStorage):</span>
-              <span style="font-size: 10px; color: #3fb950; background: rgba(63,185,80,0.15); border: 1px solid rgba(63,185,80,0.4); padding: 1px 6px; border-radius: 4px;">✓ Доступен офлайн</span>
+              <span style="font-size: 11px; font-weight: bold; color: #58a6ff;" id="baselinePlayerLabel">🎧 Твой сохранённый эталон (в LocalStorage):</span>
+              <span style="font-size: 10px; color: #3fb950; background: rgba(63,185,80,0.15); border: 1px solid rgba(63,185,80,0.4); padding: 1px 6px; border-radius: 4px;" id="baselineOfflineBadge">✓ Доступен офлайн</span>
             </div>
             <audio id="baselineAudioPlayer" controls style="width: 100%; height: 32px; border-radius: 6px;"></audio>
           </div>
@@ -1747,13 +1747,13 @@
 
           <!-- Live Pitch & Note Indicators -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 11px;">
-            <span style="color: #8b949e;">Текущий звук: <b id="recLiveFreq" style="color: #3fb950; font-size: 12px;">— Гц</b> (<b id="recLiveNote" style="color: #58a6ff; font-size: 12px;">—</b>)</span>
-            <span style="color: #8b949e; font-size: 10px;">Протяни гласную или пой ноты</span>
+            <span style="color: #8b949e;" id="recLiveFreqLabel">Текущий звук: <b id="recLiveFreq" style="color: #3fb950; font-size: 12px;">— Гц</b> (<b id="recLiveNote" style="color: #58a6ff; font-size: 12px;">—</b>)</span>
+            <span style="color: #8b949e; font-size: 10px;" id="recLivePrompt">Протяни гласную или пой ноты</span>
           </div>
 
           <!-- Realtime recognized notes pill list -->
           <div style="margin-top: 6px; font-size: 11px; color: #8b949e;">
-            Спетые ноты:
+            <span id="recSungNotesLabel">Спетые ноты:</span>
             <div id="recLiveNotesList" style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; min-height: 22px;">
               <span style="color: #484f58; font-size: 10px;">(слушаю микрофон, протяни звук...)</span>
             </div>
@@ -1773,19 +1773,19 @@
           <!-- COMPARATIVE INFOGRAPHIC (ЭТАЛОН vs ПРОВЕРКА) -->
           <div id="voiceComparisonCard" style="display: none; background: #090e17; border: 1.5px solid #388bfd; border-radius: 10px; padding: 12px; margin-bottom: 12px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <span style="font-size: 13px; font-weight: 800; color: #58a6ff;">📊 СРАВНЕНИЕ С ЭТАЛОНОМ:</span>
+              <span id="voiceComparisonTitle" style="font-size: 13px; font-weight: 800; color: #58a6ff;">📊 СРАВНЕНИЕ С ЭТАЛОНОМ:</span>
               <span class="badge-pill" id="voiceDiffBadge" style="background: rgba(35, 134, 54, 0.2); color: #3fb950; border-color: #3fb950;">+0% прогресс</span>
             </div>
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px;">
               <div style="background: #111a24; padding: 8px; border-radius: 6px; border: 1px solid #1e3146;">
-                <div style="color: #8b949e; font-size: 10px; text-transform: uppercase;">📌 Твой Эталон:</div>
+                <div style="color: #8b949e; font-size: 10px; text-transform: uppercase;" id="compBaseLabel">📌 Твой Эталон:</div>
                 <div style="font-weight: 800; color: #fff; margin-top: 2px;" id="compBaseType">—</div>
                 <div style="color: #58a6ff; font-size: 11px;" id="compBaseRange">—</div>
                 <div style="color: #8b949e; font-size: 10px; margin-top: 2px;" id="compBaseDate">—</div>
               </div>
               <div style="background: #111a24; padding: 8px; border-radius: 6px; border: 1px solid #1e3146;">
-                <div style="color: #8b949e; font-size: 10px; text-transform: uppercase;">🔬 Свежий замер:</div>
+                <div style="color: #8b949e; font-size: 10px; text-transform: uppercase;" id="compTestLabel">🔬 Свежий замер:</div>
                 <div style="font-weight: 800; color: #3fb950; margin-top: 2px;" id="compTestType">—</div>
                 <div style="color: #3fb950; font-size: 11px;" id="compTestRange">—</div>
                 <div style="color: #8b949e; font-size: 10px; margin-top: 2px;" id="compTestDate">Сейчас</div>
@@ -1796,8 +1796,8 @@
 
             <!-- Test Action Buttons -->
             <div style="display: flex; gap: 6px; margin-top: 10px;">
-              <button class="timer-btn" style="flex: 1; font-size: 11px; padding: 6px;" onclick="resetTestRecording()">🔄 Сбросить этот замер</button>
-              <button class="btn-step-next" style="flex: 1.2; font-size: 11px; padding: 6px; background: #1f6feb;" onclick="promoteTestToBaseline()">📌 Сделать эталоном</button>
+              <button class="timer-btn" id="btnResetTest" style="flex: 1; font-size: 11px; padding: 6px;" onclick="resetTestRecording()">🔄 Сбросить этот замер</button>
+              <button class="btn-step-next" id="btnPromoteTest" style="flex: 1.2; font-size: 11px; padding: 6px; background: #1f6feb;" onclick="promoteTestToBaseline()">📌 Сделать эталоном</button>
             </div>
           </div>
 
@@ -1809,32 +1809,32 @@
 
           <div class="range-grid" style="margin-bottom: 10px;">
             <div class="range-col">
-              <span class="range-label">НИЗ ТВОЕГО ГОЛОСА</span>
+              <span class="range-label" id="recLowLabel">НИЗ ТВОЕГО ГОЛОСА</span>
               <span class="range-val" id="recResMinNote">A2</span>
               <span class="range-freq" id="recResMinHz">110 Hz</span>
             </div>
             <div style="color: #8b949e; font-size: 18px;">➔</div>
             <div class="range-col">
-              <span class="range-label">ВЕРХ ТВОЕГО ГОЛОСА</span>
+              <span class="range-label" id="recHighLabel">ВЕРХ ТВОЕГО ГОЛОСА</span>
               <span class="range-val" id="recResMaxNote" style="color: #f0883e;">D4</span>
               <span class="range-freq" id="recResMaxHz">294 Hz</span>
             </div>
           </div>
 
           <div class="advice-card" style="margin-bottom: 10px;">
-            <b>💡 Анализ твоих связок:</b>
+            <b id="recAnalysisHeader">💡 Анализ твоих связок:</b>
             <div id="recResDesc" style="color: #e6edf3; margin-bottom: 4px;"></div>
             <div id="recResAdvice"></div>
             <span class="target-notes" id="recResDrill"></span>
           </div>
 
-          <button class="btn-main" onclick="applyVoiceToTuner(lastMatchedVoiceId)" style="background: #1f6feb; margin-bottom: 8px; font-size: 13px;">
-            <span>🎯 Настроить Тюнер под этот голос & Распеваться</span>
+          <button class="btn-main" id="btnApplyMatchedVoice" onclick="applyVoiceToTuner(lastMatchedVoiceId)" style="background: #1f6feb; margin-bottom: 8px; font-size: 13px;">
+            <span id="btnApplyMatchedVoiceText">🎯 Настроить Тюнер под этот голос & Распеваться</span>
           </button>
 
           <div style="display: flex; gap: 8px;">
-            <button class="timer-btn" style="flex: 1;" onclick="resetVoiceRecorder()">Записать заново</button>
-            <button class="btn-step-next" style="flex: 2;" onclick="saveVoiceRecordToHistory()">💾 Сохранить в «ДО / ПОСЛЕ»</button>
+            <button class="timer-btn" id="btnResetVoiceRec" style="flex: 1;" onclick="resetVoiceRecorder()">Записать заново</button>
+            <button class="btn-step-next" id="btnSaveVoiceHistory" style="flex: 2;" onclick="saveVoiceRecordToHistory()">💾 Сохранить в «ДО / ПОСЛЕ»</button>
           </div>
         </div>
       </div>
@@ -2370,186 +2370,256 @@
       if (recBox) recBox.style.display = 'none';
     }
 
-    // 10 Full World Vocal Palette Catalog
+        // 10 Full World Vocal Palette Catalog (Bilingual)
     const VOICE_CATALOG = [
       {
         id: 'bass_profundo',
         name: 'Бас-Профундо',
+        name_en: 'Bass-Profundo',
         category: 'male',
         title: '🌋 Бас-Профундо (Октавист)',
+        title_en: '🌋 Bass-Profundo (Octavist)',
         icon: '🧔‍♂️',
         range: 'A1 – C3 (55–130 Гц)',
+        range_en: 'A1 – C3 (55–130 Hz)',
         desc: 'Редчайший ультранизкий сейсмический голос. Звучит мощно, утробно, напоминая гул органной трубы.',
+        desc_en: 'The rarest ultra-low seismic voice. Sounds massive and primal, reminiscent of a resonant cathedral pipe organ.',
         character: 'Фундаментальный авторитет, эпический голос кинотрейлеров.',
+        character_en: 'Fundamental authority, epic movie trailer narrator sound.',
         advice: 'Твой главный козырь — низкий грудной резонатор. Обязательно давай связкам отдых и не форсируй верха.',
+        advice_en: 'Your biggest asset is deep chest resonance. Give vocal cords adequate rest and never strain for high notes.',
         examples: 'Юрий Вишняков, Владимир Пасюков, Тим Стормс',
+        examples_en: 'Tim Storms, Vladimir Pasyukov, Yuri Vishnyakov',
         notes: [
-          { name: 'C2 (65 Гц)', freq: 65.41 },
-          { name: 'E2 (82 Гц)', freq: 82.41 },
-          { name: 'G2 (98 Гц)', freq: 98.00 },
-          { name: 'C3 (131 Гц)', freq: 130.81 }
+          { name: 'C2 (65 Гц)', name_en: 'C2 (65 Hz)', freq: 65.41 },
+          { name: 'E2 (82 Гц)', name_en: 'E2 (82 Hz)', freq: 82.41 },
+          { name: 'G2 (98 Гц)', name_en: 'G2 (98 Hz)', freq: 98.00 },
+          { name: 'C3 (131 Гц)', name_en: 'C3 (131 Hz)', freq: 130.81 }
         ]
       },
       {
         id: 'central_bass',
         name: 'Центральный Бас',
+        name_en: 'Central Bass',
         category: 'male',
         title: '🧔 Центральный Бас',
+        title_en: '🧔 Central Bass',
         icon: '🎙️',
         range: 'E2 – A3 (82–220 Гц)',
+        range_en: 'E2 – A3 (82–220 Hz)',
         desc: 'Густой, массивный тембр с сочным бархатным низом и глубокой опорой на грудь.',
+        desc_en: 'Rich, dense vocal timbre with luscious velvet low end and profound chest appoggio.',
         character: 'Голос уверенности, силы и мудрости. Идеален для дикторов документалок и аудиокниг.',
+        character_en: 'Voice of confidence, gravitas, and wisdom. Ideal for documentary narration and audiobooks.',
         advice: 'Работай над четкостью взрывных согласных (П, Т, К), чтобы низкий тембр не превращался в кашу.',
+        advice_en: 'Focus on crisp explosive consonants (P, T, K) to keep low harmonics from muddiness.',
         examples: 'Юрий Левитан, Федор Шаляпин, Леонард Коэн',
+        examples_en: 'Leonard Cohen, Feodor Chaliapin, Yuri Levitan',
         notes: [
-          { name: 'E2 (82 Гц)', freq: 82.41 },
-          { name: 'G2 (98 Гц)', freq: 98.00 },
-          { name: 'B2 (123 Гц)', freq: 123.47 },
-          { name: 'D3 (147 Гц)', freq: 146.83 }
+          { name: 'E2 (82 Гц)', name_en: 'E2 (82 Hz)', freq: 82.41 },
+          { name: 'G2 (98 Гц)', name_en: 'G2 (98 Hz)', freq: 98.00 },
+          { name: 'B2 (123 Гц)', name_en: 'B2 (123 Hz)', freq: 123.47 },
+          { name: 'D3 (147 Гц)', name_en: 'D3 (147 Hz)', freq: 146.83 }
         ]
       },
       {
         id: 'bass_baritone',
         name: 'Бас-Баритон',
+        name_en: 'Bass-Baritone',
         category: 'male',
         title: '⚡ Бас-Баритон (Универсальный)',
+        title_en: '⚡ Bass-Baritone (Versatile)',
         icon: '📻',
         range: 'G2 – D4 (98–294 Гц)',
+        range_en: 'G2 – D4 (98–294 Hz)',
         desc: 'Мощный гибридный диапазон: тяжелые басовые низы сочетаются с легким выходом в речевую середину.',
+        desc_en: 'Powerful hybrid range: heavy bass lows combined with effortless passage into mid speech registers.',
         character: 'Богатый, плотный, драматичный тембр.',
+        character_en: 'Rich, dense, dramatically compelling timbre.',
         advice: 'Следи за переходным регистром (в районе 180–200 Гц), тренируй плавный переход к миксту.',
+        advice_en: 'Mind your passaggio around 180–200 Hz; practice smooth transitions to mixed voice.',
         examples: 'Муслим Магомаев, Джонни Кэш, Баста',
+        examples_en: 'Johnny Cash, Muslim Magomayev, Paul Robeson',
         notes: [
-          { name: 'G2 (98 Гц)', freq: 98.00 },
-          { name: 'C3 (131 Гц)', freq: 130.81 },
-          { name: 'E3 (165 Гц)', freq: 164.81 },
-          { name: 'G3 (196 Гц)', freq: 196.00 }
+          { name: 'G2 (98 Гц)', name_en: 'G2 (98 Hz)', freq: 98.00 },
+          { name: 'C3 (131 Гц)', name_en: 'C3 (131 Hz)', freq: 130.81 },
+          { name: 'E3 (165 Гц)', name_en: 'E3 (165 Hz)', freq: 164.81 },
+          { name: 'G3 (196 Гц)', name_en: 'G3 (196 Hz)', freq: 196.00 }
         ]
       },
       {
         id: 'dramatic_baritone',
         name: 'Драматический Баритон',
+        name_en: 'Dramatic Baritone',
         category: 'male',
         title: '🎙️ Драматический Баритон',
+        title_en: '🎙️ Dramatic Baritone',
         icon: '📻',
         range: 'A2 – E4 (110–330 Гц)',
+        range_en: 'A2 – E4 (110–330 Hz)',
         desc: 'Классический мужественный тембр, глубокий и одновременно звонкий. Самый востребованный голос на радио.',
+        desc_en: 'Classic masculine timbre, deep yet resonant. The most sought-after broadcast voice.',
         character: 'Уверенность, солидность, притягивает внимание с первых секунд.',
+        character_en: 'Confidence, prestige, captures undivided attention from the opening phrase.',
         advice: 'Твой речевой центр — 125–160 Гц. Фокусируйся на дыхании животом (диафрагмой).',
+        advice_en: 'Your natural speech focal zone is 125–160 Hz. Rely on diaphragmatic abdominal breath support.',
         examples: 'Владимир Высоцкий, Джеймс Хэтфилд, Джордж Клуни',
+        examples_en: 'James Hetfield, George Clooney, Vladimir Vysotsky',
         notes: [
-          { name: 'A2 (110 Гц)', freq: 110.00 },
-          { name: 'C3 (131 Гц)', freq: 130.81 },
-          { name: 'E3 (165 Гц)', freq: 164.81 },
-          { name: 'A3 (220 Гц)', freq: 220.00 }
+          { name: 'A2 (110 Гц)', name_en: 'A2 (110 Hz)', freq: 110.00 },
+          { name: 'C3 (131 Гц)', name_en: 'C3 (131 Hz)', freq: 130.81 },
+          { name: 'E3 (165 Гц)', name_en: 'E3 (165 Hz)', freq: 164.81 },
+          { name: 'A3 (220 Гц)', name_en: 'A3 (220 Hz)', freq: 220.00 }
         ]
       },
       {
         id: 'lyric_baritone',
         name: 'Лирический Баритон',
+        name_en: 'Lyric Baritone',
         category: 'male',
         title: '📻 Лирический Баритон',
+        title_en: '📻 Lyric Baritone',
         icon: '🎙️',
         range: 'B2 – F#4 (123–370 Гц)',
+        range_en: 'B2 – F#4 (123–370 Hz)',
         desc: 'Мягкий, благородный, тёплый тембр. Самый комфортный для восприятия в подкастах и беседах.',
+        desc_en: 'Warm, noble, velvety timbre. The most naturally pleasant voice for podcasts and conversations.',
         character: 'Доверительный, интеллигентный, мягкий бархат.',
+        character_en: 'Trustworthy, intellectual, warm acoustic intimacy.',
         advice: 'Не перегружай связки форсированием низов — используй свою естественную подвижность и теплоту.',
+        advice_en: 'Never strain to force artificial lows; lean into your natural agility and vocal warmth.',
         examples: 'Валерий Меладзе, Фрэнк Синатра, Мэттью Макконахи',
+        examples_en: 'Frank Sinatra, Matthew McConaughey, Valery Meladze',
         notes: [
-          { name: 'B2 (123 Гц)', freq: 123.47 },
-          { name: 'D3 (147 Гц)', freq: 146.83 },
-          { name: 'F3 (175 Гц)', freq: 174.61 },
-          { name: 'B3 (247 Гц)', freq: 246.94 }
+          { name: 'B2 (123 Гц)', name_en: 'B2 (123 Hz)', freq: 123.47 },
+          { name: 'D3 (147 Гц)', name_en: 'D3 (147 Hz)', freq: 146.83 },
+          { name: 'F3 (175 Гц)', name_en: 'F3 (175 Hz)', freq: 174.61 },
+          { name: 'B3 (247 Гц)', name_en: 'B3 (247 Hz)', freq: 246.94 }
         ]
       },
       {
         id: 'dramatic_tenor',
         name: 'Драматический Тенор',
+        name_en: 'Dramatic Tenor',
         category: 'male',
         title: '🎺 Драматический Тенор',
+        title_en: '🎺 Dramatic Tenor',
         icon: '⚡',
         range: 'C3 – A4 (131–440 Гц)',
+        range_en: 'C3 – A4 (131–440 Hz)',
         desc: 'Плотный, сильный мужской голос с мощным выходом на высокие ноты.',
+        desc_en: 'Dense, muscular male voice with heroic projecting power on top registers.',
         character: 'Энергичный, пробивной, героический звук.',
+        character_en: 'High-energy, punchy, heroic acoustic timbre.',
         advice: 'Следи за расслаблением нижней челюсти на верхах, тренируйся с винной пробкой в зубах.',
+        advice_en: 'Keep jaw completely relaxed on high notes; practice scales with a wine cork between teeth.',
         examples: 'Лучано Паваротти, Брюс Дикинсон',
+        examples_en: 'Luciano Pavarotti, Bruce Dickinson, Plácido Domingo',
         notes: [
-          { name: 'C3 (131 Гц)', freq: 130.81 },
-          { name: 'E3 (165 Гц)', freq: 164.81 },
-          { name: 'G3 (196 Гц)', freq: 196.00 },
-          { name: 'C4 (262 Гц)', freq: 261.63 }
+          { name: 'C3 (131 Гц)', name_en: 'C3 (131 Hz)', freq: 130.81 },
+          { name: 'E3 (165 Гц)', name_en: 'E3 (165 Hz)', freq: 164.81 },
+          { name: 'G3 (196 Гц)', name_en: 'G3 (196 Hz)', freq: 196.00 },
+          { name: 'C4 (262 Гц)', name_en: 'C4 (262 Hz)', freq: 261.63 }
         ]
       },
       {
         id: 'lyric_tenor',
         name: 'Лирический Тенор',
+        name_en: 'Lyric Tenor',
         category: 'male',
         title: '🕊️ Лирический Тенор',
+        title_en: '🕊️ Lyric Tenor',
         icon: '✨',
         range: 'D3 – C5 (147–523 Гц)',
+        range_en: 'D3 – C5 (147–523 Hz)',
         desc: 'Светлый, звонкий, серебристый и чрезвычайно полетный мужской голос.',
+        desc_en: 'Bright, soaring, silvery male voice with effortless high carry and acoustic brilliance.',
         character: 'Легкий, вдохновляющий, легко прорезает любой фоновый шум.',
+        character_en: 'Light, inspiring, cuts effortlessly through any background noise or mix.',
         advice: 'Развивай грудные резонаторы («мычание» на нотах 140–160 Гц), чтобы голос звучал плотнее.',
+        advice_en: 'Strengthen chest resonance (humming on 140–160 Hz) to give body to lighter notes.',
         examples: 'Фредди Меркьюри, Стинг, Честер Беннингтон',
+        examples_en: 'Freddie Mercury, Sting, Chester Bennington',
         notes: [
-          { name: 'D3 (147 Гц)', freq: 146.83 },
-          { name: 'F3 (175 Гц)', freq: 174.61 },
-          { name: 'A3 (220 Гц)', freq: 220.00 },
-          { name: 'D4 (294 Гц)', freq: 293.66 }
+          { name: 'D3 (147 Гц)', name_en: 'D3 (147 Hz)', freq: 146.83 },
+          { name: 'F3 (175 Гц)', name_en: 'F3 (175 Hz)', freq: 174.61 },
+          { name: 'A3 (220 Гц)', name_en: 'A3 (220 Hz)', freq: 220.00 },
+          { name: 'D4 (294 Гц)', name_en: 'D4 (294 Hz)', freq: 293.66 }
         ]
       },
       {
         id: 'contralto',
         name: 'Контральто',
+        name_en: 'Contralto',
         category: 'female',
         title: '🌹 Контральто (Глубокий женский)',
+        title_en: '🌹 Contralto (Deep Female)',
         icon: '🎷',
         range: 'D3 – F4 (147–349 Гц)',
+        range_en: 'D3 – F4 (147–349 Hz)',
         desc: 'Самый низкий и редкий женский голос. Обладает глубоким, бархатистым грудным звучанием.',
+        desc_en: 'The lowest and rarest female singing voice. Features deep, smokey, velvety chest tone.',
         character: 'Чувственный, густой, дымчатый, джазовый оттенок.',
+        character_en: 'Sensual, lush, smokey jazz acoustic overtone.',
         advice: 'Твой уникальный низ звучит гипнотически. Делай упор на связную плавную речь без резких атак.',
+        advice_en: 'Your rich low register is hypnotic. Focus on connected legato lines without harsh glottal attacks.',
         examples: 'Адель, Эми Уайнхаус, Шер, Тони Брэкстон',
+        examples_en: 'Adele, Amy Winehouse, Cher, Toni Braxton',
         notes: [
-          { name: 'D3 (147 Гц)', freq: 146.83 },
-          { name: 'F3 (175 Гц)', freq: 174.61 },
-          { name: 'A3 (220 Гц)', freq: 220.00 },
-          { name: 'D4 (294 Гц)', freq: 293.66 }
+          { name: 'D3 (147 Гц)', name_en: 'D3 (147 Hz)', freq: 146.83 },
+          { name: 'F3 (175 Гц)', name_en: 'F3 (175 Hz)', freq: 174.61 },
+          { name: 'A3 (220 Гц)', name_en: 'A3 (220 Hz)', freq: 220.00 },
+          { name: 'D4 (294 Гц)', name_en: 'D4 (294 Hz)', freq: 293.66 }
         ]
       },
       {
         id: 'mezzo_soprano',
         name: 'Меццо-Сопрано',
+        name_en: 'Mezzo-Soprano',
         category: 'female',
         title: '🌸 Меццо-Сопрано (Центральный женский)',
+        title_en: '🌸 Mezzo-Soprano (Central Female)',
         icon: '🌺',
         range: 'F3 – C5 (175–523 Гц)',
+        range_en: 'F3 – C5 (175–523 Hz)',
         desc: 'Самый распространенный и гармоничный женский голос. Идеальный баланс груди и звонкого верха.',
+        desc_en: 'Most versatile and balanced female voice. Excellent blend of warm chest and bright top ring.',
         character: 'Теплый, богатый обертонами, эмоциональный и очень выразительный.',
+        character_en: 'Warm, overtone-rich, highly expressive and emotional.',
         advice: 'Твой речевой оптимум — 190–240 Гц. Держи дыхательную опору, чтобы не зажимать горло.',
+        advice_en: 'Speech optimum is 190–240 Hz. Anchor breath support to keep throat open and relaxed.',
         examples: 'Бейонсе, Леди Гага, Рианна, Селин Дион',
+        examples_en: 'Beyoncé, Lady Gaga, Rihanna, Celine Dion',
         notes: [
-          { name: 'F3 (175 Гц)', freq: 174.61 },
-          { name: 'A3 (220 Гц)', freq: 220.00 },
-          { name: 'C4 (262 Гц)', freq: 261.63 },
-          { name: 'F4 (349 Гц)', freq: 349.23 }
+          { name: 'F3 (175 Гц)', name_en: 'F3 (175 Hz)', freq: 174.61 },
+          { name: 'A3 (220 Гц)', name_en: 'A3 (220 Hz)', freq: 220.00 },
+          { name: 'C4 (262 Гц)', name_en: 'C4 (262 Hz)', freq: 261.63 },
+          { name: 'F4 (349 Гц)', name_en: 'F4 (349 Hz)', freq: 349.23 }
         ]
       },
       {
         id: 'soprano',
         name: 'Сопрано',
+        name_en: 'Soprano',
         category: 'female',
         title: '🕊️ Сопрано (Высокий женский)',
+        title_en: '🕊️ Soprano (High Female)',
         icon: '💎',
         range: 'B3 – E5 (247–659 Гц)',
+        range_en: 'B3 – E5 (247–659 Hz)',
         desc: 'Высокий, чистый, кристальный и полетный голос с прозрачным звонким звучанием.',
+        desc_en: 'High, crystalline, soaring voice with luminous clarity and high overtone ring.',
         character: 'Свежий, звонкий, привлекающий внимание.',
+        character_en: 'Crisp, radiant, captivating acoustic brilliance.',
         advice: 'Уделяй максимум внимания мягкой атаке звука без резкого смыкания связок («на зевке»).',
+        advice_en: 'Practice gentle onset attacks without harsh vocal cord closure (sing on an inner yawn).',
         examples: 'Ариана Гранде, Мэрайя Кэри, Монсеррат Кабалье',
+        examples_en: 'Ariana Grande, Mariah Carey, Montserrat Caballé',
         notes: [
-          { name: 'A3 (220 Гц)', freq: 220.00 },
-          { name: 'C4 (262 Гц)', freq: 261.63 },
-          { name: 'E4 (330 Гц)', freq: 329.63 },
-          { name: 'A4 (440 Гц)', freq: 440.00 }
+          { name: 'A3 (220 Гц)', name_en: 'A3 (220 Hz)', freq: 220.00 },
+          { name: 'C4 (262 Гц)', name_en: 'C4 (262 Hz)', freq: 261.63 },
+          { name: 'E4 (330 Гц)', name_en: 'E4 (330 Hz)', freq: 329.63 },
+          { name: 'A4 (440 Гц)', name_en: 'A4 (440 Hz)', freq: 440.00 }
         ]
       }
     ];
@@ -2584,16 +2654,34 @@
     function renderAtlas() {
       const container = document.getElementById('atlasList');
       if (!container) return;
+      const isEn = (typeof currentAppLang !== 'undefined' && currentAppLang === 'en');
 
       const items = VOICE_CATALOG.filter(v => currentAtlasFilter === 'all' || v.category === currentAtlasFilter);
 
       container.innerHTML = items.map(v => {
         const isExp = expandedAtlasId === v.id;
-        const notesHtml = v.notes.map(n => `
-          <button class="atlas-note-pill" onclick="toggleAtlasNote(this, ${n.freq}, '${n.name}')">
-            <span>🎵</span> <b>${n.name}</b>
-          </button>
-        `).join('');
+        const vTitle = isEn && v.title_en ? v.title_en : v.title;
+        const vRange = isEn && v.range_en ? v.range_en : v.range;
+        const vDesc = isEn && v.desc_en ? v.desc_en : v.desc;
+        const vChar = isEn && v.character_en ? v.character_en : v.character;
+        const vAdv = isEn && v.advice_en ? v.advice_en : v.advice;
+        const vEx = isEn && v.examples_en ? v.examples_en : v.examples;
+        const vName = isEn && v.name_en ? v.name_en : v.name;
+
+        const notesHtml = v.notes.map(n => {
+          const nName = isEn && n.name_en ? n.name_en : n.name;
+          return `
+            <button class="atlas-note-pill" onclick="toggleAtlasNote(this, ${n.freq}, '${nName}')">
+              <span>🎵</span> <b>${nName}</b>
+            </button>
+          `;
+        }).join('');
+
+        const lblChar = isEn ? '🎭 Character:' : '🎭 Характер:';
+        const lblAdv = isEn ? '💡 Vocal Tip:' : '💡 Совет:';
+        const lblEx = isEn ? '⭐ Famous Stars:' : '⭐ Звёзды:';
+        const lblPiano = isEn ? '🎹 Tap note for warm-up sustain (Rhodes):' : '🎹 Нажми ноту для распевки (Rhodes sustain):';
+        const lblBtn = isEn ? `🎯 Set Tuner warm-up to ${vName}` : `🎯 Настроить распевку в Тюнере под ${v.name}`;
 
         return `
           <div class="atlas-item ${isExp ? 'expanded' : ''}" id="atlasCard_${v.id}">
@@ -2601,25 +2689,25 @@
               <div style="display: flex; align-items: center; gap: 8px;">
                 <span style="font-size: 18px;">${v.icon}</span>
                 <div>
-                  <div class="atlas-title">${v.title}</div>
-                  <div class="atlas-sub">${v.range}</div>
+                  <div class="atlas-title">${vTitle}</div>
+                  <div class="atlas-sub">${vRange}</div>
                 </div>
               </div>
               <span style="font-size: 14px; color: #8b949e;">${isExp ? '▲' : '▼'}</span>
             </div>
             <div class="atlas-body">
-              <div>${v.desc}</div>
+              <div>${vDesc}</div>
               <div class="atlas-info-box">
-                <div><b style="color: #f0883e;">🎭 Характер:</b> ${v.character}</div>
-                <div><b style="color: #3fb950;">💡 Совет:</b> ${v.advice}</div>
-                <div><b style="color: #d29922;">⭐ Звёзды:</b> ${v.examples}</div>
+                <div><b style="color: #f0883e;">${lblChar}</b> ${vChar}</div>
+                <div><b style="color: #3fb950;">${lblAdv}</b> ${vAdv}</div>
+                <div><b style="color: #d29922;">${lblEx}</b> ${vEx}</div>
               </div>
               <div style="font-size: 11px; font-weight: bold; color: #58a6ff; margin-bottom: 4px;">
-                🎹 Нажми ноту для распевки (Rhodes sustain):
+                ${lblPiano}
               </div>
               <div>${notesHtml}</div>
               <button class="btn-tone" style="width: 100%; margin-top: 8px; font-size: 11px; padding: 7px; background: #238636;" onclick="applyVoiceToTuner('${v.id}')">
-                🎯 Настроить распевку в Тюнере под ${v.name}
+                ${lblBtn}
               </button>
             </div>
           </div>
@@ -2627,7 +2715,6 @@
       }).join('');
     }
     renderAtlas();
-
     let lastMatchedVoiceId = 'dramatic_baritone';
 
     function applyVoiceToTuner(voiceId) {
@@ -2642,8 +2729,9 @@
       switchTab(1);
     }
 
-    function analyzeRecordedVoice() {
+        function analyzeRecordedVoice() {
       document.getElementById('recPlayerBox').style.display = 'block';
+      const isEn = (typeof currentAppLang !== 'undefined' && currentAppLang === 'en');
 
       let pitches = detectedPitchesDuringRecord;
       if (pitches.length < 5) {
@@ -2676,13 +2764,14 @@
         matched = VOICE_CATALOG[9]; // Soprano
       }
 
-      const voiceType = matched.name;
-      const title = matched.title;
-      const desc = matched.desc;
-      const advice = matched.advice;
-      const drill = '🎯 Опорные ноты распевки: ' + matched.notes.map(n => n.name).join(', ');
+      const voiceType = isEn ? (matched.name_en || matched.name) : matched.name;
+      const title = isEn ? (matched.title_en || matched.title) : matched.title;
+      const desc = isEn ? (matched.desc_en || matched.desc) : matched.desc;
+      const advice = isEn ? (matched.advice_en || matched.advice) : matched.advice;
+      const drillHeader = isEn ? '🎯 Warm-up anchor notes: ' : '🎯 Опорные ноты распевки: ';
+      const drill = drillHeader + matched.notes.map(n => isEn ? (n.name_en || n.name) : n.name).join(', ');
       lastMatchedVoiceId = matched.id;
-      userProfile.voiceType = matched.name;
+      userProfile.voiceType = voiceType;
       userProfile.voiceRange = `${minNote.name} – ${maxNote.name}`;
       saveUserProfile();
 
@@ -2691,7 +2780,7 @@
         minNote: minNote.name, minFreq: pMin,
         maxNote: maxNote.name, maxFreq: pMax,
         octaves: octaves.toFixed(1), semitones,
-        date: new Date().toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+        date: new Date().toLocaleDateString(isEn ? 'en-US' : 'ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
       };
 
       const headerEl = document.getElementById('recPlayerHeader');
@@ -2702,17 +2791,17 @@
         localStorage.setItem(BASELINE_KEY, JSON.stringify(lastVoiceRecordData));
         initBaselineVoiceUI();
         document.getElementById('voiceComparisonCard').style.display = 'none';
-        if (headerEl) headerEl.innerHTML = '🎧 <b>Твой Эталонный голос сохранён в память:</b>';
+        if (headerEl) headerEl.innerHTML = isEn ? '🎧 <b>Your Baseline voice is saved in memory:</b>' : '🎧 <b>Твой Эталонный голос сохранён в память:</b>';
         if (savedBadge) {
-          savedBadge.textContent = '💾 Эталон сохранён';
+          savedBadge.textContent = isEn ? '💾 Baseline saved' : '💾 Эталон сохранён';
           savedBadge.style.color = '#58a6ff';
           savedBadge.style.borderColor = '#1f6feb';
         }
       } else {
         // Mode is 'test' -> compare with Baseline if exists
-        if (headerEl) headerEl.innerHTML = '🔬 <b>Свежий замер теста готов: сравни с эталоном!</b>';
+        if (headerEl) headerEl.innerHTML = isEn ? '🔬 <b>New test take ready: compare with baseline!</b>' : '🔬 <b>Свежий замер теста готов: сравни с эталоном!</b>';
         if (savedBadge) {
-          savedBadge.textContent = '🔬 Тест выполнен';
+          savedBadge.textContent = isEn ? '🔬 Test completed' : '🔬 Тест выполнен';
           savedBadge.style.color = '#3fb950';
           savedBadge.style.borderColor = '#238636';
         }
@@ -2725,12 +2814,16 @@
             compCard.style.display = 'block';
 
             document.getElementById('compBaseType').textContent = base.voiceType;
-            document.getElementById('compBaseRange').textContent = `${base.minNote} ➔ ${base.maxNote} (${base.octaves} окт)`;
+            document.getElementById('compBaseRange').textContent = isEn 
+              ? `${base.minNote} ➔ ${base.maxNote} (${base.octaves} oct)` 
+              : `${base.minNote} ➔ ${base.maxNote} (${base.octaves} окт)`;
             document.getElementById('compBaseDate').textContent = base.date;
 
             document.getElementById('compTestType').textContent = lastVoiceRecordData.voiceType;
-            document.getElementById('compTestRange').textContent = `${lastVoiceRecordData.minNote} ➔ ${lastVoiceRecordData.maxNote} (${lastVoiceRecordData.octaves} окт)`;
-            document.getElementById('compTestDate').textContent = 'Только что';
+            document.getElementById('compTestRange').textContent = isEn 
+              ? `${lastVoiceRecordData.minNote} ➔ ${lastVoiceRecordData.maxNote} (${lastVoiceRecordData.octaves} oct)` 
+              : `${lastVoiceRecordData.minNote} ➔ ${lastVoiceRecordData.maxNote} (${lastVoiceRecordData.octaves} окт)`;
+            document.getElementById('compTestDate').textContent = isEn ? 'Just now' : 'Только что';
 
             const baseSemitones = parseInt(base.semitones, 10) || 18;
             const testSemitones = parseInt(lastVoiceRecordData.semitones, 10) || 18;
@@ -2740,24 +2833,30 @@
 
             if (diffSemitones > 0) {
               const pct = Math.round((diffSemitones / baseSemitones) * 100);
-              badge.textContent = `+${pct}% расширение (+${diffSemitones} пт)`;
+              badge.textContent = isEn ? `+${pct}% expansion (+${diffSemitones} st)` : `+${pct}% расширение (+${diffSemitones} пт)`;
               badge.style.color = '#3fb950';
               badge.style.borderColor = '#3fb950';
               badge.style.background = 'rgba(35, 134, 54, 0.2)';
-              analysisText.innerHTML = `🚀 <b>Отличный прогресс!</b> Твой рабочий диапазон расширился на <b>+${diffSemitones} полутонов</b> (+${pct}%) по сравнению со стартовым эталоном. Связки стали более эластичными и послушными!`;
+              analysisText.innerHTML = isEn 
+                ? `🚀 <b>Great progress!</b> Your working vocal range expanded by <b>+${diffSemitones} semitones</b> (+${pct}%) compared to baseline. Vocal cords are more supple and responsive!`
+                : `🚀 <b>Отличный прогресс!</b> Твой рабочий диапазон расширился на <b>+${diffSemitones} полутонов</b> (+${pct}%) по сравнению со стартовым эталоном. Связки стали более эластичными и послушными!`;
             } else if (diffSemitones === 0) {
-              badge.textContent = `Стабильно (100%)`;
+              badge.textContent = isEn ? `Stable (100%)` : `Стабильно (100%)`;
               badge.style.color = '#58a6ff';
               badge.style.borderColor = '#58a6ff';
               badge.style.background = 'rgba(88, 166, 255, 0.2)';
-              analysisText.innerHTML = `🎯 <b>Идеальная стабильность:</b> Диапазон точно соответствует эталону (${testSemitones} полутонов). Твой голос держит форму без просадок.`;
+              analysisText.innerHTML = isEn 
+                ? `🎯 <b>Perfect stability:</b> Range precisely matches baseline (${testSemitones} semitones). Your voice maintains solid form.`
+                : `🎯 <b>Идеальная стабильность:</b> Диапазон точно соответствует эталону (${testSemitones} полутонов). Твой голос держит форму без просадок.`;
             } else {
               const drop = Math.abs(diffSemitones);
-              badge.textContent = `-${drop} пт усталость`;
+              badge.textContent = isEn ? `-${drop} st fatigue` : `-${drop} пт усталость`;
               badge.style.color = '#f0883e';
               badge.style.borderColor = '#f0883e';
               badge.style.background = 'rgba(240, 136, 62, 0.2)';
-              analysisText.innerHTML = `☕ <b>Легкая усталость связок:</b> Сейчас зафиксировано на ${drop} полутона меньше эталона. Сделай упражнение «сброс зажима (Бр-р-р)», попей тёплой воды и дай связкам 15 минут отдыха.`;
+              analysisText.innerHTML = isEn 
+                ? `☕ <b>Slight vocal fatigue:</b> Currently ${drop} semitones below baseline. Try the "lip trill (Br-r-r)" release drill, drink warm water, and rest for 15 minutes.`
+                : `☕ <b>Легкая усталость связок:</b> Сейчас зафиксировано на ${drop} полутона меньше эталона. Сделай упражнение «сброс зажима (Бр-р-р)», попей тёплой воды и дай связкам 15 минут отдыха.`;
             }
           } catch(e) {
             compCard.style.display = 'none';
@@ -2768,7 +2867,9 @@
       }
 
       document.getElementById('recResTitle').textContent = title;
-      document.getElementById('recResSpan').textContent = `Диапазон связок: ${octaves.toFixed(1)} окт (${semitones} полутонов)`;
+      document.getElementById('recResSpan').textContent = isEn 
+        ? `Vocal cords range: ${octaves.toFixed(1)} oct (${semitones} semitones)` 
+        : `Диапазон связок: ${octaves.toFixed(1)} окт (${semitones} полутонов)`;
       document.getElementById('recResMinNote').textContent = minNote.name;
       document.getElementById('recResMinHz').textContent = `${Math.round(pMin)} Hz`;
       document.getElementById('recResMaxNote').textContent = maxNote.name;
@@ -2802,7 +2903,7 @@
 
     function promoteTestToBaseline() {
       if (!lastVoiceRecordData || !currentVoiceAudioBlob) return;
-      if (confirm('Сделать этот свежий замер твоим новым эталоном?')) {
+      if (confirm(currentAppLang === 'en' ? 'Set this new test take as your permanent baseline?' : 'Сделать этот свежий замер твоим новым эталоном?')) {
         localStorage.setItem(BASELINE_KEY, JSON.stringify(lastVoiceRecordData));
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -2814,11 +2915,11 @@
           if (comp) comp.style.display = 'none';
           const badge = document.getElementById('recSavedBadge');
           if (badge) {
-            badge.textContent = '💾 Эталон обновлён';
+            badge.textContent = (currentAppLang === 'en' ? '💾 Baseline updated' : '💾 Эталон обновлён');
             badge.style.color = '#58a6ff';
             badge.style.borderColor = '#1f6feb';
           }
-          alert('✅ Готово! Этот замер успешно установлен твоим новым эталоном!');
+          alert(currentAppLang === 'en' ? '✅ Done! This take is now set as your active baseline!' : '✅ Готово! Этот замер успешно установлен твоим новым эталоном!');
         };
         reader.readAsDataURL(currentVoiceAudioBlob);
       }
@@ -2830,30 +2931,42 @@
       history.unshift(lastVoiceRecordData);
       localStorage.setItem('vocal_history', JSON.stringify(history.slice(0, 15)));
       renderHistory();
-      alert(`✅ Замер сохранен в историю «ДО / ПОСЛЕ»: ${lastVoiceRecordData.voiceType}!`);
+      const isEn = (typeof currentAppLang !== 'undefined' && currentAppLang === 'en');
+      alert(isEn 
+        ? `✅ Take saved to 'BEFORE / AFTER' history: ${lastVoiceRecordData.voiceType}!` 
+        : `✅ Замер сохранен в историю «ДО / ПОСЛЕ»: ${lastVoiceRecordData.voiceType}!`);
     }
 
     function renderHistory() {
       const container = document.getElementById('historyList');
+      if (!container) return;
       const history = JSON.parse(localStorage.getItem('vocal_history') || '[]');
+      const isEn = (typeof currentAppLang !== 'undefined' && currentAppLang === 'en');
       if (history.length === 0) {
-        container.innerHTML = '<div style="font-size: 11px; color: #484f58; text-align: center; padding: 10px;">Нет сохраненных замеров. Сделай свою первую запись выше!</div>';
+        container.innerHTML = `<div style="font-size: 11px; color: #484f58; text-align: center; padding: 10px;">${isEn ? 'No saved takes yet. Record your first voice take above!' : 'Нет сохраненных замеров. Сделай свою первую запись выше!'}</div>`;
         return;
       }
-      container.innerHTML = history.map((item, idx) => `
-        <div class="history-item">
-          <div>
-            <div class="h-title">${idx === 0 ? '🏁 Замер (СЕЙЧАС)' : '📼 Замер №' + (history.length - idx)}: ${item.title}</div>
-            <div class="h-sub">${item.date} • ${item.minNote} ➔ ${item.maxNote}</div>
+      container.innerHTML = history.map((item, idx) => {
+        const takeLabel = isEn 
+          ? (idx === 0 ? '🏁 Take (NOW)' : '📼 Take #' + (history.length - idx))
+          : (idx === 0 ? '🏁 Замер (СЕЙЧАС)' : '📼 Замер №' + (history.length - idx));
+        const octLabel = isEn ? `${item.octaves} oct` : `${item.octaves} окт`;
+        return `
+          <div class="history-item">
+            <div>
+              <div class="h-title">${takeLabel}: ${item.title}</div>
+              <div class="h-sub">${item.date} • ${item.minNote} ➔ ${item.maxNote}</div>
+            </div>
+            <div class="h-stat">${octLabel}</div>
           </div>
-          <div class="h-stat">${item.octaves} окт</div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
     renderHistory();
 
     function clearHistory() {
-      if (confirm('Очистить историю замеров?')) {
+      const isEn = (typeof currentAppLang !== 'undefined' && currentAppLang === 'en');
+      if (confirm(isEn ? 'Clear measurement history?' : 'Очистить историю замеров?')) {
         localStorage.removeItem('vocal_history');
         renderHistory();
       }
@@ -2952,7 +3065,7 @@
         buffer = new Float32Array(analyser.fftSize);
         isRunning = true;
         toggleBtn.classList.add("recording");
-        toggleBtn.querySelector("span").textContent = "Остановить микрофон";
+        toggleBtn.querySelector("span").textContent = (currentAppLang === "en" ? "Stop microphone" : "Остановить микрофон");
 
         updatePitch();
       } catch (err) {
@@ -2967,12 +3080,12 @@
         micStream = null;
       }
       toggleBtn.classList.remove("recording");
-      toggleBtn.querySelector("span").textContent = "Включить микрофон";
+      toggleBtn.querySelector("span").textContent = (currentAppLang === "en" ? "Enable microphone" : "Включить микрофон");
       vuFill.style.width = "0%";
-      badge.textContent = "Жду голос...";
+      badge.textContent = (currentAppLang === "en" ? "Waiting for voice..." : "Жду голос...");
       badge.className = "badge";
       noteVal.textContent = "—";
-      freqVal.textContent = "Пой любую гласную";
+      freqVal.textContent = (currentAppLang === "en" ? "Sing any vowel" : "Пой любую гласную");
     }
 
     function autoCorrelate(buf, sampleRate) {
@@ -3107,14 +3220,15 @@
         noteVal.textContent = `${NOTE_NAMES[noteIdx]} ${octave}`;
         freqVal.textContent = `${pitch.toFixed(1)} Hz`;
 
+        const isEn = (typeof currentAppLang !== 'undefined' && currentAppLang === 'en');
         if (Math.abs(cents) < 18) {
-          badge.textContent = `🎯 Точно в ноту!`;
+          badge.textContent = isEn ? `🎯 In tune!` : `🎯 Точно в ноту!`;
           badge.className = "badge perfect";
         } else if (cents > 0) {
-          badge.textContent = `⬆️ Выше (+${Math.round(cents)}¢)`;
+          badge.textContent = isEn ? `⬆️ Sharp (+${Math.round(cents)}¢)` : `⬆️ Выше (+${Math.round(cents)}¢)`;
           badge.className = "badge too-high";
         } else {
-          badge.textContent = `⬇️ Ниже (${Math.round(cents)}¢)`;
+          badge.textContent = isEn ? `⬇️ Flat (${Math.round(cents)}¢)` : `⬇️ Ниже (${Math.round(cents)}¢)`;
           badge.className = "badge too-low";
         }
 
@@ -3126,7 +3240,7 @@
           ctx.fill();
         }
       } else {
-        badge.textContent = "Пой гласную...";
+        badge.textContent = (currentAppLang === "en" ? "Sing a vowel..." : "Пой гласную...");
         badge.className = "badge";
       }
     }
@@ -3135,14 +3249,18 @@
     
     
     
-    /* === ENCYCLOPEDIA & KNOWLEDGE BASE ENGINE === */
+        /* === ENCYCLOPEDIA & KNOWLEDGE BASE ENGINE === */
     const NEURO_WIKI_ARTICLES = [
       {
         id: "overview",
         group: "1. Общая Концепция",
+        group_en: "1. Core Concept",
         badge: "Концепция",
+        badge_en: "Concept",
         title: "🌌 Зачем объединять Мозг, Голос и Дикцию?",
+        title_en: "🌌 Why Combine Brain, Voice and Diction?",
         summary: "Нейробиологическое обоснование связи когнитивных процессов, голосовых связок и артикуляции.",
+        summary_en: "Neurobiological foundation linking working memory, vocal cords, and stage articulation.",
         content: `
           <div class="wiki-memo-box">
             <b>Принцип космического рейнджера:</b> Мозг пилота, дыхание и четкость доклада в эфир — единый орган боеготовности.
@@ -3156,14 +3274,32 @@
               <li><b>Снятие спазмов:</b> При неврологических нагрузках и рассеянном склерозе речевой аппарат часто спазмируется. Разминка челюсти и распевка нормализуют тонус блуждающего нерва.</li>
             </ul>
           </div>
+        `,
+        content_en: `
+          <div class="wiki-memo-box">
+            <b>The Space Ranger Principle:</b> A pilot's brain, breath control, and crisp transmission over the comms form a unified system of readiness.
+          </div>
+          <p>In neuroscience and speech therapy, it is well documented: brain regions governing <b>working memory</b> (dorsolateral prefrontal cortex), <b>speech articulation</b> (Broca's area), and <b>vocal cords</b> (primary motor cortex and the vagal nucleus) share intertwined neural pathways.</p>
+          <div class="wiki-card">
+            <div class="wiki-card-title">🔬 Benefits of the Triple Synergy:</div>
+            <ul>
+              <li><b>Oxygen Saturation:</b> Diaphragmatic vocal breathing boosts oxygen delivery to the cerebral cortex by 20–25%.</li>
+              <li><b>Neuroplasticity:</b> Alternating between mental math, spatial memory, and speech motor drills stimulates the brain to forge resilient synaptic collateral pathways.</li>
+              <li><b>Spasm Relief:</b> Under neurological stress and cognitive fatigue, speech articulators frequently tense up. Jaw warm-ups and sustained vocalizing regulate vagus nerve tone.</li>
+            </ul>
+          </div>
         `
       },
       {
         id: "memory_ayumu",
         group: "2. Тренировка Памяти",
+        group_en: "2. Memory Training",
         badge: "Память",
+        badge_en: "Memory",
         title: "🐒 Тест Аюму: Феномен шимпанзе и оперативная память",
+        title_en: "🐒 Ayumu Test: Chimpanzee Phenomenon & Working Memory",
         summary: "Как устроена мгновенная фотографическая фиксация и почему приматы превосходят человека.",
+        summary_en: "How photographic flash span operates and why primates outpace humans in eidetic capture.",
         content: `
           <div class="wiki-memo-box">
             В 2007 году в Киотском университете шимпанзе по имени <b>Аюму</b> поразил научный мир: за 0.2 секунды он запоминал расположение цифр от 1 до 9 и безошибочно нажимал их по памяти в закрытых квадратах.
@@ -3177,14 +3313,32 @@
               <li><b>Как тренироваться:</b> Начинай с 4–5 цифр на скорости 1.2 с. Дойдя до стабильных 90% точности, переключайся на 0.7 с и 0.4 с.</li>
             </ul>
           </div>
+        `,
+        content_en: `
+          <div class="wiki-memo-box">
+            In 2007 at Kyoto University, a young chimpanzee named <b>Ayumu</b> stunned the scientific world: within just 0.2 seconds, he memorized positions 1 through 9 and tapped them in ascending order behind blanked squares without error.
+          </div>
+          <p>Human evolution sacrificed part of raw iconic (eidetic) flash memory in exchange for abstract symbolic thinking and complex language. However, this neural visual buffer can be substantially expanded through training!</p>
+          <div class="wiki-card">
+            <div class="wiki-card-title">🎯 Practical Benefits:</div>
+            <ul>
+              <li><b>Expansion of the Visual Capture Buffer:</b> You learn to grasp complex visual arrays in a fraction of a second without internal verbal subvocalization.</li>
+              <li><b>Reaction Velocity:</b> Accelerates transmission across the optic pathway and parietal cortex responsible for spatial coordinate maps.</li>
+              <li><b>Training Protocol:</b> Begin with 4–5 digits at 1.2s flash speed. Once achieving stable 90% accuracy, progress to 0.7s and 0.4s speeds.</li>
+            </ul>
+          </div>
         `
       },
       {
         id: "memory_math",
         group: "2. Тренировка Памяти",
+        group_en: "2. Memory Training",
         badge: "Устный счёт",
+        badge_en: "Mental Math",
         title: "🧮 Устный счёт вслепую: Умножение многозначных чисел",
+        title_en: "🧮 Blind Mental Arithmetic: Multi-Digit Multiplication",
         summary: "Сверхнагрузка на рабочую память через удержание промежуточных разрядов столбика.",
+        summary_en: "Peak cognitive load on prefrontal cortex by holding partial column digits blind.",
         content: `
           <div class="wiki-memo-box">
             <b>Умножение вслепую</b> — это предельная «тяжёлая атлетика» для лобных долей мозга.
@@ -3204,14 +3358,38 @@
               <li><b>Без дублей:</b> Убирает паттерны вроде <code>777</code>, которые мозг пытается просчитать по шаблону.</li>
             </ul>
           </div>
+        `,
+        content_en: `
+          <div class="wiki-memo-box">
+            <b>Blind mental multiplication</b> is the ultimate heavyweight gym session for prefrontal executive function.
+          </div>
+          <p>When numbers are masked by dots (e.g. <code>•••• × ••••</code>), your brain must simultaneously:</p>
+          <ol>
+            <li>Retain mental representations of both original multi-digit operands;</li>
+            <li>Compute partial row products with carried tens;</li>
+            <li>Shift decimal places across tens, hundreds, and thousands;</li>
+            <li>Accumulate partial products into a single final sum.</li>
+          </ol>
+          <div class="wiki-card">
+            <div class="wiki-card-title">🛡️ Why Use Digit Filters (0, 1, 2)?</div>
+            <ul>
+              <li><b>Exclude 1 and 2:</b> Eliminates trivial doubling steps, compelling the mind to execute non-trivial products (7, 8, 9) with continuous mental carries.</li>
+              <li><b>Exclude 0:</b> Eliminates skipped zero rows, requiring rigorous full-column alignment.</li>
+              <li><b>No Duplicates:</b> Prevents repetitive patterns like <code>777</code>, forcing active computation over rote shortcuts.</li>
+            </ul>
+          </div>
         `
       },
       {
         id: "voice_tuning",
         group: "3. Голос и Связки",
+        group_en: "3. Voice & Vocal Cords",
         badge: "Акустика",
+        badge_en: "Acoustics",
         title: "🎙️ Точное интонирование и Тюнер центов",
+        title_en: "🎙️ Precision Pitch Tuning & Cents Meter",
         summary: "Физика голоса: полутона, центы, вибрато и опора дыхания.",
+        summary_en: "Physics of singing: semitones, cents, harmonic resonance, and breath support.",
         content: `
           <div class="wiki-memo-box">
             <b>Что такое цент (¢)?</b> Полутон делится ровно на 100 центов. Отклонение менее 15 центов человеческое ухо воспринимает как идеальное чистое попадание в ноту.
@@ -3224,14 +3402,31 @@
               <li><b>Опора:</b> Не толкай звук связками — звук должен опираться на упругое сопротивление мышц живота (диафрагму).</li>
             </ul>
           </div>
+        `,
+        content_en: `
+          <div class="wiki-memo-box">
+            <b>What is a cent (¢)?</b> A musical semitone is divided into exactly 100 cents. A deviation of less than 15 cents is perceived by the human ear as an impeccably in-tune note.
+          </div>
+          <p>When the tuner rests in the green zone (±15¢), your vocal folds vibrate in acoustic resonance with cranial and sternum resonators. This generates a rich, velvet, carrying sound with zero throat tension.</p>
+          <div class="wiki-card">
+            <div class="wiki-card-title">💡 Keys to Vocal Freedom:</div>
+            <ul>
+              <li><b>The Inhalation Yawn:</b> Sing with the sensation of an inner half-yawn — this lowers the larynx and disengages constrictor throat muscles.</li>
+              <li><b>Diaphragmatic Appoggio:</b> Never push tone with raw throat pressure — sound rests upon elastic abdominal and lower back muscle support.</li>
+            </ul>
+          </div>
         `
       },
       {
         id: "diction_cork",
         group: "4. Сценическая Речь",
+        group_en: "4. Stage Diction",
         badge: "Дикция",
+        badge_en: "Diction",
         title: "🍾 Метод пробки и взрывные согласные",
+        title_en: "🍾 Wine Cork Technique & Explosive Consonants",
         summary: "Методика театральных училищ: почему тренировка с сопротивлением творит чудеса.",
+        summary_en: "Drama school standard: why practicing against resistance achieves effortless crystal clarity.",
         content: `
           <div class="wiki-memo-box">
             <b>Классический приём дикторов Гостелерадио:</b> Чтение скороговорок с винной пробкой в зубах перед каждым важным эфиром.
@@ -3241,14 +3436,28 @@
             <div class="wiki-card-title">🏆 Эффект после 2 минут читки:</div>
             <p>Когда ты вынимаешь пробку, речевой аппарат ощущает невероятную свободу и лёгкость (эффект «снятых гантелей»). Звуки произносятся остро, кристально чисто, а дикция становится «дикторской» без каши во рту.</p>
           </div>
+        `,
+        content_en: `
+          <div class="wiki-memo-box">
+            <b>Classic Broadcast Anchor Standard:</b> Reading complex tongue-twisters with a wine cork clamped between teeth before going on air.
+          </div>
+          <p>Holding a wine cork with front incisors (1–1.5 cm) restricts free jaw displacement. Consequently, the tongue, lips, and soft palate must articulate with twice the muscular amplitude and precision.</p>
+          <div class="wiki-card">
+            <div class="wiki-card-title">🏆 The 2-Minute Release Effect:</div>
+            <p>When you remove the cork, your articulators experience immediate lightness (the "removed ankle weights" effect). Consonants strike with crisp clarity, and speech sounds polished and authoritative.</p>
+          </div>
         `
       },
       {
         id: "storage_memo",
         group: "5. Памятка Системы",
+        group_en: "5. System Reference",
         badge: "Памятка",
+        badge_en: "Reference",
         title: "💾 Памятка: Локальное хранилище и 7-дневный цикл",
+        title_en: "💾 System Memo: Local Storage & 7-Day Cycle",
         summary: "Правила работы с профилем, эталонным голосом и приватностью.",
+        summary_en: "Operational guidelines for profile retention, baseline recordings, and total privacy.",
         content: `
           <div class="wiki-memo-box">
             <b>100% On-Device & Zero Cloud:</b> Ни один звук твоего голоса, ни один математический результат не покидает твоего браузера.
@@ -3259,6 +3468,19 @@
               <li><b>Скользящее 7-дневное окно:</b> Каждое посещение сайта продлевает жизнь твоей статистики ещё на 7 дней.</li>
               <li><b>Запись Эталона:</b> Зафиксируй свой стартовый уровень связок. Затем делай проверяющие замеры после распевки и скороговорок.</li>
               <li><b>Кнопка «Очистить кэш»:</b> Доступна на Главной странице для полного ручного сброса истории.</li>
+            </ul>
+          </div>
+        `,
+        content_en: `
+          <div class="wiki-memo-box">
+            <b>100% On-Device & Zero Cloud:</b> Not a single audio snippet, nor any math score ever leaves your browser sandbox.
+          </div>
+          <div class="wiki-card">
+            <div class="wiki-card-title">📌 Ranger Quick Memo:</div>
+            <ul>
+              <li><b>Rolling 7-Day Window:</b> Every site visit automatically extends your stored records for an additional 7 days.</li>
+              <li><b>Baseline Voice Recording:</b> Capture your starting benchmark take. Later run verification tests after warm-up exercises.</li>
+              <li><b>«Clear Cache» Button:</b> Located right on the Home tab for complete on-demand local data wipe.</li>
             </ul>
           </div>
         `
@@ -3295,14 +3517,19 @@
       if (!navPane) return;
       navPane.innerHTML = "";
       const q = filterQuery.trim().toLowerCase();
+      const isEn = (typeof currentAppLang !== 'undefined' && currentAppLang === 'en');
 
       let currentGroup = "";
       NEURO_WIKI_ARTICLES.forEach((art) => {
-        const matches = !q || art.title.toLowerCase().includes(q) || art.summary.toLowerCase().includes(q) || art.group.toLowerCase().includes(q);
+        const artTitle = isEn && art.title_en ? art.title_en : art.title;
+        const artSummary = isEn && art.summary_en ? art.summary_en : art.summary;
+        const artGroup = isEn && art.group_en ? art.group_en : art.group;
+
+        const matches = !q || artTitle.toLowerCase().includes(q) || artSummary.toLowerCase().includes(q) || artGroup.toLowerCase().includes(q);
         if (!matches) return;
 
-        if (art.group !== currentGroup) {
-          currentGroup = art.group;
+        if (artGroup !== currentGroup) {
+          currentGroup = artGroup;
           const gTitle = document.createElement("div");
           gTitle.className = "wiki-nav-group-title";
           gTitle.textContent = currentGroup;
@@ -3311,7 +3538,7 @@
 
         const item = document.createElement("div");
         item.className = "wiki-nav-item" + (art.id === activeWikiArticleId ? " active" : "");
-        item.innerHTML = `<span>${art.title.replace(/^[^a-zA-Zа-яА-Я0-9]+/, '')}</span>`;
+        item.innerHTML = `<span>${artTitle.replace(/^[^a-zA-Zа-яА-Я0-9]+/, '')}</span>`;
         item.onclick = () => {
           activeWikiArticleId = art.id;
           renderWikiNav(filterQuery);
@@ -3326,19 +3553,25 @@
       if (!pane) return;
       const art = NEURO_WIKI_ARTICLES.find(a => a.id === id) || NEURO_WIKI_ARTICLES[0];
       activeWikiArticleId = art.id;
+      const isEn = (typeof currentAppLang !== 'undefined' && currentAppLang === 'en');
+
+      const artTitle = isEn && art.title_en ? art.title_en : art.title;
+      const artSummary = isEn && art.summary_en ? art.summary_en : art.summary;
+      const artBadge = isEn && art.badge_en ? art.badge_en : art.badge;
+      const artContent = isEn && art.content_en ? art.content_en : art.content;
 
       pane.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; flex-wrap: wrap;">
           <div>
             <h2 style="margin: 0 0 6px 0; color: #00e5ff; font-size: 20px; display: flex; align-items: center; gap: 8px;">
-              ${art.title}
+              ${artTitle}
             </h2>
-            <div style="color: #90a4ae; font-size: 13px;">${art.summary}</div>
+            <div style="color: #90a4ae; font-size: 13px;">${artSummary}</div>
           </div>
-          <span class="wiki-badge rule-guide">${art.badge}</span>
+          <span class="wiki-badge rule-guide">${artBadge}</span>
         </div>
         <div style="border-top: 1px solid #1e3146; padding-top: 14px;">
-          ${art.content}
+          ${artContent}
         </div>
       `;
       pane.scrollTop = 0;
@@ -3353,7 +3586,7 @@
     /* === BASELINE VOICE vs CHECK TEST COMPARATIVE ENGINE === */
     const BASELINE_KEY = 'neuro_atlas_baseline_voice';
 
-    function initBaselineVoiceUI() {
+        function initBaselineVoiceUI() {
       try {
         const raw = localStorage.getItem(BASELINE_KEY);
         const titleEl = document.getElementById('baselineTitle');
@@ -3363,11 +3596,17 @@
         const playerWrap = document.getElementById('baselineAudioPlayerWrap');
         const player = document.getElementById('baselineAudioPlayer');
         const audioData = localStorage.getItem('neuro_atlas_baseline_audio');
+        const isEn = (typeof currentAppLang !== 'undefined' && currentAppLang === 'en');
 
         if (raw) {
           const base = JSON.parse(raw);
-          if (titleEl) titleEl.innerHTML = `Эталон: <b style="color: #58a6ff;">${base.voiceType}</b> (${base.minNote} ➔ ${base.maxNote})`;
-          if (subEl) subEl.textContent = `Записан: ${base.date} • Диапазон: ${base.octaves} окт (${base.semitones} полутонов)`;
+          const lblBase = isEn ? 'Baseline: ' : 'Эталон: ';
+          if (titleEl) titleEl.innerHTML = `${lblBase}<b style="color: #58a6ff;">${base.voiceType}</b> (${base.minNote} ➔ ${base.maxNote})`;
+          if (subEl) {
+            subEl.textContent = isEn 
+              ? `Recorded: ${base.date} • Range: ${base.octaves} oct (${base.semitones} semitones)`
+              : `Записан: ${base.date} • Диапазон: ${base.octaves} окт (${base.semitones} полутонов)`;
+          }
           if (iconEl) iconEl.textContent = '✅';
           if (resetBtn) resetBtn.style.display = 'inline-block';
 
@@ -3378,8 +3617,8 @@
             playerWrap.style.display = 'none';
           }
         } else {
-          if (titleEl) titleEl.textContent = 'Эталонный голос не записан';
-          if (subEl) subEl.textContent = 'Запиши эталон (до 30 сек), чтобы система могла сравнивать твой прогресс';
+          if (titleEl) titleEl.textContent = isEn ? 'No baseline voice recorded' : 'Эталонный голос не записан';
+          if (subEl) subEl.textContent = isEn ? 'Record baseline (up to 30s) so the system can track your vocal progress' : 'Запиши эталон (до 30 сек), чтобы отслеживать прогресс';
           if (iconEl) iconEl.textContent = '📌';
           if (resetBtn) resetBtn.style.display = 'none';
           if (playerWrap) playerWrap.style.display = 'none';
@@ -3392,7 +3631,11 @@
     }
 
     function resetBaselineVoice() {
-      if (confirm('Сбросить текущий эталон голоса и сохранённую аудиозапись?')) {
+      const isEn = (typeof currentAppLang !== 'undefined' && currentAppLang === 'en');
+      const confirmMsg = isEn 
+        ? 'Reset current baseline voice and saved audio take?' 
+        : 'Сбросить текущий эталон голоса и сохранённую аудиозапись?';
+      if (confirm(confirmMsg)) {
         localStorage.removeItem(BASELINE_KEY);
         localStorage.removeItem('neuro_atlas_baseline_audio');
         const player = document.getElementById('baselineAudioPlayer');
@@ -3403,12 +3646,13 @@
         initBaselineVoiceUI();
         const comp = document.getElementById('voiceComparisonCard');
         if (comp) comp.style.display = 'none';
-        alert('📌 Эталон успешно сброшен. Теперь ты можешь напеть новый чистый эталон!');
+        alert(isEn ? '📌 Baseline voice reset. Now you can record a fresh baseline take!' : '📌 Эталон успешно сброшен. Теперь ты можешь напеть новый чистый эталон!');
       }
     }
 
     function startVoiceRecordingMode(mode) {
       voiceRecordingMode = mode;
+      const isEn = (typeof currentAppLang !== 'undefined' && currentAppLang === 'en');
       const btnBase = document.getElementById('btnRecordBaseline');
       const btnTest = document.getElementById('btnRecordTest');
       const btnStop = document.getElementById('btnStopRecordVoice');
@@ -3418,13 +3662,15 @@
       
       const modeTitle = document.getElementById('recModeTitle');
       if (modeTitle) {
-        modeTitle.textContent = (mode === 'baseline') 
-          ? '● ЗАПИСЬ ЭТАЛОНА (до 30 сек)...' 
-          : '● ПРОВЕРЯЮЩИЙ ТЕСТ (до 30 сек)...';
+        if (mode === 'baseline') {
+          modeTitle.textContent = isEn ? '● RECORDING BASELINE (up to 30s)...' : '● ЗАПИСЬ ЭТАЛОНА (до 30 сек)...';
+        } else {
+          modeTitle.textContent = isEn ? '● VERIFICATION TEST (up to 30s)...' : '● ПРОВЕРЯЮЩИЙ ТЕСТ (до 30 сек)...';
+        }
       }
       const recNotesList = document.getElementById('recLiveNotesList');
       if (recNotesList) {
-        recNotesList.innerHTML = '<span style="color: #484f58; font-size: 10px;">(слушаю микрофон, протяни звук...)</span>';
+        recNotesList.innerHTML = `<span style="color: #484f58; font-size: 10px;">${isEn ? '(listening to mic, sustain tone...)' : '(слушаю микрофон, протяни звук...)'}</span>`;
       }
       startVoiceRecording();
     }
@@ -3487,7 +3733,8 @@
     }
 
     function userClearStorage() {
-      if (confirm('Очистить всю сохраненную статистику, эталон голоса и историю тренировок?')) {
+      const isEn = (typeof currentAppLang !== 'undefined' && currentAppLang === 'en');
+      if (confirm(isEn ? 'Clear all saved statistics, baseline voice, and training history?' : 'Очистить всю сохраненную статистику, эталон голоса и историю тренировок?')) {
         localStorage.removeItem(STORAGE_KEY);
         localStorage.removeItem('vocal_history');
         localStorage.removeItem(BASELINE_KEY);
@@ -3500,7 +3747,7 @@
           ayumuCorrect: 0,
           mathLastResult: '',
           mathLastTime: '',
-          voiceType: 'Баритон',
+          voiceType: isEn ? 'Baritone' : 'Баритон',
           voiceRange: 'A2 – E4',
           lastTwisterGroup: 0,
           lastTwisterIndex: 0
@@ -3508,37 +3755,42 @@
         renderDashboardWidget();
         initBaselineVoiceUI();
         if (typeof renderHistory === 'function') renderHistory();
-        alert('🧹 Локальное хранилище полностью очищено!');
+        alert(isEn ? '🧹 Local storage successfully cleared!' : '🧹 Локальное хранилище полностью очищено!');
       }
     }
 
     function renderDashboardWidget() {
+      const isEn = (typeof currentAppLang !== 'undefined' && currentAppLang === 'en');
       const ttlNotice = document.getElementById('storageTtlNotice');
       if (ttlNotice) {
         const remainingMs = SEVEN_DAYS_MS - (Date.now() - userProfile.lastActive);
         const days = Math.max(1, Math.ceil(remainingMs / (24 * 60 * 60 * 1000)));
-        ttlNotice.innerHTML = `Срок хранения: <b style="color: #3fb950;">ещё ${days} дн.</b> (обновляется при каждом входе)`;
+        if (isEn) {
+          ttlNotice.innerHTML = `Storage retention: <b style="color: #3fb950;">${days} days left</b> (renews on visit)`;
+        } else {
+          ttlNotice.innerHTML = `Срок хранения: <b style="color: #3fb950;">ещё ${days} дн.</b> (обновляется при каждом входе)`;
+        }
       }
 
       const ayumuStat = document.getElementById('dashAyumuStat');
       const ayumuAcc = document.getElementById('dashAyumuAcc');
       if (ayumuStat && ayumuAcc) {
-        ayumuStat.textContent = userProfile.ayumuBest > 0 ? `${userProfile.ayumuBest} цифр` : 'Нет данных';
-        ayumuAcc.textContent = userProfile.ayumuTotal > 0 ? `Точность ${userProfile.ayumuAccuracy}` : 'Пройди раунд';
+        ayumuStat.textContent = userProfile.ayumuBest > 0 ? (isEn ? `${userProfile.ayumuBest} digits` : `${userProfile.ayumuBest} цифр`) : (isEn ? 'No data' : 'Нет данных');
+        ayumuAcc.textContent = userProfile.ayumuTotal > 0 ? (isEn ? `Accuracy ${userProfile.ayumuAccuracy}` : `Точность ${userProfile.ayumuAccuracy}`) : (isEn ? 'Complete round' : 'Пройди раунд');
       }
 
       const mathStat = document.getElementById('dashMathStat');
       const mathTime = document.getElementById('dashMathTime');
       if (mathStat && mathTime) {
-        mathStat.textContent = userProfile.mathLastResult || 'Ещё не решено';
-        mathTime.textContent = userProfile.mathLastTime ? `Время: ${userProfile.mathLastTime}` : '2-7 знаков';
+        mathStat.textContent = userProfile.mathLastResult || (isEn ? 'Not solved yet' : 'Ещё не решено');
+        mathTime.textContent = userProfile.mathLastTime ? (isEn ? `Time: ${userProfile.mathLastTime}` : `Время: ${userProfile.mathLastTime}`) : (isEn ? '2-7 digits' : '2-7 знаков');
       }
 
       const voiceType = document.getElementById('dashVoiceType');
       const voiceRange = document.getElementById('dashVoiceRange');
       if (voiceType && voiceRange) {
-        voiceType.textContent = userProfile.voiceType || 'Баритон';
-        voiceRange.textContent = userProfile.voiceRange || 'Распевка готова';
+        voiceType.textContent = userProfile.voiceType || (isEn ? 'Baritone' : 'Баритон');
+        voiceRange.textContent = userProfile.voiceRange || (isEn ? 'Warm-up ready' : 'Распевка готова');
       }
 
       const twisterStat = document.getElementById('dashTwisterStat');
@@ -3673,7 +3925,52 @@
         atlasFilterMale: "🧔 Мужские (7)",
         atlasFilterFemale: "👩 Женские (3)",
         historyTitle: "История замеров и твоих аудиозаписей:",
-        historyClear: "Очистить"
+        historyClear: "Очистить",
+        // Vocal Tab (Tab 1)
+        vocalTitle: "Вокальный Тренажёр",
+        vuLabel: "Микр:",
+        micBtnStart: "Включить микрофон",
+        micBtnStop: "Остановить микрофон",
+        vocalSingAnyVowel: "Пой любую гласную",
+        vocalSingVowel: "Пой гласную...",
+        vocalWaitingVoice: "Жду голос...",
+        vocalInTune: "🎯 Точно в ноту!",
+        vocalSharp: "⬆️ Выше",
+        vocalFlat: "⬇️ Ниже",
+        pianoWarmupTitle: "🎯 РАСПЕВКА ПОД ГОЛОС:",
+        vPresetBaritone: "🎙️ Баритон",
+        vPresetTenor: "🎺 Тенор",
+        vPresetBass: "🧔 Бас",
+        vPresetMezzo: "🌸 Меццо",
+        vPresetSoprano: "💎 Сопрано",
+        vPresetOctaves: "🎹 По октавам",
+        octLabelText: "Октава:",
+        octBtn2: "Бас (C2)",
+        octBtn3: "Речь (C3)",
+        octBtn4: "Высокий (C4)",
+
+        // Baseline & Comparison (Tab 4)
+        baselinePlayerLabel: "🎧 Твой сохранённый эталон (в LocalStorage):",
+        baselineOfflineBadge: "✓ Доступен офлайн",
+        btnResetBaselineText: "Сбросить ↺",
+        recLiveFreqLabel: "Текущий звук:",
+        recLivePrompt: "Протяни гласную или пой ноты",
+        recSungNotesLabel: "Спетые ноты:",
+        voiceComparisonTitle: "📊 СРАВНЕНИЕ С ЭТАЛОНОМ:",
+        compBaseLabel: "📌 Твой Эталон:",
+        compTestLabel: "🔬 Свежий замер:",
+        btnResetTestText: "🔄 Сбросить этот замер",
+        btnPromoteTestText: "📌 Сделать эталоном",
+        recLowLabel: "НИЗ ТВОЕГО ГОЛОСА",
+        recHighLabel: "ВЕРХ ТВОЕГО ГОЛОСА",
+        recAnalysisHeader: "💡 Анализ твоих связок:",
+        btnApplyMatchedVoiceText: "🎯 Настроить Тюнер под этот голос & Распеваться",
+        btnResetVoiceRecText: "Записать заново",
+        btnSaveVoiceHistoryText: "💾 Сохранить в «ДО / ПОСЛЕ»",
+
+        // Encyclopedia Wiki Modal
+        wikiModalMainTitle: "База Знаний & Памятка",
+        wikiSearchPlaceholder: "🔍 Поиск по справке...",
       },
       en: {
         docTitle: "🧠 Neuro-Atlas | Vocal, Memory & Diction",
@@ -3792,7 +4089,52 @@
         atlasFilterMale: "🧔 Male (7)",
         atlasFilterFemale: "👩 Female (3)",
         historyTitle: "Measurement history & recorded takes:",
-        historyClear: "Clear"
+        historyClear: "Clear",
+        // Vocal Tab (Tab 1)
+        vocalTitle: "Vocal Laboratory",
+        vuLabel: "Mic:",
+        micBtnStart: "Enable microphone",
+        micBtnStop: "Stop microphone",
+        vocalSingAnyVowel: "Sing any vowel",
+        vocalSingVowel: "Sing a vowel...",
+        vocalWaitingVoice: "Waiting for voice...",
+        vocalInTune: "🎯 In tune!",
+        vocalSharp: "⬆️ Sharp",
+        vocalFlat: "⬇️ Flat",
+        pianoWarmupTitle: "🎯 VOICE WARM-UP:",
+        vPresetBaritone: "🎙️ Baritone",
+        vPresetTenor: "🎺 Tenor",
+        vPresetBass: "🧔 Bass",
+        vPresetMezzo: "🌸 Mezzo",
+        vPresetSoprano: "💎 Soprano",
+        vPresetOctaves: "🎹 By Octaves",
+        octLabelText: "Octave:",
+        octBtn2: "Bass (C2)",
+        octBtn3: "Speech (C3)",
+        octBtn4: "High (C4)",
+
+        // Baseline & Comparison (Tab 4)
+        baselinePlayerLabel: "🎧 Your saved baseline (in LocalStorage):",
+        baselineOfflineBadge: "✓ Offline available",
+        btnResetBaselineText: "Reset ↺",
+        recLiveFreqLabel: "Current pitch:",
+        recLivePrompt: "Sustain vowel or sing notes",
+        recSungNotesLabel: "Sung notes:",
+        voiceComparisonTitle: "📊 COMPARISON WITH BASELINE:",
+        compBaseLabel: "📌 Your Baseline:",
+        compTestLabel: "🔬 New Take:",
+        btnResetTestText: "🔄 Discard this take",
+        btnPromoteTestText: "📌 Set as baseline",
+        recLowLabel: "LOWEST NOTE",
+        recHighLabel: "HIGHEST NOTE",
+        recAnalysisHeader: "💡 Vocal cords analysis:",
+        btnApplyMatchedVoiceText: "🎯 Set Tuner to this voice & Warm up",
+        btnResetVoiceRecText: "Record again",
+        btnSaveVoiceHistoryText: "💾 Save to 'BEFORE / AFTER'",
+
+        // Encyclopedia Wiki Modal
+        wikiModalMainTitle: "Knowledge Base & Memo",
+        wikiSearchPlaceholder: "🔍 Search guide...",
       }
     };
 
@@ -4063,7 +4405,7 @@
       renderCurrentTwister();
     }
 
-    function applyLanguage(lang) {
+        function applyLanguage(lang) {
       if (lang !== 'ru' && lang !== 'en') lang = 'ru';
       currentAppLang = lang;
       try {
@@ -4130,6 +4472,29 @@
       const sExpl = document.getElementById('storageExplainer'); if (sExpl) sExpl.innerHTML = t.storageExplainer;
       const privF = document.getElementById('privacyFooterNotice'); if (privF) privF.textContent = t.privacyFooter;
 
+      // Vocal Tab (Tab 1)
+      const vocTitle = document.getElementById('vocalTitle'); if (vocTitle) vocTitle.textContent = t.vocalTitle;
+      const vuLbl = document.getElementById('vuLabelText'); if (vuLbl) vuLbl.textContent = t.vuLabel;
+      const togBtnSpan = document.querySelector('#toggleBtn span');
+      if (togBtnSpan && !isRunning) togBtnSpan.textContent = t.micBtnStart;
+      else if (togBtnSpan && isRunning) togBtnSpan.textContent = t.micBtnStop;
+      const freqV = document.getElementById('freqVal');
+      if (freqV && (!isRunning || !history.some(h => h !== null))) freqV.textContent = t.vocalSingAnyVowel;
+      const bdg = document.getElementById('badge');
+      if (bdg && !isRunning) bdg.textContent = t.vocalWaitingVoice;
+
+      const pWarmTitle = document.getElementById('pianoWarmupTitle'); if (pWarmTitle) pWarmTitle.textContent = t.pianoWarmupTitle;
+      const vpBari = document.getElementById('vPresetBaritone'); if (vpBari) vpBari.textContent = t.vPresetBaritone;
+      const vpTen = document.getElementById('vPresetTenor'); if (vpTen) vpTen.textContent = t.vPresetTenor;
+      const vpBass = document.getElementById('vPresetBass'); if (vpBass) vpBass.textContent = t.vPresetBass;
+      const vpMez = document.getElementById('vPresetMezzo'); if (vpMez) vpMez.textContent = t.vPresetMezzo;
+      const vpSop = document.getElementById('vPresetSoprano'); if (vpSop) vpSop.textContent = t.vPresetSoprano;
+      const vpOct = document.getElementById('vPresetOctaves'); if (vpOct) vpOct.textContent = t.vPresetOctaves;
+      const octLbl = document.getElementById('octLabelText'); if (octLbl) octLbl.textContent = t.octLabelText;
+      const ob2 = document.getElementById('octBtn2'); if (ob2) ob2.textContent = t.octBtn2;
+      const ob3 = document.getElementById('octBtn3'); if (ob3) ob3.textContent = t.octBtn3;
+      const ob4 = document.getElementById('octBtn4'); if (ob4) ob4.textContent = t.octBtn4;
+
       // Memory Section (Tab 2)
       const mSub1 = document.getElementById('memSubTab1Text'); if (mSub1) mSub1.textContent = t.memSubTab1;
       const mSub2 = document.getElementById('memSubTab2Text'); if (mSub2) mSub2.textContent = t.memSubTab2;
@@ -4193,6 +4558,30 @@
       const btnRecTest = document.getElementById('btnRecordTest'); if (btnRecTest) btnRecTest.querySelector('span').textContent = t.btnRecordTestText;
       const btnStopRec = document.getElementById('btnStopRecordVoice'); if (btnStopRec) btnStopRec.querySelector('span').textContent = t.btnStopRecordVoiceText;
 
+      const basePlayLbl = document.getElementById('baselinePlayerLabel'); if (basePlayLbl) basePlayLbl.textContent = t.baselinePlayerLabel;
+      const baseOffBdg = document.getElementById('baselineOfflineBadge'); if (baseOffBdg) baseOffBdg.textContent = t.baselineOfflineBadge;
+      const btnResetBase = document.getElementById('btnResetBaseline'); if (btnResetBase) btnResetBase.textContent = t.btnResetBaselineText;
+      const rLiveFreqLbl = document.getElementById('recLiveFreqLabel');
+      if (rLiveFreqLbl) {
+        const curFreq = document.getElementById('recLiveFreq') ? document.getElementById('recLiveFreq').textContent : '— Hz';
+        const curNote = document.getElementById('recLiveNote') ? document.getElementById('recLiveNote').textContent : '—';
+        rLiveFreqLbl.innerHTML = `${t.recLiveFreqLabel} <b id="recLiveFreq" style="color: #3fb950; font-size: 12px;">${curFreq}</b> (<b id="recLiveNote" style="color: #58a6ff; font-size: 12px;">${curNote}</b>)`;
+      }
+      const rPrompt = document.getElementById('recLivePrompt'); if (rPrompt) rPrompt.textContent = t.recLivePrompt;
+      const rSungLbl = document.getElementById('recSungNotesLabel'); if (rSungLbl) rSungLbl.textContent = t.recSungNotesLabel;
+
+      const vCompTitle = document.getElementById('voiceComparisonTitle'); if (vCompTitle) vCompTitle.textContent = t.voiceComparisonTitle;
+      const cBaseLbl = document.getElementById('compBaseLabel'); if (cBaseLbl) cBaseLbl.textContent = t.compBaseLabel;
+      const cTestLbl = document.getElementById('compTestLabel'); if (cTestLbl) cTestLbl.textContent = t.compTestLabel;
+      const bResTest = document.getElementById('btnResetTest'); if (bResTest) bResTest.textContent = t.btnResetTestText;
+      const bPromTest = document.getElementById('btnPromoteTest'); if (bPromTest) bPromTest.textContent = t.btnPromoteTestText;
+      const rLowLbl = document.getElementById('recLowLabel'); if (rLowLbl) rLowLbl.textContent = t.recLowLabel;
+      const rHighLbl = document.getElementById('recHighLabel'); if (rHighLbl) rHighLbl.textContent = t.recHighLabel;
+      const rAnHdr = document.getElementById('recAnalysisHeader'); if (rAnHdr) rAnHdr.textContent = t.recAnalysisHeader;
+      const bAppMatched = document.getElementById('btnApplyMatchedVoiceText'); if (bAppMatched) bAppMatched.textContent = t.btnApplyMatchedVoiceText;
+      const bResVRec = document.getElementById('btnResetVoiceRec'); if (bResVRec) bResVRec.textContent = t.btnResetVoiceRecText;
+      const bSaveVHist = document.getElementById('btnSaveVoiceHistory'); if (bSaveVHist) bSaveVHist.textContent = t.btnSaveVoiceHistoryText;
+
       const atT = document.getElementById('atlasHeaderTitle'); if (atT) atT.textContent = t.atlasHeaderTitle;
       const atB = document.getElementById('atlasBadgeText'); if (atB) atB.textContent = t.atlasBadgeText;
       const atD = document.getElementById('atlasHeaderDesc'); if (atD) atD.textContent = t.atlasHeaderDesc;
@@ -4201,6 +4590,18 @@
       const atFem = document.getElementById('atlasFilterFemale'); if (atFem) atFem.textContent = t.atlasFilterFemale;
       const hTitle = document.getElementById('historyTitleText'); if (hTitle) hTitle.textContent = t.historyTitle;
       const hClear = document.getElementById('historyClearBtn'); if (hClear) hClear.textContent = t.historyClear;
+
+      // Wiki Modal translations
+      const wModalTitle = document.getElementById('wikiModalMainTitle'); if (wModalTitle) wModalTitle.textContent = t.wikiModalMainTitle;
+      const wSearchInp = document.getElementById('wikiSearchInput'); if (wSearchInp) wSearchInp.placeholder = t.wikiSearchPlaceholder;
+
+      // Re-render dynamic elements
+      renderAtlas();
+      initBaselineVoiceUI();
+      renderDashboardWidget();
+      if (typeof renderHistory === 'function') renderHistory();
+      if (typeof renderWikiNav === 'function') renderWikiNav();
+      if (typeof renderWikiArticle === 'function' && typeof activeWikiArticleId !== 'undefined') renderWikiArticle(activeWikiArticleId);
 
       // Synchronize twisters
       setTwisterLanguage(lang);
