@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0f111a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Вокал & Дикция — Студия Мастерства</title>
+  <title>Нейро-Атлас — Вокал, Дикция и Тренировка Мозга</title>
   <style>
     * { 
       box-sizing: border-box; 
@@ -549,6 +549,353 @@
       font-weight: bold;
       box-shadow: 0 0 10px rgba(46, 160, 67, 0.4);
     }
+  
+    /* === MEMORY & COGNITIVE TRAINER STYLES === */
+    :root {
+      --green: #238636;
+      --green-glow: rgba(35, 134, 54, 0.4);
+      --red: #da3633;
+      --red-glow: rgba(218, 54, 51, 0.4);
+      --accent-glow: rgba(31, 111, 235, 0.4);
+      --orange: #f0883e;
+      --orange-glow: rgba(240, 136, 62, 0.4);
+      --card-bg: #161b22;
+      --card-border: #30363d;
+      --text-muted: #8b949e;
+    }
+
+    /* Sub Navigation Tabs for Memory */
+    .mem-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+
+    .mem-tab {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 4px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      text-align: center;
+      transition: all 0.15s;
+      user-select: none;
+    }
+
+    .mem-tab span.icon { font-size: 16px; }
+
+    .mem-tab:hover {
+      border-color: #58a6ff;
+      color: #fff;
+    }
+
+    .mem-tab.active {
+      background: #1f6feb;
+      border-color: #58a6ff;
+      color: #fff;
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    /* Sub Panes */
+    .mem-pane {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .mem-pane.active {
+      display: flex;
+    }
+
+    /* Card container */
+    .mem-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #58a6ff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge-pill {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      color: var(--text-muted);
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    /* Common Buttons & Pills */
+    .pills-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .pill-label {
+      font-size: 11px;
+      font-weight: bold;
+      color: var(--text-muted);
+      margin-right: 4px;
+    }
+
+    .btn-pill {
+      background: #21262d;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: bold;
+      padding: 5px 9px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+
+    .btn-pill.active {
+      background: #1f6feb;
+      border-color: #58a6ff;
+      color: #fff;
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    .btn-secondary {
+      background: #21262d;
+      border: 1px solid var(--card-border);
+      color: #e6edf3;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+
+    .btn-secondary:hover { border-color: #58a6ff; }
+    .btn-secondary:active { transform: scale(0.97); }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .stat-box {
+      background: #0d1117;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .stat-val { font-size: 16px; font-weight: 800; color: #fff; }
+    .stat-lbl { font-size: 9px; color: var(--text-muted); text-transform: uppercase; font-weight: bold; margin-top: 2px; }
+
+    /* 5x4 Board Grid (Mode 1 & Mode 3) */
+    .board-grid {
+      width: 100%;
+      aspect-ratio: 5 / 4;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 6px;
+      background: #090d13;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 8px;
+      touch-action: manipulation;
+    }
+
+    .cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      font-size: 20px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 0.1s, background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .cell.empty { background: transparent; border: 1px dashed rgba(48, 54, 61, 0.4); cursor: default; }
+    .cell.visible { background: #21262d; border: 2px solid #58a6ff; color: #fff; box-shadow: 0 0 10px var(--accent-glow); }
+    .cell.hidden-mask { background: #30363d; border: 2px solid #8b949e; color: transparent; }
+    .cell.hidden-mask:active { transform: scale(0.92); background: #484f58; }
+    .cell.correct { background: var(--green) !important; border-color: #3fb950 !important; color: #fff !important; box-shadow: 0 0 12px var(--green-glow); }
+    .cell.wrong { background: var(--red) !important; border-color: #f85149 !important; color: #fff !important; box-shadow: 0 0 14px var(--red-glow); }
+    .cell.revealed { background: #161b22 !important; border-color: #d29922 !important; color: #d29922 !important; opacity: 0.85; }
+
+    /* Corsi Mode Cell specific */
+    .cell.corsi-flash {
+      background: #f0883e !important;
+      border-color: #ffa657 !important;
+      color: #fff !important;
+      box-shadow: 0 0 16px var(--orange-glow);
+      transform: scale(1.05);
+    }
+
+    /* Mode 2: Digit Span Screen */
+    .digit-flash-screen {
+      width: 100%;
+      height: 180px;
+      background: #090d13;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .digit-big {
+      font-size: 72px;
+      font-weight: 900;
+      color: #58a6ff;
+      text-shadow: 0 0 20px rgba(88, 166, 255, 0.6);
+      transition: all 0.15s;
+    }
+
+    .numpad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+
+    .numpad-btn {
+      background: #21262d;
+      border: 1px solid var(--card-border);
+      color: #fff;
+      font-size: 22px;
+      font-weight: bold;
+      padding: 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: all 0.1s;
+    }
+
+    .numpad-btn:active {
+      transform: scale(0.92);
+      background: #30363d;
+    }
+
+    .input-display {
+      font-family: monospace;
+      font-size: 26px;
+      letter-spacing: 6px;
+      color: #3fb950;
+      font-weight: 900;
+      background: #0d1117;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 8px 14px;
+      text-align: center;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Mode 4: Blind Mental Math Screen */
+    .math-screen {
+      background: #090d13;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .math-problem {
+      font-family: monospace;
+      font-size: clamp(20px, 4.5vw, 32px);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 2px;
+      margin: 8px 0;
+      word-break: break-all;
+    }
+
+    .math-problem.masked {
+      color: #8b949e;
+      letter-spacing: 6px;
+    }
+
+    .timer-badge {
+      font-family: monospace;
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--orange);
+      background: #0d1117;
+      border: 1px solid var(--orange);
+      padding: 4px 12px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .math-input {
+      width: 100%;
+      background: #0d1117;
+      border: 2px solid #1f6feb;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 26px;
+      font-family: monospace;
+      text-align: center;
+      padding: 10px;
+      outline: none;
+      letter-spacing: 2px;
+    }
+
+    .math-input:focus {
+      border-color: #58a6ff;
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    .checkbox-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #e6edf3;
+      cursor: pointer;
+      user-select: none;
+    }
+
   </style>
 </head>
 <body>
@@ -556,13 +903,16 @@
   <!-- Navigation Tabs -->
   <div class="nav-tabs">
     <button class="tab-btn active" id="tabBtn1" onclick="switchTab(1)">
-      <span>🎙️ Тюнер</span>
+      <span>🎙️ Вокал</span>
     </button>
     <button class="tab-btn" id="tabBtn2" onclick="switchTab(2)">
-      <span>🗣️ Дикция</span>
+      <span>🧠 Память</span>
     </button>
     <button class="tab-btn" id="tabBtn3" onclick="switchTab(3)">
-      <span>🧠 AI-Диапазон</span>
+      <span>🗣️ Дикция</span>
+    </button>
+    <button class="tab-btn" id="tabBtn4" onclick="switchTab(4)">
+      <span>📊 Диапазон</span>
     </button>
   </div>
 
@@ -626,7 +976,7 @@
   </div>
 
   <!-- TAB 2: DICTION EXERCISES -->
-  <div class="tab-content" id="tabContent2">
+  <div class="tab-content" id="tabContent3">
     <div class="diction-wrap">
       
       <!-- 1. Cork / Pencil -->
@@ -684,7 +1034,7 @@
   </div>
 
   <!-- TAB 3: AI DIAGNOSTICS & VOICE RECORDER -->
-  <div class="tab-content" id="tabContent3">
+  <div class="tab-content" id="tabContent4">
     <div class="diag-wrap">
       
       <div class="diag-card">
@@ -755,6 +1105,7 @@
             <button class="btn-step-next" style="flex: 2;" onclick="saveVoiceRecordToHistory()">💾 Сохранить в «ДО / ПОСЛЕ»</button>
           </div>
         </div>
+      </div>
 
       <!-- Vocal Palette Atlas (10 voice types) -->
       <div class="diag-card" style="margin-top: 14px; margin-bottom: 12px;">
@@ -836,7 +1187,7 @@
       return closest;
     }
 
-    // Tab Switching
+    // Main Tab Switching (1=Vocal, 2=Memory, 3=Diction, 4=Diagnostics)
     function switchTab(num) {
       document.querySelectorAll('.tab-btn').forEach((b, i) => {
         b.classList.toggle('active', i === (num - 1));
@@ -844,7 +1195,14 @@
       document.querySelectorAll('.tab-content').forEach((c, i) => {
         c.classList.toggle('active', i === (num - 1));
       });
-      if (num === 1) resizeCanvas();
+      if (num === 1) {
+        resizeCanvas();
+      } else {
+        // Automatically stop tuner mic to protect privacy and save phone battery
+        if (typeof isListening !== 'undefined' && isListening && typeof stopTuner === 'function') {
+          stopTuner();
+        }
+      }
     }
 
     // Dynamic Piano Grid for Octave
@@ -1846,6 +2204,607 @@
         badge.className = "badge";
       }
     }
+  
+
+    /* === COGNITIVE BRAIN GYM SCRIPTS === */
+// Audio Synthesizer (Web Audio API)
+    let memAudioCtx = null;
+    function playTone(freq, type = 'sine', duration = 0.08, vol = 0.15) {
+      try {
+        if (!memAudioCtx) memAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (memAudioCtx.state === 'suspended') memAudioCtx.resume();
+        const osc = memAudioCtx.createOscillator();
+        const gain = memAudioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, memAudioCtx.currentTime);
+        gain.gain.setValueAtTime(vol, memAudioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, memAudioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(memAudioCtx.destination);
+        osc.start();
+        osc.stop(memAudioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function soundSuccess() {
+      playTone(523.25, 'triangle', 0.08, 0.2);
+      setTimeout(() => playTone(659.25, 'triangle', 0.12, 0.2), 60);
+    }
+    function soundWin() {
+      playTone(523.25, 'triangle', 0.08, 0.2);
+      setTimeout(() => playTone(659.25, 'triangle', 0.08, 0.2), 70);
+      setTimeout(() => playTone(783.99, 'triangle', 0.18, 0.25), 140);
+    }
+    function soundError() {
+      playTone(196.00, 'sawtooth', 0.18, 0.25);
+    }
+
+    // Tab Switching
+    function switchMemSubTab(num, btn) {
+      document.querySelectorAll('.mem-tab').forEach((b, i) => b.classList.toggle('active', i === (num - 1)));
+      document.querySelectorAll('.mem-pane').forEach((p, i) => p.classList.toggle('active', i === (num - 1)));
+    }
+
+    /* ======================================================== */
+    /* 1. AYUMU GRID MODULE                                     */
+    /* ======================================================== */
+    const AYUMU_CELLS = 20;
+    let ayumuDigits = 4;
+    let ayumuDurationMs = 2000;
+    let ayumuState = 'IDLE';
+    let ayumuNumbers = [];
+    let ayumuExpected = 0;
+    let ayumuTimer = null;
+    let ayumuStreak = 0;
+    let ayumuBest = 4;
+    let ayumuTotal = 0;
+    let ayumuCorrect = 0;
+
+    const ayumuGridEl = document.getElementById('ayumuGrid');
+    const ayumuStatusEl = document.getElementById('ayumuStatus');
+    const ayumuBtn = document.getElementById('btnAyumuStart');
+
+    function initAyumuGrid() {
+      ayumuGridEl.innerHTML = '';
+      for (let i = 0; i < AYUMU_CELLS; i++) {
+        const c = document.createElement('div');
+        c.className = 'cell empty';
+        c.addEventListener('pointerdown', (e) => {
+          e.preventDefault();
+          onAyumuCellTap(i, c);
+        });
+        ayumuGridEl.appendChild(c);
+      }
+    }
+    initAyumuGrid();
+
+    function setAyumuSpeed(ms, btn) {
+      if (ayumuState === 'SHOWING' || ayumuState === 'PLAYING') return;
+      ayumuDurationMs = ms;
+      btn.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function setAyumuStart(cnt, btn) {
+      if (ayumuState === 'SHOWING' || ayumuState === 'PLAYING') return;
+      ayumuDigits = cnt;
+      btn.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('ayumuBadge').textContent = `Уровень: ${ayumuDigits} цифр`;
+    }
+
+    function startAyumuRound() {
+      if (ayumuState === 'SHOWING') return;
+      clearTimeout(ayumuTimer);
+      ayumuState = 'SHOWING';
+      ayumuExpected = 0;
+      ayumuStatusEl.style.color = '#58a6ff';
+      ayumuStatusEl.textContent = `👁️ Запомни расположение ${ayumuDigits} цифр!`;
+      ayumuBtn.style.display = 'none';
+
+      const positions = [];
+      while (positions.length < ayumuDigits) {
+        const r = Math.floor(Math.random() * AYUMU_CELLS);
+        if (!positions.includes(r)) positions.push(r);
+      }
+
+      ayumuNumbers = [];
+      for (let i = 1; i <= ayumuDigits; i++) {
+        ayumuNumbers.push({ val: i, pos: positions[i - 1] });
+      }
+
+      const cells = ayumuGridEl.querySelectorAll('.cell');
+      cells.forEach(c => { c.className = 'cell empty'; c.textContent = ''; c.dataset.val = ''; });
+
+      ayumuNumbers.forEach(item => {
+        const c = cells[item.pos];
+        c.className = 'cell visible';
+        c.textContent = item.val;
+        c.dataset.val = item.val;
+      });
+
+      playTone(440, 'sine', 0.05, 0.1);
+
+      ayumuTimer = setTimeout(maskAyumuCells, ayumuDurationMs);
+    }
+
+    function maskAyumuCells() {
+      if (ayumuState !== 'SHOWING') return;
+      ayumuState = 'PLAYING';
+      ayumuStatusEl.style.color = '#e6edf3';
+      ayumuStatusEl.textContent = '👆 Нажимай по памяти по возрастанию!';
+
+      const cells = ayumuGridEl.querySelectorAll('.cell');
+      ayumuNumbers.forEach(item => {
+        const c = cells[item.pos];
+        c.className = 'cell hidden-mask';
+        c.textContent = '?';
+      });
+    }
+
+    function onAyumuCellTap(pos, cellEl) {
+      if (ayumuState !== 'PLAYING') {
+        if (ayumuState === 'SHOWING') {
+          clearTimeout(ayumuTimer);
+          maskAyumuCells();
+        } else return;
+      }
+
+      const val = parseInt(cellEl.dataset.val, 10);
+      if (!val) return;
+
+      const expected = ayumuNumbers[ayumuExpected].val;
+      if (val === expected) {
+        soundSuccess();
+        cellEl.className = 'cell correct';
+        cellEl.textContent = val;
+        ayumuExpected++;
+
+        if (ayumuExpected >= ayumuNumbers.length) {
+          ayumuState = 'ROUND_OVER';
+          ayumuStreak++;
+          ayumuTotal++;
+          ayumuCorrect++;
+          if (ayumuDigits > ayumuBest) ayumuBest = ayumuDigits;
+          document.getElementById('ayumuStreak').textContent = ayumuStreak;
+          document.getElementById('ayumuBest').textContent = ayumuBest;
+          document.getElementById('ayumuAccuracy').textContent = `${Math.round((ayumuCorrect / ayumuTotal) * 100)}%`;
+          soundWin();
+          ayumuStatusEl.style.color = '#3fb950';
+          ayumuStatusEl.textContent = `🎉 Отлично! Все ${ayumuDigits} цифр верно!`;
+          if (ayumuDigits < 10) ayumuDigits++;
+          document.getElementById('ayumuBadge').textContent = `Уровень: ${ayumuDigits} цифр`;
+          ayumuBtn.style.display = 'flex';
+          ayumuBtn.style.background = '#238636';
+          ayumuBtn.innerHTML = `<span>Следующий уровень: ${ayumuDigits} цифр ➔</span>`;
+        }
+      } else {
+        ayumuState = 'ROUND_OVER';
+        ayumuStreak = 0;
+        ayumuTotal++;
+        document.getElementById('ayumuStreak').textContent = 0;
+        document.getElementById('ayumuAccuracy').textContent = `${Math.round((ayumuCorrect / ayumuTotal) * 100)}%`;
+        soundError();
+        cellEl.className = 'cell wrong';
+        cellEl.textContent = val;
+
+        const cells = ayumuGridEl.querySelectorAll('.cell');
+        ayumuNumbers.forEach(item => {
+          const c = cells[item.pos];
+          if (c !== cellEl && !c.classList.contains('correct')) {
+            c.className = 'cell revealed';
+            c.textContent = item.val;
+          }
+        });
+
+        ayumuStatusEl.style.color = '#da3633';
+        ayumuStatusEl.textContent = `❌ Ошибка! Нужна была цифра ${expected}. Запомни поле!`;
+        ayumuBtn.style.display = 'flex';
+        ayumuBtn.style.background = '#1f6feb';
+        ayumuBtn.innerHTML = `<span>Попробовать снова (${ayumuDigits} цифр) ↺</span>`;
+      }
+    }
+
+
+    /* ======================================================== */
+    /* 2. DIGIT SPAN MODULE (Прямо и Задом наперёд)             */
+    /* ======================================================== */
+    let spanLength = 4;
+    let spanDirection = 'forward'; // 'forward' or 'backward'
+    let spanSequence = [];
+    let spanUserDigits = [];
+    let spanIsActive = false;
+
+    function setSpanDirection(dir) {
+      if (spanIsActive) return;
+      spanDirection = dir;
+      document.getElementById('spanDirForward').classList.toggle('active', dir === 'forward');
+      document.getElementById('spanDirBackward').classList.toggle('active', dir === 'backward');
+    }
+
+    function setSpanLength(len, btn) {
+      if (spanIsActive) return;
+      spanLength = len;
+      btn.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('spanBadge').textContent = `Длина: ${spanLength} цифр`;
+    }
+
+    function startSpanRound() {
+      spanIsActive = true;
+      spanUserDigits = [];
+      document.getElementById('spanInputDisplay').textContent = '...';
+      document.getElementById('btnSpanStart').style.display = 'none';
+
+      spanSequence = [];
+      for (let i = 0; i < spanLength; i++) {
+        spanSequence.push(Math.floor(Math.random() * 10));
+      }
+
+      document.getElementById('spanSubText').textContent = 'Внимание на экран...';
+      let idx = 0;
+
+      const interval = setInterval(() => {
+        if (idx < spanSequence.length) {
+          const d = spanSequence[idx];
+          const displayEl = document.getElementById('spanDigitDisplay');
+          displayEl.textContent = d;
+          displayEl.style.transform = 'scale(1.2)';
+          setTimeout(() => { displayEl.style.transform = 'scale(1.0)'; }, 150);
+          playTone(400 + d * 40, 'sine', 0.08, 0.15);
+          idx++;
+        } else {
+          clearInterval(interval);
+          setTimeout(() => {
+            document.getElementById('spanDigitDisplay').textContent = '?';
+            document.getElementById('spanSubText').textContent = spanDirection === 'backward'
+              ? '🔄 Введи цифры ЗАДОМ НАПЕРЁД (с конца к началу):'
+              : 'Введи цифры в том же порядке:';
+            document.getElementById('spanInputDisplay').textContent = '';
+          }, 600);
+        }
+      }, 900);
+    }
+
+    function spanInputKey(num) {
+      if (!spanIsActive || spanUserDigits.length >= spanLength) return;
+      spanUserDigits.push(num);
+      document.getElementById('spanInputDisplay').textContent = spanUserDigits.join(' ');
+      playTone(500, 'sine', 0.04, 0.1);
+    }
+
+    function spanClearInput() {
+      if (!spanIsActive || spanUserDigits.length === 0) return;
+      spanUserDigits.pop();
+      document.getElementById('spanInputDisplay').textContent = spanUserDigits.join(' ');
+    }
+
+    function spanSubmit() {
+      if (!spanIsActive || spanUserDigits.length === 0) return;
+      spanIsActive = false;
+
+      let expected = [...spanSequence];
+      if (spanDirection === 'backward') {
+        expected.reverse();
+      }
+
+      const isCorrect = spanUserDigits.length === expected.length &&
+        spanUserDigits.every((val, i) => val === expected[i]);
+
+      const subText = document.getElementById('spanSubText');
+      const inputDisp = document.getElementById('spanInputDisplay');
+
+      if (isCorrect) {
+        soundWin();
+        subText.style.color = '#3fb950';
+        subText.textContent = `🎉 БРАВО! Абсолютно верно: [${expected.join(', ')}]`;
+        inputDisp.style.borderColor = '#3fb950';
+      } else {
+        soundError();
+        subText.style.color = '#da3633';
+        subText.textContent = `❌ Ошибка! Было: [${spanSequence.join(', ')}], ожидалось: [${expected.join(', ')}]`;
+        inputDisp.style.borderColor = '#da3633';
+      }
+
+      document.getElementById('btnSpanStart').style.display = 'flex';
+      document.getElementById('btnSpanStart').innerHTML = `<span>Повторить раунд ↺</span>`;
+    }
+
+
+    /* ======================================================== */
+    /* 3. CORSI BLOCKS MODULE (Суслики / Кактусы по сетке)       */
+    /* ======================================================== */
+    let corsiLength = 4;
+    let corsiSequence = [];
+    let corsiUserSteps = [];
+    let corsiIsShowing = false;
+    let corsiCanTap = false;
+
+    const corsiGridEl = document.getElementById('corsiGrid');
+    const corsiStatusEl = document.getElementById('corsiStatus');
+    const corsiBtn = document.getElementById('btnCorsiStart');
+
+    function initCorsiGrid() {
+      corsiGridEl.innerHTML = '';
+      for (let i = 0; i < AYUMU_CELLS; i++) {
+        const c = document.createElement('div');
+        c.className = 'cell empty';
+        c.addEventListener('pointerdown', (e) => {
+          e.preventDefault();
+          onCorsiCellTap(i, c);
+        });
+        corsiGridEl.appendChild(c);
+      }
+    }
+    initCorsiGrid();
+
+    function setCorsiLength(len, btn) {
+      if (corsiIsShowing || corsiCanTap) return;
+      corsiLength = len;
+      btn.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('corsiBadge').textContent = `Длина следа: ${corsiLength}`;
+    }
+
+    function startCorsiRound() {
+      if (corsiIsShowing) return;
+      corsiIsShowing = true;
+      corsiCanTap = false;
+      corsiUserSteps = [];
+      corsiBtn.style.display = 'none';
+
+      // Pick random sequence of positions (no consecutive duplicates)
+      corsiSequence = [];
+      while (corsiSequence.length < corsiLength) {
+        const r = Math.floor(Math.random() * AYUMU_CELLS);
+        if (corsiSequence.length === 0 || corsiSequence[corsiSequence.length - 1] !== r) {
+          corsiSequence.push(r);
+        }
+      }
+
+      const cells = corsiGridEl.querySelectorAll('.cell');
+      cells.forEach(c => { c.className = 'cell empty'; c.textContent = ''; });
+
+      corsiStatusEl.style.color = '#f0883e';
+      corsiStatusEl.textContent = '👀 Следи за вспыхивающими ячейками!';
+
+      let step = 0;
+      const interval = setInterval(() => {
+        if (step < corsiSequence.length) {
+          const pos = corsiSequence[step];
+          const c = cells[pos];
+          c.className = 'cell corsi-flash';
+          c.textContent = '🌵';
+          playTone(480 + step * 50, 'triangle', 0.12, 0.2);
+
+          setTimeout(() => {
+            c.className = 'cell empty';
+            c.textContent = '';
+          }, 500);
+
+          step++;
+        } else {
+          clearInterval(interval);
+          setTimeout(() => {
+            corsiIsShowing = false;
+            corsiCanTap = true;
+            corsiStatusEl.style.color = '#e6edf3';
+            corsiStatusEl.textContent = '👆 Нажимай по памяти по той же траектории!';
+            cells.forEach(c => { c.className = 'cell hidden-mask'; c.textContent = '•'; });
+          }, 400);
+        }
+      }, 750);
+    }
+
+    function onCorsiCellTap(pos, cellEl) {
+      if (!corsiCanTap) return;
+
+      const expectedPos = corsiSequence[corsiUserSteps.length];
+      if (pos === expectedPos) {
+        soundSuccess();
+        cellEl.className = 'cell correct';
+        cellEl.textContent = '✓';
+        corsiUserSteps.push(pos);
+
+        if (corsiUserSteps.length === corsiSequence.length) {
+          soundWin();
+          corsiCanTap = false;
+          corsiStatusEl.style.color = '#3fb950';
+          corsiStatusEl.textContent = `🎉 Браво! Вся пространственная цепочка из ${corsiLength} шагов пройдена!`;
+          if (corsiLength < 8) corsiLength++;
+          document.getElementById('corsiBadge').textContent = `Длина следа: ${corsiLength}`;
+          corsiBtn.style.display = 'flex';
+          corsiBtn.style.background = '#238636';
+          corsiBtn.innerHTML = `<span>Следующий раунд (${corsiLength} шагов) ➔</span>`;
+        }
+      } else {
+        soundError();
+        cellEl.className = 'cell wrong';
+        cellEl.textContent = '✗';
+        corsiCanTap = false;
+        corsiStatusEl.style.color = '#da3633';
+        corsiStatusEl.textContent = '❌ Неверная ячейка! Попробуй ещё раз.';
+
+        const cells = corsiGridEl.querySelectorAll('.cell');
+        const correctCell = cells[expectedPos];
+        correctCell.className = 'cell revealed';
+        correctCell.textContent = '🌵';
+
+        corsiBtn.style.display = 'flex';
+        corsiBtn.style.background = '#1f6feb';
+        corsiBtn.innerHTML = `<span>Попробовать снова ↺</span>`;
+      }
+    }
+
+
+    /* ======================================================== */
+    /* 4. BLIND MENTAL MATH MODULE (Умножение вслепую)          */
+    /* ======================================================== */
+    let mathDigits1 = 3;
+    let mathDigits2 = 3;
+    let mathNum1 = 478n;
+    let mathNum2 = 639n;
+    let mathStartTime = null;
+    let mathTimerInterval = null;
+    let mathIsHidden = false;
+
+    function setMathDigits1(cnt, btn) {
+      mathDigits1 = cnt;
+      btn.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateMathBadge();
+      generateMathProblem();
+    }
+
+    function setMathDigits2(cnt, btn) {
+      mathDigits2 = cnt;
+      btn.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateMathBadge();
+      generateMathProblem();
+    }
+
+    function updateMathBadge() {
+      document.getElementById('mathDigitsBadge').textContent = `${mathDigits1} × ${mathDigits2} знака`;
+    }
+
+    function generateRandomNumber(digits) {
+      const exclude1 = document.getElementById('chkExclude1').checked;
+      const exclude2 = document.getElementById('chkExclude2').checked;
+      const exclude0 = document.getElementById('chkExclude0')?.checked;
+      const noReps = document.getElementById('chkNoRepetitions').checked;
+
+      let validDigits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+      if (exclude0) validDigits = validDigits.filter(d => d !== 0);
+      if (exclude1) validDigits = validDigits.filter(d => d !== 1);
+      if (exclude2) validDigits = validDigits.filter(d => d !== 2);
+
+      let res = '';
+      for (let i = 0; i < digits; i++) {
+        let pool = [...validDigits];
+        if (i === 0) pool = pool.filter(d => d !== 0); // No leading zero
+        if (noReps && res.length > 0) {
+          const prev = parseInt(res[res.length - 1], 10);
+          pool = pool.filter(d => d !== prev);
+        }
+        if (pool.length === 0) pool = [3, 4, 5, 6, 7, 8, 9];
+        const pick = pool[Math.floor(Math.random() * pool.length)];
+        res += pick;
+      }
+      return BigInt(res);
+    }
+
+    function generateMathProblem() {
+      cancelMathProblem();
+      mathNum1 = generateRandomNumber(mathDigits1);
+      mathNum2 = generateRandomNumber(mathDigits2);
+      document.getElementById('mathProblemText').textContent = `${mathNum1.toString()} × ${mathNum2.toString()}`;
+      document.getElementById('mathProblemText').className = 'math-problem';
+      document.getElementById('mathSubMsg').textContent = 'Нажми «Скрыть числа и начать счёт»';
+    }
+
+    function startMathTimer() {
+      mathIsHidden = true;
+      document.getElementById('mathProblemText').textContent = `${'•'.repeat(mathDigits1)} × ${'•'.repeat(mathDigits2)}`;
+      document.getElementById('mathProblemText').className = 'math-problem masked';
+      document.getElementById('mathSubMsg').textContent = 'Числа в памяти! Считай в столбик в уме...';
+
+      document.getElementById('mathPreStartRow').style.display = 'none';
+      document.getElementById('mathInProgressRow').style.display = 'flex';
+      document.getElementById('mathResultBox').style.display = 'none';
+      document.getElementById('mathUserAnswer').value = '';
+
+      mathStartTime = Date.now();
+      clearInterval(mathTimerInterval);
+      mathTimerInterval = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - mathStartTime) / 1000);
+        const m = Math.floor(elapsed / 60).toString().padStart(2, '0');
+        const s = (elapsed % 60).toString().padStart(2, '0');
+        document.getElementById('mathTimer').textContent = `${m}:${s}`;
+      }, 1000);
+
+      playTone(550, 'sine', 0.1, 0.15);
+    }
+
+    function peekMathProblem() {
+      const probEl = document.getElementById('mathProblemText');
+      probEl.textContent = `${mathNum1.toString()} × ${mathNum2.toString()}`;
+      probEl.className = 'math-problem';
+      setTimeout(() => {
+        if (mathIsHidden) {
+          probEl.textContent = `${'•'.repeat(mathDigits1)} × ${'•'.repeat(mathDigits2)}`;
+          probEl.className = 'math-problem masked';
+        }
+      }, 1500);
+    }
+
+    function cancelMathProblem() {
+      mathIsHidden = false;
+      clearInterval(mathTimerInterval);
+      document.getElementById('mathTimer').textContent = '00:00';
+      document.getElementById('mathPreStartRow').style.display = 'flex';
+      document.getElementById('mathInProgressRow').style.display = 'none';
+      document.getElementById('mathResultBox').style.display = 'none';
+      document.getElementById('mathProblemText').textContent = `${mathNum1.toString()} × ${mathNum2.toString()}`;
+      document.getElementById('mathProblemText').className = 'math-problem';
+    }
+
+    function checkMathAnswer() {
+      const userStr = document.getElementById('mathUserAnswer').value.trim();
+      if (!userStr) {
+        alert('Пожалуйста, введи полученный результат умножения!');
+        return;
+      }
+
+      mathIsHidden = false;
+      clearInterval(mathTimerInterval);
+
+      const userVal = BigInt(userStr);
+      const correctVal = mathNum1 * mathNum2;
+      const isCorrect = userVal === correctVal;
+
+      const probEl = document.getElementById('mathProblemText');
+      probEl.textContent = `${mathNum1.toString()} × ${mathNum2.toString()}`;
+      probEl.className = 'math-problem';
+
+      const resBox = document.getElementById('mathResultBox');
+      resBox.style.display = 'block';
+
+      const elapsed = Math.floor((Date.now() - mathStartTime) / 1000);
+      const m = Math.floor(elapsed / 60);
+      const s = elapsed % 60;
+      const timeStr = `${m > 0 ? m + ' мин ' : ''}${s} сек`;
+
+      if (isCorrect) {
+        soundWin();
+        resBox.style.borderColor = '#3fb950';
+        resBox.innerHTML = `
+          <div style="font-size: 18px; font-weight: 900; color: #3fb950;">🎉 ГЕНИАЛЬНО! АБСОЛЮТНО ТОЧНО!</div>
+          <div style="font-size: 13px; color: #fff; margin-top: 6px;">
+            ${mathNum1} × ${mathNum2} = <b style="color: #3fb950;">${correctVal.toLocaleString('ru-RU')}</b>
+          </div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Время счёта: <b>${timeStr}</b></div>
+          <button class="btn-main" style="margin-top: 10px;" onclick="generateMathProblem()">Следующий пример ➔</button>
+        `;
+      } else {
+        soundError();
+        const diff = userVal > correctVal ? (userVal - correctVal) : (correctVal - userVal);
+        resBox.style.borderColor = '#da3633';
+        resBox.innerHTML = `
+          <div style="font-size: 18px; font-weight: 900; color: #da3633;">❌ Ошибка в расчетах</div>
+          <div style="font-size: 13px; color: #fff; margin-top: 6px;">
+            Твой ответ: <b style="color: #da3633;">${userVal.toLocaleString('ru-RU')}</b><br>
+            Правильный ответ: <b style="color: #3fb950;">${correctVal.toLocaleString('ru-RU')}</b>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+            Разница: ${diff.toLocaleString('ru-RU')} • Время: ${timeStr}
+          </div>
+          <button class="btn-secondary" style="margin-top: 10px; width: 100%;" onclick="generateMathProblem()">Попробовать другой пример ↺</button>
+        `;
+      }
+    }
+
+    generateMathProblem();
   </script>
 </body>
 </html>
