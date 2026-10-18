@@ -1103,6 +1103,14 @@
       .wiki-search-box { width: 140px; }
     }
 
+    @keyframes blink-dot {
+      from { opacity: 1; transform: scale(1); }
+      to { opacity: 0.25; transform: scale(0.8); }
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.7); }
+      to { opacity: 1; transform: scale(1); }
+    }
   </style>
 </head>
 <body>
@@ -1657,17 +1665,27 @@
         </div>
 
         <!-- Baseline Status Banner -->
-        <div id="baselineStatusBanner" style="background: #090d13; border: 1px solid #30363d; border-radius: 10px; padding: 10px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 20px;" id="baselineIcon">📌</span>
-            <div>
-              <div style="font-size: 13px; font-weight: bold; color: #fff;" id="baselineTitle">Эталонный голос не записан</div>
-              <div style="font-size: 11px; color: #8b949e;" id="baselineSub">Запиши эталон (до 30 сек), чтобы отслеживать прогресс</div>
+        <div id="baselineStatusBanner" style="background: #090d13; border: 1px solid #30363d; border-radius: 12px; padding: 12px; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 22px;" id="baselineIcon">📌</span>
+              <div>
+                <div style="font-size: 13px; font-weight: bold; color: #fff;" id="baselineTitle">Эталонный голос не записан</div>
+                <div style="font-size: 11px; color: #8b949e;" id="baselineSub">Запиши эталон (до 30 сек), чтобы отслеживать прогресс</div>
+              </div>
             </div>
+            <button class="btn-secondary" id="btnResetBaseline" style="display: none; font-size: 11px; padding: 4px 8px; border-color: #da3633; color: #f85149;" onclick="resetBaselineVoice()">
+              Сбросить ↺
+            </button>
           </div>
-          <button class="btn-secondary" id="btnResetBaseline" style="display: none; font-size: 10px; padding: 4px 8px; border-color: #da3633; color: #f85149;" onclick="resetBaselineVoice()">
-            Перезаписать ↺
-          </button>
+          <!-- Persistent Baseline Audio Player -->
+          <div id="baselineAudioPlayerWrap" style="display: none; margin-top: 10px; padding-top: 8px; border-top: 1px solid #21262d;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+              <span style="font-size: 11px; font-weight: bold; color: #58a6ff;">🎧 Твой сохранённый эталон (в LocalStorage):</span>
+              <span style="font-size: 10px; color: #3fb950; background: rgba(63,185,80,0.15); border: 1px solid rgba(63,185,80,0.4); padding: 1px 6px; border-radius: 4px;">✓ Доступен офлайн</span>
+            </div>
+            <audio id="baselineAudioPlayer" controls style="width: 100%; height: 32px; border-radius: 6px;"></audio>
+          </div>
         </div>
 
         <!-- 2 Recording Buttons: Baseline & Verify Test -->
@@ -1681,25 +1699,50 @@
         </div>
 
         <!-- Unified Stop Button during record -->
-        <button class="btn-main" id="btnStopRecordVoice" onclick="stopVoiceRecording()" style="display: none; background: #da3633; margin-bottom: 8px;">
-          <span>⏹️ Остановить запись (до 30 сек)</span>
+        <button class="btn-main" id="btnStopRecordVoice" onclick="stopVoiceRecording()" style="display: none; background: #da3633; margin-bottom: 8px; box-shadow: 0 4px 14px rgba(218, 54, 51, 0.4);">
+          <span>⏹️ Завершить запись и проанализировать</span>
         </button>
 
-        <!-- Live Recording Status Bar -->
-        <div id="recStatusBox" style="display: none; background: #0d1117; border: 1px solid #da3633; border-radius: 10px; padding: 10px; margin-bottom: 12px;">
+        <!-- Live Recording Status Bar with Waveform Dynamics -->
+        <div id="recStatusBox" style="display: none; background: #0d1117; border: 1.5px solid #da3633; border-radius: 12px; padding: 12px; margin-bottom: 12px; box-shadow: 0 0 16px rgba(218, 54, 51, 0.25);">
           <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-weight: bold; color: #da3633; font-size: 13px;">● Идёт запись твоего голоса...</span>
-            <span id="recTimer" style="font-family: monospace; font-size: 15px; font-weight: bold; color: #f0883e;">00:00</span>
+            <span id="recModeBadge" style="font-weight: bold; color: #f85149; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+              <span style="display: inline-block; width: 10px; height: 10px; background: #da3633; border-radius: 50%; box-shadow: 0 0 8px #da3633; animation: blink-dot 1s infinite alternate;"></span>
+              <span id="recModeTitle">● ИДЁТ ЗАПИСЬ ГОЛОСА...</span>
+            </span>
+            <span id="recTimer" style="font-family: monospace; font-size: 15px; font-weight: bold; color: #f0883e;">00:00 / 00:30</span>
           </div>
+
+          <!-- Progress bar -->
+          <div style="height: 4px; background: #21262d; border-radius: 2px; margin: 8px 0; overflow: hidden;">
+            <div id="recProgressBar" style="width: 0%; height: 100%; background: #da3633; transition: width 0.3s linear;"></div>
+          </div>
+
+          <!-- Real-time Oscilloscope / Frequency Dynamics Canvas -->
+          <canvas id="recVisualizerCanvas" height="42" style="width: 100%; height: 42px; background: #06090f; border-radius: 6px; border: 1px solid #30363d; display: block;"></canvas>
+
+          <!-- Live Pitch & Note Indicators -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 11px;">
+            <span style="color: #8b949e;">Текущий звук: <b id="recLiveFreq" style="color: #3fb950; font-size: 12px;">— Гц</b> (<b id="recLiveNote" style="color: #58a6ff; font-size: 12px;">—</b>)</span>
+            <span style="color: #8b949e; font-size: 10px;">Протяни гласную или пой ноты</span>
+          </div>
+
+          <!-- Realtime recognized notes pill list -->
           <div style="margin-top: 6px; font-size: 11px; color: #8b949e;">
-            Текущая частота: <b id="recLiveFreq" style="color: #3fb950;">— Гц</b> (<span id="recLiveNote">—</span>)
+            Спетые ноты:
+            <div id="recLiveNotesList" style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; min-height: 22px;">
+              <span style="color: #484f58; font-size: 10px;">(слушаю микрофон, протяни звук...)</span>
+            </div>
           </div>
         </div>
 
         <!-- Recorded Audio Player Box -->
         <div id="recPlayerBox" style="display: none; background: #0d1117; border: 1px solid #238636; border-radius: 12px; padding: 14px; margin-bottom: 12px;">
-          <div style="font-size: 13px; font-weight: bold; color: #3fb950; margin-bottom: 8px;">
-            🎧 Твоя аудиозапись готова — послушай себя:
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div id="recPlayerHeader" style="font-size: 13px; font-weight: bold; color: #3fb950;">
+              🎧 Твоя аудиозапись готова — послушай себя:
+            </div>
+            <span id="recSavedBadge" style="font-size: 10px; background: rgba(35, 134, 54, 0.2); color: #3fb950; border: 1px solid #238636; padding: 2px 6px; border-radius: 4px;">💾 Сохранено</span>
           </div>
           <audio id="voiceAudioPlayer" controls style="width: 100%; border-radius: 8px; margin-bottom: 10px;"></audio>
           
@@ -1726,6 +1769,12 @@
             </div>
 
             <div id="compAnalysisText" style="margin-top: 8px; font-size: 11px; color: #e6edf3; line-height: 1.4; border-top: 1px solid #1e3146; padding-top: 6px;"></div>
+
+            <!-- Test Action Buttons -->
+            <div style="display: flex; gap: 6px; margin-top: 10px;">
+              <button class="timer-btn" style="flex: 1; font-size: 11px; padding: 6px;" onclick="resetTestRecording()">🔄 Сбросить этот замер</button>
+              <button class="btn-step-next" style="flex: 1.2; font-size: 11px; padding: 6px; background: #1f6feb;" onclick="promoteTestToBaseline()">📌 Сделать эталоном</button>
+            </div>
           </div>
 
           <!-- Automatic Analysis from Recording -->
@@ -2100,11 +2149,13 @@
     let voiceRecordTimer = null;
     let voiceRecordSeconds = 0;
     let detectedPitchesDuringRecord = [];
+    let uniqueNotesRecorded = new Set();
     let voiceRecordAnalyser = null;
     let voiceRecordAudioCtx = null;
     let recordAnimFrame = null;
     let currentVoiceAudioBlob = null;
     let lastVoiceRecordData = null;
+    let voiceRecordingMode = 'baseline';
 
     async function toggleVoiceRecording() {
       if (mediaRecorder && mediaRecorder.state === 'recording') {
@@ -2131,6 +2182,7 @@
 
         voiceChunks = [];
         detectedPitchesDuringRecord = [];
+        uniqueNotesRecorded.clear();
 
         const options = (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported('audio/webm;codecs=opus'))
           ? { mimeType: 'audio/webm;codecs=opus' }
@@ -2149,43 +2201,114 @@
           currentVoiceAudioBlob = new Blob(voiceChunks, { type: mime });
           const audioUrl = URL.createObjectURL(currentVoiceAudioBlob);
           const player = document.getElementById('voiceAudioPlayer');
-          player.src = audioUrl;
+          if (player) {
+            player.src = audioUrl;
+          }
+
+          // If baseline, convert blob to base64 Data URL and store in LocalStorage for persistent playback!
+          if (voiceRecordingMode === 'baseline') {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              const base64Audio = reader.result;
+              try {
+                localStorage.setItem('neuro_atlas_baseline_audio', base64Audio);
+              } catch(e) {
+                console.warn('LocalStorage limit for audio storage:', e);
+              }
+              initBaselineVoiceUI();
+            };
+            reader.readAsDataURL(currentVoiceAudioBlob);
+          }
 
           analyzeRecordedVoice();
         };
 
         mediaRecorder.start(100);
 
-        // UI
-        document.getElementById('btnVoiceRecord').style.background = '#21262d';
-        document.getElementById('recBtnIcon').textContent = '⏹️';
-        document.getElementById('recBtnText').textContent = 'Остановить запись';
-        document.getElementById('recStatusBox').style.display = 'block';
-        document.getElementById('recPlayerBox').style.display = 'none';
+        // UI Updates for recording
+        const recBox = document.getElementById('recStatusBox');
+        const playBox = document.getElementById('recPlayerBox');
+        if (recBox) recBox.style.display = 'block';
+        if (playBox) playBox.style.display = 'none';
 
         voiceRecordSeconds = 0;
-        document.getElementById('recTimer').textContent = '00:00';
+        const timerEl = document.getElementById('recTimer');
+        const progressEl = document.getElementById('recProgressBar');
+        if (timerEl) timerEl.textContent = '00:00 / 00:30';
+        if (progressEl) progressEl.style.width = '0%';
+
         clearInterval(voiceRecordTimer);
         voiceRecordTimer = setInterval(() => {
           voiceRecordSeconds++;
           const m = Math.floor(voiceRecordSeconds / 60).toString().padStart(2, '0');
           const s = (voiceRecordSeconds % 60).toString().padStart(2, '0');
-          document.getElementById('recTimer').textContent = `${m}:${s}`;
+          if (timerEl) timerEl.textContent = `${m}:${s} / 00:30`;
+          const pct = Math.min(100, Math.round((voiceRecordSeconds / 30) * 100));
+          if (progressEl) progressEl.style.width = `${pct}%`;
           if (voiceRecordSeconds >= 30) {
             stopVoiceRecording();
           }
         }, 1000);
 
-        const buf = new Float32Array(voiceRecordAnalyser.fftSize);
+        // Live Audio Dynamics Visualizer
+        const canvas = document.getElementById('recVisualizerCanvas');
+        let visCtx = null;
+        if (canvas) {
+          visCtx = canvas.getContext('2d');
+        }
+
+        const timeBuf = new Float32Array(voiceRecordAnalyser.fftSize);
+        const byteBuf = new Uint8Array(voiceRecordAnalyser.frequencyBinCount);
+
         function recordPitchLoop() {
           if (!mediaRecorder || mediaRecorder.state !== 'recording') return;
-          voiceRecordAnalyser.getFloatTimeDomainData(buf);
-          const pitch = autoCorrelate(buf, voiceRecordAudioCtx.sampleRate);
-          if (pitch > 60 && pitch < 550) {
+
+          // 1. Draw dynamic oscilloscope frequency bars
+          if (visCtx && canvas) {
+            const w = canvas.width = canvas.clientWidth || 300;
+            const h = canvas.height = canvas.clientHeight || 42;
+            voiceRecordAnalyser.getByteFrequencyData(byteBuf);
+
+            visCtx.fillStyle = '#06090f';
+            visCtx.fillRect(0, 0, w, h);
+
+            const barCount = 36;
+            const barWidth = (w / barCount) - 1.5;
+            for (let i = 0; i < barCount; i++) {
+              const val = byteBuf[i * 2] || 0;
+              const barHeight = Math.max(2, (val / 255) * (h - 4));
+              const hue = (voiceRecordingMode === 'baseline') 
+                ? (210 + (i / barCount) * 40) // Cyan-blue for baseline
+                : (130 + (i / barCount) * 50); // Emerald green for test
+              visCtx.fillStyle = `hsl(${hue}, 85%, 55%)`;
+              visCtx.fillRect(i * (barWidth + 1.5), h - barHeight, barWidth, barHeight);
+            }
+          }
+
+          // 2. Pitch and note detection
+          voiceRecordAnalyser.getFloatTimeDomainData(timeBuf);
+          const pitch = autoCorrelate(timeBuf, voiceRecordAudioCtx.sampleRate);
+          if (pitch > 60 && pitch < 650) {
             detectedPitchesDuringRecord.push(pitch);
             const note = freqToClosestNote(pitch);
-            document.getElementById('recLiveFreq').textContent = `${pitch.toFixed(1)} Гц`;
-            document.getElementById('recLiveNote').textContent = note.name;
+            const freqEl = document.getElementById('recLiveFreq');
+            const noteEl = document.getElementById('recLiveNote');
+            if (freqEl) freqEl.textContent = `${pitch.toFixed(1)} Гц`;
+            if (noteEl) noteEl.textContent = note.name;
+
+            // Live note badges
+            if (!uniqueNotesRecorded.has(note.name)) {
+              uniqueNotesRecorded.add(note.name);
+              const listEl = document.getElementById('recLiveNotesList');
+              if (listEl) {
+                if (uniqueNotesRecorded.size === 1) listEl.innerHTML = '';
+                const pill = document.createElement('span');
+                pill.className = 'badge-pill';
+                pill.style.cssText = 'font-size: 10px; background: #161b22; color: #58a6ff; border: 1px solid #30363d; padding: 2px 7px; border-radius: 4px; animation: popIn 0.2s;';
+                pill.textContent = note.name;
+                listEl.appendChild(pill);
+              }
+            }
           }
           recordAnimFrame = requestAnimationFrame(recordPitchLoop);
         }
@@ -2193,6 +2316,7 @@
 
       } catch(err) {
         alert('Не удалось запустить микрофон: ' + err.message);
+        stopVoiceRecording();
       }
     }
 
@@ -2212,10 +2336,14 @@
         voiceRecordAudioCtx = null;
       }
 
-      document.getElementById('btnRecordBaseline').style.display = 'flex';
-      document.getElementById('btnRecordTest').style.display = 'flex';
-      document.getElementById('btnStopRecordVoice').style.display = 'none';
-      document.getElementById('recStatusBox').style.display = 'none';
+      const btnBase = document.getElementById('btnRecordBaseline');
+      const btnTest = document.getElementById('btnRecordTest');
+      const btnStop = document.getElementById('btnStopRecordVoice');
+      const recBox = document.getElementById('recStatusBox');
+      if (btnBase) btnBase.style.display = 'flex';
+      if (btnTest) btnTest.style.display = 'flex';
+      if (btnStop) btnStop.style.display = 'none';
+      if (recBox) recBox.style.display = 'none';
     }
 
     // 10 Full World Vocal Palette Catalog
@@ -2542,14 +2670,29 @@
         date: new Date().toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
       };
 
+      const headerEl = document.getElementById('recPlayerHeader');
+      const savedBadge = document.getElementById('recSavedBadge');
+
       // Handle Baseline vs Check Test
       if (voiceRecordingMode === 'baseline') {
         localStorage.setItem(BASELINE_KEY, JSON.stringify(lastVoiceRecordData));
         initBaselineVoiceUI();
         document.getElementById('voiceComparisonCard').style.display = 'none';
-        alert(`🎉 Эталон успешно сохранён: ${lastVoiceRecordData.voiceType} (${lastVoiceRecordData.minNote} ➔ ${lastVoiceRecordData.maxNote})! Теперь тренируйся и делай «Проверяющий тест»!`);
+        if (headerEl) headerEl.innerHTML = '🎧 <b>Твой Эталонный голос сохранён в память:</b>';
+        if (savedBadge) {
+          savedBadge.textContent = '💾 Эталон сохранён';
+          savedBadge.style.color = '#58a6ff';
+          savedBadge.style.borderColor = '#1f6feb';
+        }
       } else {
         // Mode is 'test' -> compare with Baseline if exists
+        if (headerEl) headerEl.innerHTML = '🔬 <b>Свежий замер теста готов: сравни с эталоном!</b>';
+        if (savedBadge) {
+          savedBadge.textContent = '🔬 Тест выполнен';
+          savedBadge.style.color = '#3fb950';
+          savedBadge.style.borderColor = '#238636';
+        }
+
         const rawBase = localStorage.getItem(BASELINE_KEY);
         const compCard = document.getElementById('voiceComparisonCard');
         if (rawBase && compCard) {
@@ -2590,7 +2733,7 @@
               badge.style.color = '#f0883e';
               badge.style.borderColor = '#f0883e';
               badge.style.background = 'rgba(240, 136, 62, 0.2)';
-              analysisText.innerHTML = `☕ <b>Легкая усталость связок:</b> Сейчас зафиксировано на ${drop} полутона меньше эталона. Сделай упражнение «сброс зажима (Бр-р-р)», попей тёплой воды и дай голосу 15 минут отдыха.`;
+              analysisText.innerHTML = `☕ <b>Легкая усталость связок:</b> Сейчас зафиксировано на ${drop} полутона меньше эталона. Сделай упражнение «сброс зажима (Бр-р-р)», попей тёплой воды и дай связкам 15 минут отдыха.`;
             }
           } catch(e) {
             compCard.style.display = 'none';
@@ -2612,11 +2755,49 @@
     }
 
     function resetVoiceRecorder() {
-      document.getElementById('recPlayerBox').style.display = 'none';
       const player = document.getElementById('voiceAudioPlayer');
-      player.pause();
-      player.src = '';
-      startVoiceRecording();
+      if (player) {
+        player.pause();
+        player.src = '';
+      }
+      document.getElementById('recPlayerBox').style.display = 'none';
+      startVoiceRecordingMode(voiceRecordingMode || 'baseline');
+    }
+
+    function resetTestRecording() {
+      const p = document.getElementById('voiceAudioPlayer');
+      if (p) {
+        p.pause();
+        p.src = '';
+      }
+      const comp = document.getElementById('voiceComparisonCard');
+      if (comp) comp.style.display = 'none';
+      const playerBox = document.getElementById('recPlayerBox');
+      if (playerBox) playerBox.style.display = 'none';
+    }
+
+    function promoteTestToBaseline() {
+      if (!lastVoiceRecordData || !currentVoiceAudioBlob) return;
+      if (confirm('Сделать этот свежий замер твоим новым эталоном?')) {
+        localStorage.setItem(BASELINE_KEY, JSON.stringify(lastVoiceRecordData));
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          try {
+            localStorage.setItem('neuro_atlas_baseline_audio', reader.result);
+          } catch(e) {}
+          initBaselineVoiceUI();
+          const comp = document.getElementById('voiceComparisonCard');
+          if (comp) comp.style.display = 'none';
+          const badge = document.getElementById('recSavedBadge');
+          if (badge) {
+            badge.textContent = '💾 Эталон обновлён';
+            badge.style.color = '#58a6ff';
+            badge.style.borderColor = '#1f6feb';
+          }
+          alert('✅ Готово! Этот замер успешно установлен твоим новым эталоном!');
+        };
+        reader.readAsDataURL(currentVoiceAudioBlob);
+      }
     }
 
     function saveVoiceRecordToHistory() {
@@ -3146,7 +3327,6 @@
 
 
     /* === BASELINE VOICE vs CHECK TEST COMPARATIVE ENGINE === */
-    let voiceRecordingMode = 'test'; // 'baseline' or 'test'
     const BASELINE_KEY = 'neuro_atlas_baseline_voice';
 
     function initBaselineVoiceUI() {
@@ -3156,6 +3336,9 @@
         const subEl = document.getElementById('baselineSub');
         const iconEl = document.getElementById('baselineIcon');
         const resetBtn = document.getElementById('btnResetBaseline');
+        const playerWrap = document.getElementById('baselineAudioPlayerWrap');
+        const player = document.getElementById('baselineAudioPlayer');
+        const audioData = localStorage.getItem('neuro_atlas_baseline_audio');
 
         if (raw) {
           const base = JSON.parse(raw);
@@ -3163,34 +3346,61 @@
           if (subEl) subEl.textContent = `Записан: ${base.date} • Диапазон: ${base.octaves} окт (${base.semitones} полутонов)`;
           if (iconEl) iconEl.textContent = '✅';
           if (resetBtn) resetBtn.style.display = 'inline-block';
+
+          if (audioData && player && playerWrap) {
+            player.src = audioData;
+            playerWrap.style.display = 'block';
+          } else if (playerWrap) {
+            playerWrap.style.display = 'none';
+          }
         } else {
           if (titleEl) titleEl.textContent = 'Эталонный голос не записан';
           if (subEl) subEl.textContent = 'Запиши эталон (до 30 сек), чтобы система могла сравнивать твой прогресс';
           if (iconEl) iconEl.textContent = '📌';
           if (resetBtn) resetBtn.style.display = 'none';
+          if (playerWrap) playerWrap.style.display = 'none';
+          if (player) {
+            player.pause();
+            player.src = '';
+          }
         }
       } catch(e) {}
     }
 
     function resetBaselineVoice() {
-      if (confirm('Сбросить текущий эталон голоса и записать новый?')) {
+      if (confirm('Сбросить текущий эталон голоса и сохранённую аудиозапись?')) {
         localStorage.removeItem(BASELINE_KEY);
+        localStorage.removeItem('neuro_atlas_baseline_audio');
+        const player = document.getElementById('baselineAudioPlayer');
+        if (player) {
+          player.pause();
+          player.src = '';
+        }
         initBaselineVoiceUI();
-        document.getElementById('voiceComparisonCard').style.display = 'none';
-        alert('📌 Эталон сброшен. Нажми «1. Записать Эталон» для нового замера.');
+        const comp = document.getElementById('voiceComparisonCard');
+        if (comp) comp.style.display = 'none';
+        alert('📌 Эталон успешно сброшен. Теперь ты можешь напеть новый чистый эталон!');
       }
     }
 
     function startVoiceRecordingMode(mode) {
       voiceRecordingMode = mode;
-      document.getElementById('btnRecordBaseline').style.display = 'none';
-      document.getElementById('btnRecordTest').style.display = 'none';
-      document.getElementById('btnStopRecordVoice').style.display = 'flex';
+      const btnBase = document.getElementById('btnRecordBaseline');
+      const btnTest = document.getElementById('btnRecordTest');
+      const btnStop = document.getElementById('btnStopRecordVoice');
+      if (btnBase) btnBase.style.display = 'none';
+      if (btnTest) btnTest.style.display = 'none';
+      if (btnStop) btnStop.style.display = 'flex';
       
-      if (mode === 'baseline') {
-        document.getElementById('recBtnText').textContent = '📌 ИДЁТ ЗАПИСЬ ЭТАЛОНА (до 30 сек)...';
-      } else {
-        document.getElementById('recBtnText').textContent = '🔬 ИДЁТ ПРОВЕРЯЮЩИЙ ТЕСТ (до 30 сек)...';
+      const modeTitle = document.getElementById('recModeTitle');
+      if (modeTitle) {
+        modeTitle.textContent = (mode === 'baseline') 
+          ? '● ЗАПИСЬ ЭТАЛОНА (до 30 сек)...' 
+          : '● ПРОВЕРЯЮЩИЙ ТЕСТ (до 30 сек)...';
+      }
+      const recNotesList = document.getElementById('recLiveNotesList');
+      if (recNotesList) {
+        recNotesList.innerHTML = '<span style="color: #484f58; font-size: 10px;">(слушаю микрофон, протяни звук...)</span>';
       }
       startVoiceRecording();
     }
@@ -3223,6 +3433,10 @@
           if (now - parsed.lastActive > SEVEN_DAYS_MS) {
             // More than 7 days passed -> clean storage as requested
             localStorage.removeItem(STORAGE_KEY);
+            localStorage.removeItem('vocal_history');
+            localStorage.removeItem(BASELINE_KEY);
+            localStorage.removeItem('neuro_atlas_baseline_audio');
+            initBaselineVoiceUI();
             console.log('7-day inactivity reached: localStorage cleaned.');
           } else {
             // Renew rolling token
@@ -3249,9 +3463,11 @@
     }
 
     function userClearStorage() {
-      if (confirm('Очистить всю сохраненную статистику и историю тренировок?')) {
+      if (confirm('Очистить всю сохраненную статистику, эталон голоса и историю тренировок?')) {
         localStorage.removeItem(STORAGE_KEY);
         localStorage.removeItem('vocal_history');
+        localStorage.removeItem(BASELINE_KEY);
+        localStorage.removeItem('neuro_atlas_baseline_audio');
         userProfile = {
           lastActive: Date.now(),
           ayumuBest: 0,
@@ -3266,6 +3482,7 @@
           lastTwisterIndex: 0
         };
         renderDashboardWidget();
+        initBaselineVoiceUI();
         if (typeof renderHistory === 'function') renderHistory();
         alert('🧹 Локальное хранилище полностью очищено!');
       }
