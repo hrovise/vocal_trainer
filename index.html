@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0f111a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>🧠 Нейро-Атлас | Вокал, Память, Дикция</title>
+  <title>🧠 Vocal Brain Trainer | Voice, Memory & Diction</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🧠%3C/text%3E%3C/svg%3E">
   <style>
     * { 
@@ -1377,6 +1377,12 @@
         </div>
 
         <div class="pills-row">
+          <span class="pill-label" id="ayumuDirLabel">Направление:</span>
+          <button class="btn-pill active" id="ayumuDirForward" onclick="setAyumuDirection('forward')">1 ➔ N (Прямой)</button>
+          <button class="btn-pill" id="ayumuDirBackward" onclick="setAyumuDirection('backward')">🔄 N ➔ 1 (Задом наперёд)</button>
+        </div>
+
+        <div class="pills-row">
           <span class="pill-label" id="ayumuSpeedLabel">⏱️ Скорость показа:</span>
           <button class="btn-pill active" id="aySpd2000" onclick="setAyumuSpeed(2000, this)">🐢 2.0 с</button>
           <button class="btn-pill" id="aySpd1200" onclick="setAyumuSpeed(1200, this)">⚡ 1.2 с</button>
@@ -1488,6 +1494,12 @@
         <div class="card-title">
           <span id="corsiTitleText">🌵 Блоки Корси (Пространственный след)</span>
           <span class="badge-pill" id="corsiBadge">Длина следа: 4</span>
+        </div>
+
+        <div class="pills-row">
+          <span class="pill-label" id="corsiDirLabel">Направление:</span>
+          <button class="btn-pill active" id="corsiDirForward" onclick="setCorsiDirection('forward')">Прямой порядок</button>
+          <button class="btn-pill" id="corsiDirBackward" onclick="setCorsiDirection('backward')">🔄 Задом наперёд</button>
         </div>
 
         <div class="pills-row">
@@ -1660,6 +1672,12 @@
         <div class="ex-desc" id="explosiveDesc">
           Стреляй звуком! Произноси слоги энергично, акцентируя каждый согласный ударными губами:
         </div>
+        <div class="pills-row" style="margin: 6px 0 10px;">
+          <span class="pill-label" id="syllablesDirLabel">Направление:</span>
+          <button class="btn-pill active" id="syllablesDirForward" onclick="setSyllablesDirection('forward')">Прямой (У ➔ Ы)</button>
+          <button class="btn-pill" id="syllablesDirBackward" onclick="setSyllablesDirection('backward')">🔄 Задом наперёд (Ы ➔ У)</button>
+        </div>
+
         <div class="syllables-box" id="syllablesBox">
           <div>ПТКУ — ПТКО — ПТКА — ПТКЭ — ПТКИ — ПТКЫ</div>
           <div style="color: #58a6ff;">БДГУ — БДГО — БДГА — БДГЭ — БДГИ — БДГЫ</div>
@@ -4271,6 +4289,9 @@
         explosiveTitle: "💥 2. Взрывные дикторские слоги",
         explosiveTime: "1 мин",
         explosiveDesc: "Стреляй звуком! Произноси слоги энергично, акцентируя каждый согласный ударными губами:",
+        syllablesDir: "Направление:",
+        syllablesForward: "Прямой (У ➔ Ы)",
+        syllablesBackward: "🔄 Задом наперёд (Ы ➔ У)", 
         jawTitle: "🗡️ 3. Разминка челюсти & «Укол шпаги»",
         jawTime: "1.5 мин",
         jawDesc: "1. <b>Круговые движения челюстью</b>: 8 раз по часовой, 8 раз против.<br>2. <b>«Укол шпаги»</b>: язык с силой упирается изнутри попеременно в правую и левую щеку.<br>3. <b>Сброс зажима</b>: сделай выдох со звуком «Бр-р-р-р» (вибрация расслабленных губ).",
@@ -4763,6 +4784,32 @@
       renderCurrentTwister();
     }
 
+    let syllablesDirection = 'forward';
+
+    function setSyllablesDirection(dir) {
+      syllablesDirection = dir;
+      const fwd = document.getElementById('syllablesDirForward');
+      const bwd = document.getElementById('syllablesDirBackward');
+      if (fwd) fwd.classList.toggle('active', dir === 'forward');
+      if (bwd) bwd.classList.toggle('active', dir === 'backward');
+      renderSyllablesBox();
+    }
+
+    function renderSyllablesBox() {
+      const sylBox = document.getElementById('syllablesBox');
+      if (!sylBox) return;
+      const isEn = (currentAppLang === 'en');
+      if (syllablesDirection === 'forward') {
+        sylBox.innerHTML = isEn
+          ? `<div>PTKU — PTKO — PTKA — PTKE — PTKI — PTKY</div><div style="color: #58a6ff;">BDGU — BDGO — BDGA — BDGE — BDGI — BDGY</div><div style="color: #3fb950;">VZHDU — VZHDO — VZHDA — VZHDE — VZHDI — VZHDY</div>`
+          : `<div>ПТКУ — ПТКО — ПТКА — ПТКЭ — ПТКИ — ПТКЫ</div><div style="color: #58a6ff;">БДГУ — БДГО — БДГА — БДГЭ — БДГИ — БДГЫ</div><div style="color: #3fb950;">ВЖДУ — ВЖДО — ВЖДА — ВЖДЭ — ВЖДИ — ВЖДЫ</div>`;
+      } else {
+        sylBox.innerHTML = isEn
+          ? `<div>PTKY — PTKI — PTKE — PTKA — PTKO — PTKU</div><div style="color: #58a6ff;">BDGY — BDGI — BDGE — BDGA — BDGO — BDGU</div><div style="color: #3fb950;">VZHDY — VZHDI — VZHDE — VZHDA — VZHDO — VZHDU</div>`
+          : `<div>ПТКЫ — ПТКИ — ПТКЭ — ПТКА — ПТКО — ПТКУ</div><div style="color: #58a6ff;">БДГЫ — БДГИ — БДГЭ — БДГА — БДГО — БДГУ</div><div style="color: #3fb950;">ВЖДЫ — ВЖДИ — ВЖДЭ — ВЖДА — ВЖДО — ВЖДУ</div>`;
+      }
+    }
+
     function setTwisterLanguage(lang) {
       currentTwisterLang = (lang === 'en') ? 'en' : 'ru';
       const ruBtn = document.getElementById('twisterLangRuBtn');
@@ -4878,6 +4925,9 @@
       const mSub4 = document.getElementById('memSubTab4Text'); if (mSub4) mSub4.textContent = t.memSubTab4;
 
       const ayTitle = document.getElementById('ayumuTitleText'); if (ayTitle) ayTitle.textContent = t.ayumuTitle;
+      const ayDir = document.getElementById('ayumuDirLabel'); if (ayDir) ayDir.textContent = t.ayumuDir;
+      const ayFwd = document.getElementById('ayumuDirForward'); if (ayFwd) ayFwd.textContent = t.ayumuForward;
+      const ayBwd = document.getElementById('ayumuDirBackward'); if (ayBwd) ayBwd.textContent = t.ayumuBackward;
       const aySpd = document.getElementById('ayumuSpeedLabel'); if (aySpd) aySpd.textContent = t.ayumuSpeed;
       const ayStDig = document.getElementById('ayumuStartLabel'); if (ayStDig) ayStDig.textContent = t.ayumuStartDigits;
       const ayStrk = document.getElementById('ayumuStreakLbl'); if (ayStrk) ayStrk.textContent = t.ayumuStreakLbl;
@@ -4923,6 +4973,9 @@
       const expT = document.getElementById('explosiveTitle'); if (expT) expT.textContent = t.explosiveTitle;
       const expTime = document.getElementById('explosiveTime'); if (expTime) expTime.textContent = t.explosiveTime;
       const expD = document.getElementById('explosiveDesc'); if (expD) expD.textContent = t.explosiveDesc;
+      const syDir = document.getElementById('syllablesDirLabel'); if (syDir) syDir.textContent = t.syllablesDir;
+      const syFwd = document.getElementById('syllablesDirForward'); if (syFwd) syFwd.textContent = t.syllablesForward;
+      const syBwd = document.getElementById('syllablesDirBackward'); if (syBwd) syBwd.textContent = t.syllablesBackward;
       const jawT = document.getElementById('jawTitle'); if (jawT) jawT.textContent = t.jawTitle;
       const jawTime = document.getElementById('jawTime'); if (jawTime) jawTime.textContent = t.jawTime;
       const jawD = document.getElementById('jawDesc'); if (jawD) jawD.innerHTML = t.jawDesc;
@@ -4976,8 +5029,7 @@
       const authBadge = document.getElementById('authorBadgeText');
       if (authBadge && t.authorBadgeText) authBadge.innerHTML = t.authorBadgeText;
 
-      const sylBox = document.getElementById('syllablesBox');
-      if (sylBox && t.syllablesBoxHtml) sylBox.innerHTML = t.syllablesBoxHtml;
+      renderSyllablesBox();
 
 
       // Re-render dynamic elements
@@ -5047,6 +5099,16 @@
     let ayumuDigits = 4;
     let ayumuDurationMs = 2000;
     let ayumuState = 'IDLE';
+    let ayumuDirection = 'forward';
+
+    function setAyumuDirection(dir) {
+      if (ayumuState === 'SHOWING' || ayumuState === 'PLAYING') return;
+      ayumuDirection = dir;
+      const fwd = document.getElementById('ayumuDirForward');
+      const bwd = document.getElementById('ayumuDirBackward');
+      if (fwd) fwd.classList.toggle('active', dir === 'forward');
+      if (bwd) bwd.classList.toggle('active', dir === 'backward');
+    }
     let ayumuNumbers = [];
     let ayumuExpected = 0;
     let ayumuTimer = null;
@@ -5127,7 +5189,11 @@
       if (ayumuState !== 'SHOWING') return;
       ayumuState = 'PLAYING';
       ayumuStatusEl.style.color = '#e6edf3';
-      ayumuStatusEl.textContent = (currentAppLang === 'en' ? '👆 Tap from memory in ascending order!' : '👆 Нажимай по памяти по возрастанию!');
+      if (ayumuDirection === 'forward') {
+        ayumuStatusEl.textContent = (currentAppLang === 'en' ? '👆 Tap from memory in ascending order (1 ➔ N)!' : '👆 Нажимай по памяти по возрастанию (1 ➔ N)!');
+      } else {
+        ayumuStatusEl.textContent = (currentAppLang === 'en' ? '🔄 Tap from memory in REVERSE order (N ➔ 1)!' : '🔄 Нажимай по памяти ЗАДОМ НАПЕРЁД (N ➔ 1)!');
+      }
 
       const cells = ayumuGridEl.querySelectorAll('.cell');
       ayumuNumbers.forEach(item => {
@@ -5148,7 +5214,10 @@
       const val = parseInt(cellEl.dataset.val, 10);
       if (!val) return;
 
-      const expected = ayumuNumbers[ayumuExpected].val;
+      const expected = (ayumuDirection === 'forward')
+        ? ayumuNumbers[ayumuExpected].val
+        : ayumuNumbers[ayumuNumbers.length - 1 - ayumuExpected].val;
+
       if (val === expected) {
         soundSuccess();
         cellEl.className = 'cell correct';
@@ -5171,7 +5240,11 @@
           document.getElementById('ayumuAccuracy').textContent = `${Math.round((ayumuCorrect / ayumuTotal) * 100)}%`;
           soundWin();
           ayumuStatusEl.style.color = '#3fb950';
-          ayumuStatusEl.textContent = (currentAppLang === 'en' ? `🎉 Great! All ${ayumuDigits} digits correct!` : `🎉 Отлично! Все ${ayumuDigits} цифр верно!`);
+          if (ayumuDirection === 'forward') {
+            ayumuStatusEl.textContent = (currentAppLang === 'en' ? `🎉 Great! All ${ayumuDigits} digits correct!` : `🎉 Отлично! Все ${ayumuDigits} цифр верно!`);
+          } else {
+            ayumuStatusEl.textContent = (currentAppLang === 'en' ? `🔥 Phenomenal! All ${ayumuDigits} digits in REVERSE order!` : `🔥 Феноменально! Все ${ayumuDigits} цифр задом наперёд открыты!`);
+          }
           if (ayumuDigits < 10) ayumuDigits++;
           document.getElementById('ayumuBadge').textContent = (currentAppLang === 'en' ? `Level: ${ayumuDigits} digits` : `Уровень: ${ayumuDigits} цифр`);
           ayumuBtn.style.display = 'flex';
@@ -5319,6 +5392,16 @@
     let corsiUserSteps = [];
     let corsiIsShowing = false;
     let corsiCanTap = false;
+    let corsiDirection = 'forward';
+
+    function setCorsiDirection(dir) {
+      if (corsiIsShowing || corsiCanTap) return;
+      corsiDirection = dir;
+      const fwd = document.getElementById('corsiDirForward');
+      const bwd = document.getElementById('corsiDirBackward');
+      if (fwd) fwd.classList.toggle('active', dir === 'forward');
+      if (bwd) bwd.classList.toggle('active', dir === 'backward');
+    }
 
     const corsiGridEl = document.getElementById('corsiGrid');
     const corsiStatusEl = document.getElementById('corsiStatus');
@@ -5389,7 +5472,15 @@
             corsiIsShowing = false;
             corsiCanTap = true;
             corsiStatusEl.style.color = '#e6edf3';
-            corsiStatusEl.textContent = (currentAppLang === 'en' ? '👆 Tap the same path from memory!' : '👆 Нажимай по памяти по той же траектории!');
+            if (corsiDirection === 'forward') {
+              corsiStatusEl.textContent = (currentAppLang === 'en' 
+                ? '👆 Tap the same path from memory (1st to last)!' 
+                : '👆 Нажимай по памяти в том же порядке (от 1-го к последнему)!');
+            } else {
+              corsiStatusEl.textContent = (currentAppLang === 'en' 
+                ? '🔄 Tap in REVERSE order (from last block to 1st)!' 
+                : '🔄 Нажимай В ОБРАТНОМ ПОРЯДКЕ (от последнего к первому)!');
+            }
             cells.forEach(c => { c.className = 'cell hidden-mask'; c.textContent = '•'; });
           }, 400);
         }
@@ -5399,7 +5490,10 @@
     function onCorsiCellTap(pos, cellEl) {
       if (!corsiCanTap) return;
 
-      const expectedPos = corsiSequence[corsiUserSteps.length];
+      const expectedPos = (corsiDirection === 'forward')
+        ? corsiSequence[corsiUserSteps.length]
+        : corsiSequence[corsiSequence.length - 1 - corsiUserSteps.length];
+
       if (pos === expectedPos) {
         soundSuccess();
         cellEl.className = 'cell correct';
@@ -5410,7 +5504,15 @@
           soundWin();
           corsiCanTap = false;
           corsiStatusEl.style.color = '#3fb950';
-          corsiStatusEl.textContent = `🎉 Браво! Вся пространственная цепочка из ${corsiLength} шагов пройдена!`;
+          if (corsiDirection === 'forward') {
+            corsiStatusEl.textContent = (currentAppLang === 'en'
+              ? `🎉 Bravo! Entire ${corsiLength}-step forward chain completed!`
+              : `🎉 Браво! Вся пространственная цепочка из ${corsiLength} шагов пройдена!`);
+          } else {
+            corsiStatusEl.textContent = (currentAppLang === 'en'
+              ? `🔥 Brilliant! Reverse chain of ${corsiLength} blocks mastered!`
+              : `🔥 Блестяще! Цепочка из ${corsiLength} блоков задом наперёд пройдена!`);
+          }
           if (corsiLength < 8) corsiLength++;
           document.getElementById('corsiBadge').textContent = `Длина следа: ${corsiLength}`;
           corsiBtn.style.display = 'flex';
