@@ -1112,6 +1112,13 @@
       from { opacity: 0; transform: scale(0.7); }
       to { opacity: 1; transform: scale(1); }
     }
+
+    #authorPlatformLink:hover {
+      border-color: #58a6ff !important;
+      color: #58a6ff !important;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(88, 166, 255, 0.2) !important;
+    }
   </style>
 </head>
 <body>
@@ -1872,6 +1879,22 @@
 
     </div>
   </div>
+
+  <!-- Global Author & Writer Platform Footer Badge -->
+  <div style="width: 100%; max-width: 600px; margin: 18px auto 24px auto; text-align: center; padding: 0 8px;">
+    <a href="https://web-dev-wrs.netlify.app/" target="_blank" rel="noopener noreferrer" id="authorPlatformLink" style="display: inline-flex; align-items: center; gap: 8px; background: #090d13; border: 1px solid #30363d; padding: 7px 16px; border-radius: 24px; font-size: 11px; color: #8b949e; text-decoration: none; transition: all 0.2s ease; box-shadow: 0 4px 14px rgba(0,0,0,0.4);">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="#58a6ff">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+      <span id="authorBadgeText">Автор: <b style="color: #fff;">Макс</b> • Платформа Писателя (web-dev-wrs)</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b949e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+        <polyline points="15 3 21 3 21 9"></polyline>
+        <line x1="10" y1="14" x2="21" y2="3"></line>
+      </svg>
+    </a>
+  </div>
+
 
   <script>
     let currentAppLang = localStorage.getItem('vocal_trainer_lang') || 'ru';
@@ -4049,6 +4072,8 @@
         // Encyclopedia Wiki Modal
         wikiModalMainTitle: "База Знаний & Памятка",
         wikiSearchPlaceholder: "🔍 Поиск по справке...",
+        authorBadgeText: "Автор: <b style=\"color: #fff;\">Макс</b> • Платформа Писателя (web-dev-wrs)",
+        syllablesBoxHtml: "<div>ПТКУ — ПТКО — ПТКА — ПТКЭ — ПТКИ — ПТКЫ</div><div style=\"color: #58a6ff;\">БДГУ — БДГО — БДГА — БДГЭ — БДГИ — БДГЫ</div><div style=\"color: #3fb950;\">ВЖДУ — ВЖДО — ВЖДА — ВЖДЭ — ВЖДИ — ВЖДЫ</div>",
       },
       en: {
         docTitle: "🧠 Neuro-Atlas | Vocal, Memory & Diction",
@@ -4213,6 +4238,8 @@
         // Encyclopedia Wiki Modal
         wikiModalMainTitle: "Knowledge Base & Memo",
         wikiSearchPlaceholder: "🔍 Search guide...",
+        authorBadgeText: "Author: <b style=\"color: #fff;\">Max</b> • Writer's Platform (web-dev-wrs)",
+        syllablesBoxHtml: "<div>PTKU — PTKO — PTKA — PTKE — PTKI — PTKY</div><div style=\"color: #58a6ff;\">BDGU — BDGO — BDGA — BDGE — BDGI — BDGY</div><div style=\"color: #3fb950;\">VZDU — VZDO — VZDA — VZDE — VZDI — VZDY</div>",
       }
     };
 
@@ -4672,6 +4699,12 @@
       // Wiki Modal translations
       const wModalTitle = document.getElementById('wikiModalMainTitle'); if (wModalTitle) wModalTitle.textContent = t.wikiModalMainTitle;
       const wSearchInp = document.getElementById('wikiSearchInput'); if (wSearchInp) wSearchInp.placeholder = t.wikiSearchPlaceholder;
+      const authBadge = document.getElementById('authorBadgeText');
+      if (authBadge && t.authorBadgeText) authBadge.innerHTML = t.authorBadgeText;
+
+      const sylBox = document.getElementById('syllablesBox');
+      if (sylBox && t.syllablesBoxHtml) sylBox.innerHTML = t.syllablesBoxHtml;
+
 
       // Re-render dynamic elements
       renderAtlas();
