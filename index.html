@@ -1555,7 +1555,7 @@
           <input type="number" class="math-input" id="mathUserAnswer" placeholder="Введи результат умножения" inputmode="numeric">
           
           <button class="btn-main" onclick="checkMathAnswer()">
-            <span>✓ Я посчитал — проверить ответ!</span>
+            <span>✓ Ответ готов — проверить результат!</span>
           </button>
         </div>
 
@@ -3289,7 +3289,7 @@
       const mathStat = document.getElementById('dashMathStat');
       const mathTime = document.getElementById('dashMathTime');
       if (mathStat && mathTime) {
-        mathStat.textContent = userProfile.mathLastResult || 'Не решал';
+        mathStat.textContent = userProfile.mathLastResult || 'Ещё не решено';
         mathTime.textContent = userProfile.mathLastTime ? `Время: ${userProfile.mathLastTime}` : '2-7 знаков';
       }
 
