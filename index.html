@@ -897,7 +897,7 @@
     }
 
   
-    /* === SPACE RANGERS 2 / SCI-FI ENCYCLOPEDIA STYLES === */
+    /* === ENCYCLOPEDIA & KNOWLEDGE BASE STYLES === */
     #neuroWikiModal {
       position: fixed;
       inset: 0;
@@ -1115,6 +1115,19 @@
 </head>
 <body>
 
+  <!-- Top Utility Bar: Logo & Language Toggle (Writer-Platform Style) -->
+  <div style="width: 100%; max-width: 600px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding: 0 4px;">
+    <div style="display: flex; align-items: center; gap: 6px;">
+      <span style="font-size: 16px;">🌌</span>
+      <span style="font-size: 13px; font-weight: 800; color: #58a6ff; letter-spacing: 0.5px;" id="topLogoText">НЕЙРО-АТЛАС</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 6px;">
+      <button type="button" onclick="toggleAppLanguage()" id="globalLangBtn" style="background: #161b22; border: 1px solid #30363d; color: #f0883e; font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.15s ease;">
+        <span id="langFlag">🌐</span> <span id="langLabel">Язык: RU</span>
+      </button>
+    </div>
+  </div>
+
   <!-- Navigation Tabs -->
   <div class="nav-tabs">
     <button class="tab-btn active" id="tabBtn0" onclick="switchTab(0)">
@@ -1133,7 +1146,7 @@
       <span>📊 Диапазон</span>
     </button>
     <button class="tab-btn" id="btnOpenWiki" onclick="openNeuroWiki()" style="color: #00e5ff; border: 1px solid rgba(0, 229, 255, 0.3);">
-      <span>📖 Справка</span>
+      <span id="tabWikiSpan">📖 Справка</span>
     </button>
   </div>
 
@@ -1141,10 +1154,10 @@
   <!-- TAB 0: HOME / WELCOME DASHBOARD (ГЛАВНАЯ СТРАНИЦА ХАБА) -->
   <div class="tab-content active" id="tabContent0">
     <div style="width: 100%; text-align: center; padding: 10px 0 16px;">
-      <div style="font-size: 24px; font-weight: 900; background: linear-gradient(135deg, #58a6ff, #3fb950); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+      <div id="portalMainTitle" style="font-size: 24px; font-weight: 900; background: linear-gradient(135deg, #58a6ff, #3fb950); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
         Нейро-Атлас Мастерства
       </div>
-      <div style="font-size: 13px; color: #8b949e; margin-top: 6px; line-height: 1.4;">
+      <div id="portalMainSub" style="font-size: 13px; color: #8b949e; margin-top: 6px; line-height: 1.4;">
         Комплексная система тренировки оперативной памяти, точного интонирования голоса и сценической речи
       </div>
     </div>
@@ -1156,13 +1169,13 @@
       <div class="mem-card" style="cursor: pointer; border-color: rgba(88, 166, 255, 0.4); transition: transform 0.15s, border-color 0.15s;" onclick="switchTab(1)" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
         <div style="display: flex; align-items: center; justify-content: space-between;">
           <span style="font-size: 28px;">🎙️</span>
-          <span class="badge-pill" style="color: #58a6ff; border-color: #58a6ff;">Тюнер & Распевка</span>
+          <span class="badge-pill" id="card1Sub" style="color: #58a6ff; border-color: #58a6ff;">Тюнер & Распевка</span>
         </div>
-        <div style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">Вокальная Лаборатория</div>
-        <div style="font-size: 12px; color: #8b949e; line-height: 1.4;">
+        <div id="card1Title" style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">Вокальная Лаборатория</div>
+        <div id="card1Desc" style="font-size: 12px; color: #8b949e; line-height: 1.4;">
           Точный тюнер с определением нот и центов на лету. Персональная распевка на фортепиано под баритон, тенор, бас, меццо или сопрано.
         </div>
-        <button class="btn-main" style="margin-top: 6px; padding: 10px; font-size: 13px;" onclick="event.stopPropagation(); switchTab(1);">
+        <button class="btn-main" id="card1Btn" style="margin-top: 6px; padding: 10px; font-size: 13px;" onclick="event.stopPropagation(); switchTab(1);">
           Открыть Вокал ➔
         </button>
       </div>
@@ -1171,13 +1184,13 @@
       <div class="mem-card" style="cursor: pointer; border-color: rgba(63, 185, 80, 0.4); transition: transform 0.15s, border-color 0.15s;" onclick="switchTab(2)" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
         <div style="display: flex; align-items: center; justify-content: space-between;">
           <span style="font-size: 28px;">🧠</span>
-          <span class="badge-pill" style="color: #3fb950; border-color: #3fb950;">Brain Gym</span>
+          <span class="badge-pill" id="card2Sub" style="color: #3fb950; border-color: #3fb950;">Память & Счёт</span>
         </div>
-        <div style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">Тренировка Памяти & Счёт</div>
-        <div style="font-size: 12px; color: #8b949e; line-height: 1.4;">
+        <div id="card2Title" style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">Тренировка Памяти & Счёт</div>
+        <div id="card2Desc" style="font-size: 12px; color: #8b949e; line-height: 1.4;">
           4 когнитивных режима: Тест Аюму (зрительная фиксация), Числовая цепочка (прямо и задом наперёд), Блоки Корси и слепой устный счёт от 2 до 7 знаков.
         </div>
-        <button class="btn-main" style="margin-top: 6px; padding: 10px; font-size: 13px; background: #238636;" onclick="event.stopPropagation(); switchTab(2);">
+        <button class="btn-main" id="card2Btn" style="margin-top: 6px; padding: 10px; font-size: 13px; background: #238636;" onclick="event.stopPropagation(); switchTab(2);">
           Тренировать Память ➔
         </button>
       </div>
@@ -1186,13 +1199,13 @@
       <div class="mem-card" style="cursor: pointer; border-color: rgba(240, 136, 62, 0.4); transition: transform 0.15s, border-color 0.15s;" onclick="switchTab(3)" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
         <div style="display: flex; align-items: center; justify-content: space-between;">
           <span style="font-size: 28px;">🗣️</span>
-          <span class="badge-pill" style="color: #f0883e; border-color: #f0883e;">Речь & Скороговорки</span>
+          <span class="badge-pill" id="card3Sub" style="color: #f0883e; border-color: #f0883e;">Речь & Скороговорки</span>
         </div>
-        <div style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">Дикция & Артикуляция</div>
-        <div style="font-size: 12px; color: #8b949e; line-height: 1.4;">
+        <div id="card3Title" style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">Дикция & Артикуляция</div>
+        <div id="card3Desc" style="font-size: 12px; color: #8b949e; line-height: 1.4;">
           Большая библиотека из 110 скороговорок с удобной пагинацией по группам звуков (Б-П-В-Ф, Р-Л-М-Н, З-С-Ж-Ш-Ч-Щ), метод пробки и снятие зажимов.
         </div>
-        <button class="btn-main" style="margin-top: 6px; padding: 10px; font-size: 13px; background: #b05012;" onclick="event.stopPropagation(); switchTab(3);">
+        <button class="btn-main" id="card3Btn" style="margin-top: 6px; padding: 10px; font-size: 13px; background: #b05012;" onclick="event.stopPropagation(); switchTab(3);">
           Перейти к Дикции ➔
         </button>
       </div>
@@ -1201,13 +1214,13 @@
       <div class="mem-card" style="cursor: pointer; border-color: rgba(163, 113, 247, 0.4); transition: transform 0.15s, border-color 0.15s;" onclick="switchTab(4)" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
         <div style="display: flex; align-items: center; justify-content: space-between;">
           <span style="font-size: 28px;">📊</span>
-          <span class="badge-pill" style="color: #a371f7; border-color: #a371f7;">Атлас & Диктофон</span>
+          <span class="badge-pill" id="card4Sub" style="color: #a371f7; border-color: #a371f7;">Атлас & Диктофон</span>
         </div>
-        <div style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">Диапазон & Тембр Голоса</div>
-        <div style="font-size: 12px; color: #8b949e; line-height: 1.4;">
+        <div id="card4Title" style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">Диапазон & Тембр Голоса</div>
+        <div id="card4Desc" style="font-size: 12px; color: #8b949e; line-height: 1.4;">
           Запись гласной с мгновенным прослушиванием «ДО / ПОСЛЕ», расчет крайних нот и полный акустический справочник 10 типов певческого голоса.
         </div>
-        <button class="btn-main" style="margin-top: 6px; padding: 10px; font-size: 13px; background: #6e40c9;" onclick="event.stopPropagation(); switchTab(4);">
+        <button class="btn-main" id="card4Btn" style="margin-top: 6px; padding: 10px; font-size: 13px; background: #6e40c9;" onclick="event.stopPropagation(); switchTab(4);">
           Диагностика Голоса ➔
         </button>
       </div>
@@ -1580,16 +1593,26 @@
       <!-- 1. Cork / Pencil & Interactive Tongue-Twisters Library -->
       <div class="ex-card">
         <div class="ex-header">
-          <div class="ex-title">🍾 1. Метод винной пробки & Скороговорки</div>
-          <div class="ex-time">2 мин</div>
+          <div class="ex-title" id="corkExTitle">🍾 1. Метод винной пробки & Скороговорки</div>
+          <div class="ex-time" id="corkExTime">2 мин</div>
         </div>
-        <div class="ex-desc">
+        <div class="ex-desc" id="corkExDesc">
           Зажми пробку или карандаш передними зубами на 1–1.5 см. Выбери группу звуков и отрабатывай артикуляцию, преодолевая сопротивление мышц.
         </div>
 
+        <!-- Twister Language Selector (RU / EN) -->
+        <div style="display: flex; gap: 8px; margin: 8px 0;">
+          <button class="oct-btn active" id="twisterLangRuBtn" onclick="setTwisterLanguage('ru')" style="flex: 1; padding: 6px 8px; font-size: 12px; font-weight: bold;">
+            🇷🇺 Русские (110)
+          </button>
+          <button class="oct-btn" id="twisterLangEnBtn" onclick="setTwisterLanguage('en')" style="flex: 1; padding: 6px 8px; font-size: 12px; font-weight: bold;">
+            🇬🇧 English (36)
+          </button>
+        </div>
+
         <!-- Sound Groups Selector Pills -->
-        <div class="pills-row" style="margin: 8px 0;">
-          <span class="pill-label">Группа звуков:</span>
+        <div class="pills-row" style="margin: 6px 0 10px;">
+          <span class="pill-label" id="soundGroupLabelText">Группа звуков:</span>
           <button class="btn-pill active" id="soundGrpBtn0" onclick="selectSoundGroup(0, this)">Б, П, В, Ф, Г, К, Д, Т, Х</button>
           <button class="btn-pill" id="soundGrpBtn1" onclick="selectSoundGroup(1, this)">Р, Л, М, Н</button>
           <button class="btn-pill" id="soundGrpBtn2" onclick="selectSoundGroup(2, this)">З, С, Ж, Ш, Ч, Щ, Ц</button>
@@ -1607,14 +1630,14 @@
           
           <!-- Navigation & Random Buttons -->
           <div style="display: flex; gap: 8px; margin-top: 10px;">
-            <button class="btn-secondary" style="flex: 1; padding: 8px;" onclick="prevTwister()">◀ Назад</button>
-            <button class="btn-secondary" style="flex: 1; padding: 8px;" onclick="randomTwister()">🎲 Случайная</button>
-            <button class="btn-secondary" style="flex: 1; padding: 8px;" onclick="nextTwister()">Вперёд ▶</button>
+            <button class="btn-secondary" id="btnPrevTwister" style="flex: 1; padding: 8px;" onclick="prevTwister()">◀ Назад</button>
+            <button class="btn-secondary" id="btnRandomTwister" style="flex: 1; padding: 8px;" onclick="randomTwister()">🎲 Случайная</button>
+            <button class="btn-secondary" id="btnNextTwister" style="flex: 1; padding: 8px;" onclick="nextTwister()">Вперёд ▶</button>
           </div>
         </div>
 
         <div class="timer-bar">
-          <span>Таймер читки с пробкой:</span>
+          <span id="corkTimerLabel">Таймер читки с пробкой:</span>
           <span class="timer-display" id="corkTimerDisplay">02:00</span>
           <button class="timer-btn" id="corkTimerBtn" onclick="toggleTimer()">Старт 2 мин</button>
         </div>
@@ -1623,13 +1646,13 @@
       <!-- 2. Explosive Consonants -->
       <div class="ex-card">
         <div class="ex-header">
-          <div class="ex-title">💥 2. Взрывные дикторские слоги</div>
-          <div class="ex-time">1 мин</div>
+          <div class="ex-title" id="explosiveTitle">💥 2. Взрывные дикторские слоги</div>
+          <div class="ex-time" id="explosiveTime">1 мин</div>
         </div>
-        <div class="ex-desc">
+        <div class="ex-desc" id="explosiveDesc">
           Стреляй звуком! Произноси слоги энергично, акцентируя каждый согласный ударными губами:
         </div>
-        <div class="syllables-box">
+        <div class="syllables-box" id="syllablesBox">
           <div>ПТКУ — ПТКО — ПТКА — ПТКЭ — ПТКИ — ПТКЫ</div>
           <div style="color: #58a6ff;">БДГУ — БДГО — БДГА — БДГЭ — БДГИ — БДГЫ</div>
           <div style="color: #3fb950;">ВЖДУ — ВЖДО — ВЖДА — ВЖДЭ — ВЖДИ — ВЖДЫ</div>
@@ -1639,10 +1662,10 @@
       <!-- 3. Jaw Release -->
       <div class="ex-card">
         <div class="ex-header">
-          <div class="ex-title">🗡️ 3. Разминка челюсти & «Укол шпаги»</div>
-          <div class="ex-time">1.5 мин</div>
+          <div class="ex-title" id="jawTitle">🗡️ 3. Разминка челюсти & «Укол шпаги»</div>
+          <div class="ex-time" id="jawTime">1.5 мин</div>
         </div>
-        <div class="ex-desc">
+        <div class="ex-desc" id="jawDesc">
           1. <b>Круговые движения челюстью</b>: 8 раз по часовой, 8 раз против.<br>
           2. <b>«Укол шпаги»</b>: язык с силой упирается изнутри попеременно в правую и левую щеку.<br>
           3. <b>Сброс зажима</b>: сделай выдох со звуком «Бр-р-р-р» (вибрация расслабленных губ).
@@ -3111,7 +3134,7 @@
     
     
     
-    /* === SPACE RANGERS 2 STYLE ENCYCLOPEDIA & MEMO ENGINE === */
+    /* === ENCYCLOPEDIA & KNOWLEDGE BASE ENGINE === */
     const NEURO_WIKI_ARTICLES = [
       {
         id: "overview",
@@ -3137,7 +3160,7 @@
       {
         id: "memory_ayumu",
         group: "2. Тренировка Памяти",
-        badge: "Brain Gym",
+        badge: "Память",
         title: "🐒 Тест Аюму: Феномен шимпанзе и оперативная память",
         summary: "Как устроена мгновенная фотографическая фиксация и почему приматы превосходят человека.",
         content: `
@@ -3158,7 +3181,7 @@
       {
         id: "memory_math",
         group: "2. Тренировка Памяти",
-        badge: "BigInt Math",
+        badge: "Устный счёт",
         title: "🧮 Устный счёт вслепую: Умножение многозначных чисел",
         summary: "Сверхнагрузка на рабочую память через удержание промежуточных разрядов столбика.",
         content: `
@@ -3530,13 +3553,294 @@
     });
 
 
-    /* === 110 TONGUE-TWISTERS INTERACTIVE PAGINATION MODULE === */
-    const TWISTER_GROUPS = [{"sounds": "б, п, в, ф, г, к, д, т, х", "items": ["Добыл бобов бобыль.", "Вакул бабу обул, да и Вакула баба обула.", "От топота копыт пыль по полю летит.", "Бык тупогуб, тупогубенький бычок, у быка бела губа была тупа.", "Колпак на колпаке, под колпаком колпак.", "Верзила Вавила весело ворочал вилы.", "Около кола колокола, около ворот коловорот.", "Шакал шагал, шакал скакал.", "Купи кипу пик, пик кипу купи. Купи кипу пуха, кипу пуха купи.", "Повар Петр, повар Павел. Петр плавал, Павел плавал.", "Ткет ткач ткани на платки Тани.", "Водовоз вез воду из-под водопровода.", "Наш голова вашего голову головой переголовил, перевыголовил.", "Вашему пономарю нашего пономаря не перепономарить, не перевыпономарить; наш пономарь вашего пономаря перепономарит, перевыпономарит.", "В один, Клим, клин колоти.", "Стоит копна с подприкопёночком.", "В поле полет Фрося просо, сорняки выносит Фрося.", "Краб крабу сделал грабли. Подал грабли крабу краб: сено граблями, краб, грабь!", "У елки иголки колки.", "Кукушка кукушонку купила капюшон. Надел кукушонок капюшон. Как в капюшоне он смешон!", "Все бобры для своих бобрят добры. Бобры берут для бобрят бобы. Бобры, бывает, будоражат бобрят, давая им бобы.", "Забыл Панкрат Кондратов домкрат, а Панкрату без домкрата не поднять на тракте трактор. И ждет на тракте трактор домкрат.", "На меду медовик, а мне не до медовика.", "Пришел Прокоп, кипел укроп, ушел Прокоп, кипел укроп; как при Прокопе кипел укроп, так и без Прокопа кипел укроп.", "Шли три попа, три Прокопия-попа, три Прокопьевича, говорили про попа, про Прокопия-попа, про Прокопьевича.", "Однажды галок поп пугая, в кустах увидел попугая, и говорит тот попугай: пугать ты галок, поп, пугай, но галок, поп, в кустах пугая, пугать не смей ты попугая.", "Волховал волхв в хлеву с волхвами.", "Бомбардир бонбоньерками бомбардировал барышень.", "У Феофана Митрофаньча три сына Феофанычи.", "У нас гость унес трость.", "Фараонов фаворит на сапфир сменил нефрит.", "Рододендроны из дендрария даны родителями.", "К Габсбургам из Страсбурга.", "Сидел тетерев на дереве, а тетерка с тетеревятами на ветке.", "Брит Клим брат, брит Глеб брат, брат Игнат бородат.", "Хвалю халву.", "Хохлатые хохотушки хохотом хохотали."]}, {"sounds": "р, л, м, н", "items": ["Всех скороговорок не перескороговоришь, не перевыскороговоришь.", "У нас на дворе-подворье погода размокропогодилась.", "Два дровосека, два дровокола, два дроворуба говорили про Ларьку, про Варьку, про Марину жену.", "Клара-краля кралась к ларю.", "Говорил командир про полковника и про полковницу, про подполковника и про подполковницу, про поручика и про поручицу, про подпоручика и про подпоручицу, про прапорщика и про прапорщицу, про подпрапорщика, а про подпрапорщицу промолчал.", "На дворе трава, на траве дрова – раз дрова, два дрова, три дрова. Не руби дрова на траве двора.", "На дворе дрова, за двором дрова, дрова вширь двора, не вместит двор дров, надо дрова выдворить на дровяной двор.", "На дворе вдовы Варвары два вора дрова воровали, рассердилася вдова, убрала в сарай дрова.", "Курфюрст скомпрометировал ландскнехта.", "Рапортовал да не дорапортовал, дорапортовывал да зарапортовался.", "Рыла свинья белорыла, тупорыла; полдвора рылом изрыла, вырыла, подрыла.", "Съел молодец тридцать три пирога с пирогом, да все с творогом.", "Тридцать три корабля лавировали, лавировали да не вылавировали.", "На мели мы лениво налима ловили. На мели мы лениво ловили линя. О любви не меня ли вы мило молили И в туманы лимана манили меня?", "Карл у Клары украл кораллы, а Клара у Карла украла кларнет.", "Королева Клара строго карала Карла за кражу коралла.", "Карл клал лук на ларь. Клара крала лук с ларя.", "Дробью по перепелам да по тетеревам.", "Мамаша Ромаше дала сыворотку из-под простокваши.", "Расскажите про покупки. Про какие про покупки? Про покупки, про покупки, про покупочки свои.", "Сшит колпак, да не по-колпаковски; вылит колокол, да не по-колоколовски. Надо колпак переколпаковать, перевыколпаковать, надо колокол переколоколовать, перевыколоколовать.", "Протокол про протокол протоколом запротоколировали.", "Была у Фрола, Фролу на Лавра наврала. Подойду к Лавру, на Фрола Лавру навру.", "Король-орел.", "Курьера курьер обгоняет в карьер. бЗ. Маланья-болтунья молоко болтала, выбалтывала, да не выболтала.", "Регулировщик-лигуриец регулировал в Лигурии.", "Полили ли лилию? Видели ли Лидию? Полили лилию, видели Лидию.", "Гонец с галер сгорел.", "Талер тарелка стоит.", "Идти на рать, так бердыш брать.", "Интервьюер интервента интервьюировал.", "Либретто Риголетто.", "Наш Полкан из Байкала лакал. Полкан лакал, но не мелел Байкал.", "Мы ели, ели ершей у ели, их еле-еле у ели доели.", "Не жалела мама мыла. Мама Милу мылом мыла. Мила мыла не любила, мыло Мила уронила.", "Во мраке раки шумят в драке.", "На дороге с утра тарахтят трактора.", "Жри во ржи, да не ржи во ржи.", "Орел на горе, перо на орле, гора под орлом, орел под пером.", "Город Нерль на Нерли-реке.", "На горе Арарат рвала Варвара виноград.", "Из-под Костромы, из-под Костромщины шли четыре мужчины. Говорили они про торги, да про покупки, про крупу да про подкрупки.", "Вахмистр с вахмистршей, ротмистр с ротмистршей.", "Турка курит трубку, курка клюет крупку. Не кури, турка, трубку, не клюй, курка, крупку.", "А мне не до недомогания."]}, {"sounds": "з, с, ж, ш, ч, щ, ц", "items": ["У Сени и Сани в сетях сом с усами.", "У осы не усы, не усища, а усики.", "Везет Сенька Саньку с Сонькой на санках. Санки скок, Сеньку с ног, Саньку в бок, Соньку в лоб, все в сугроб.", "Осип охрип, а Архип осип.", "Не хочет косой косить косой, говорит, коса коса.", "Сачок зацепился за сучок.", "По семеро в сани уселися сами.", "Из кузова в кузов шла перегрузка арбузов. В грозу в грязи от груза арбузов развалился кузов.", "Свиристель свиристит свирелью.", "Две реки: Вазуза с Гжатью, Вазуза с Гжатью.", "Разнервничавшийся конституционалист был обнаружен ассимилировавшимся в Константинополе.", "Шла Саша по шоссе и сосала сушку.", "Цапля чахла, цапля сохла, цапля сдохла.", "Шли сорок мышей, нашли сорок грошей, две мыши поплоше нашли по два гроша.", "Шестнадцать шли мышей и шесть нашли грошей, а мыши, что поплоше, шумливо шарят гроши.", "Чешуйки у щучки, щетинки у чушки.", "Четверть четверика гороха без червоточинки.", "Инцидент с интендантом.", "Прецедент с претендентом.", "Константин констатировал.", "У ежа ежата, у ужа ужата.", "Жутко жуку жить на суку.", "Два щенка щека к щеке щиплют щетку в уголке.", "Тщетно тщится щука ущемить леща.", "Жужжит жужелица, жужжит, да не кружится.", "Яшма в замше замшела.", "В Чите течет Читинка."]}];
+    /* === MULTILINGUAL TRANSLATION & PHONETIC TONGUE-TWISTER ENGINE === */
+    const TRANSLATIONS = {
+      ru: {
+        topLogo: "НЕЙРО-АТЛАС",
+        langBtn: "Язык: RU",
+        tab0: "🏠 Главная",
+        tab1: "🎙️ Вокал",
+        tab2: "🧠 Память",
+        tab3: "🗣️ Дикция",
+        tab4: "📊 Диапазон",
+        tabWiki: "📖 Справка",
+        portalTitle: "Нейро-Атлас Мастерства",
+        portalSub: "Комплексная система тренировки оперативной памяти, точного интонирования голоса и сценической речи",
+        card1Title: "Вокальная Лаборатория",
+        card1Sub: "Тюнер & Распевка",
+        card1Desc: "Точный тюнер с определением нот и центов на лету. Персональная распевка на фортепиано под баритон, тенор, бас, меццо или сопрано.",
+        card1Btn: "Открыть Вокал ➔",
+        card2Title: "Тренировка Памяти & Счёт",
+        card2Sub: "Память & Счёт",
+        card2Desc: "4 когнитивных режима: Тест Аюму (зрительная фиксация), Числовая цепочка (прямо и задом наперёд), Блоки Корси и слепой устный счёт от 2 до 7 знаков.",
+        card2Btn: "Тренировать Память ➔",
+        card3Title: "Дикция & Артикуляция",
+        card3Sub: "Речь & Скороговорки",
+        card3Desc: "Большая библиотека из 110 скороговорок с удобной пагинацией по группам звуков (Б-П-В-Ф, Р-Л-М-Н, З-С-Ж-Ш-Ч-Щ), метод пробки и снятие зажимов.",
+        card3Btn: "Перейти к Дикции ➔",
+        card4Title: "Диапазон & Тембр Голоса",
+        card4Sub: "Атлас & Диктофон",
+        card4Desc: "Запись гласной с мгновенным прослушиванием «ДО / ПОСЛЕ», расчет крайних нот и полный акустический справочник 10 типов певческого голоса.",
+        card4Btn: "Диагностика Голоса ➔",
+        corkTitle: "Метод Винной Пробки & Скороговорки",
+        corkDesc: "Зажми пробку или карандаш передними зубами на 1–1.5 см. Выбери группу звуков и отрабатывай артикуляцию, преодолевая сопротивление мышц.",
+        soundGrpLabel: "Группа звуков:",
+        btnPrev: "◀ Назад",
+        btnRandom: "🎲 Случайная",
+        btnNext: "Вперёд ▶",
+        corkTimerLabel: "Таймер читки с пробкой:",
+        corkTimerStart: "Старт 2 мин",
+        corkTimerStop: "Стоп",
+        explosiveTitle: "Артикуляционные Слоги (Взрывные согласные)",
+        explosiveDesc: "Произноси энергично, акцентируя губы и диафрагму:",
+        jawTitle: "Освобождение Челюсти & Зевок",
+        jawDesc: "Опусти челюсть свободно вниз на 2 пальца, почувствуй купол мягкого нёба (полузевок). Произноси плавно:",
+        twisterPracticeSound: "Отработка: "
+      },
+      en: {
+        topLogo: "NEURO-ATLAS",
+        langBtn: "Language: EN",
+        tab0: "🏠 Home",
+        tab1: "🎙️ Vocal",
+        tab2: "🧠 Memory",
+        tab3: "🗣️ Diction",
+        tab4: "📊 Range",
+        tabWiki: "📖 Reference",
+        portalTitle: "Neuro-Atlas of Mastery",
+        portalSub: "Comprehensive cognitive workout: working memory, pitch intonation & stage diction",
+        card1Title: "Vocal Laboratory",
+        card1Sub: "Tuner & Warm-up",
+        card1Desc: "Precision pitch tuner with real-time cents. Piano warm-up tailored for baritone, tenor, bass, mezzo, or soprano.",
+        card1Btn: "Open Vocal ➔",
+        card2Title: "Memory & Mental Math",
+        card2Sub: "Memory & Math",
+        card2Desc: "4 cognitive modes: Ayumu Test (flash span), Digit Span (forward/backward), Corsi Blocks, and mental arithmetic (2 to 7 digits).",
+        card2Btn: "Train Memory ➔",
+        card3Title: "Diction & Articulation",
+        card3Sub: "Speech & Twisters",
+        card3Desc: "Curated tongue-twister library grouped by phonetics (P-B-T-D, S-SH-CH, R-L-W), cork technique, and jaw release exercises.",
+        card3Btn: "Go to Diction ➔",
+        card4Title: "Voice Range & Timbre",
+        card4Sub: "Atlas & Recorder",
+        card4Desc: "Record voice sample with instant 'BEFORE / AFTER' comparison, vocal range note finder, and full 10-type voice reference.",
+        card4Btn: "Diagnose Voice ➔",
+        corkTitle: "Wine Cork Technique & Tongue-Twisters",
+        corkDesc: "Hold a cork or pencil between front teeth (1-1.5 cm). Select a phonetic group and speak clearly against resistance.",
+        soundGrpLabel: "Sound group:",
+        btnPrev: "◀ Prev",
+        btnRandom: "🎲 Random",
+        btnNext: "Next ▶",
+        corkTimerLabel: "Cork reading timer:",
+        corkTimerStart: "Start 2 min",
+        corkTimerStop: "Stop",
+        explosiveTitle: "Articulation Syllables (Plosive Consonants)",
+        explosiveDesc: "Pronounce energetically, engaging lips and diaphragm:",
+        jawTitle: "Jaw Release & Yawn Dome",
+        jawDesc: "Drop jaw freely down 2 finger-widths, lift soft palate dome. Vocalize smoothly:",
+        twisterPracticeSound: "Target sounds: "
+      }
+    };
+
+    const TWISTER_DATABASE = {
+      ru: [
+        {
+          groupName: "Б, П, В, Ф, Г, К, Д, Т, Х",
+          sounds: "б, п, в, ф, г, к, д, т, х",
+          items: [
+            "Добыл бобов бобыль.",
+            "Вакул бабу обул, да и Вакула баба обула.",
+            "От топота копыт пыль по полю летит.",
+            "Бык тупогуб, тупогубенький бычок, у быка бела губа была тупа.",
+            "Колпак на колпаке, под колпаком колпак.",
+            "Верзила Вавила весело ворочал вилы.",
+            "Около кола колокола, около ворот коловорот.",
+            "Шакал шагал, шакал скакал.",
+            "Купи кипу пик, пик кипу купи. Купи кипу пуха, кипу пуха купи.",
+            "Повар Петр, повар Павел. Петр плавал, Павел плавал.",
+            "Ткет ткач ткани на платки Тани.",
+            "Водовоз вез воду из-под водопровода.",
+            "Наш голова вашего голову головой переголовил, перевыголовил.",
+            "Вашему пономарю нашего пономаря не перепономарить, не перевыпономарить; наш пономарь вашего пономаря перепономарит, перевыпономарит.",
+            "В один, Клим, клин колоти.",
+            "Стоит копна с подприкопёночком.",
+            "В поле полет Фрося просо, сорняки выносит Фрося.",
+            "Краб крабу сделал грабли. Подал грабли крабу краб: сено граблями, краб, грабь!",
+            "У елки иголки колки.",
+            "Кукушка кукушонку купила капюшон. Надел кукушонок капюшон. Как в капюшоне он смешон!",
+            "Все бобры для своих бобрят добры. Бобры берут для бобрят бобы. Бобры, бывает, будоражат бобрят, давая им бобы.",
+            "Забыл Панкрат Кондратов домкрат, а Панкрату без домкрата не поднять на тракте трактор. И ждет на тракте трактор домкрат.",
+            "На меду медовик, а мне не до медовика.",
+            "Пришел Прокоп, кипел укроп, ушел Прокоп, кипел укроп; как при Прокопе кипел укроп, так и без Прокопа кипел укроп.",
+            "Шли три попа, три Прокопия-попа, три Прокопьевича, говорили про попа, про Прокопия-попа, про Прокопьевича.",
+            "Однажды галок поп пугая, в кустах увидел попугая, и говорит тот попугай: пугать ты галок, поп, пугай, но галок, поп, в кустах пугая, пугать не смей ты попугая.",
+            "Волховал волхв в хлеву с волхвами.",
+            "Бомбардир бонбоньерками бомбардировал барышень.",
+            "У Феофана Митрофаньча три сына Феофанычи.",
+            "У нас гость унес трость.",
+            "Фараонов фаворит на сапфир сменил нефрит.",
+            "Рододендроны из дендрария даны родителями.",
+            "К Габсбургам из Страсбурга.",
+            "Сидел тетерев на дереве, а тетерка с тетеревятами на ветке.",
+            "Брит Клим брат, брит Глеб брат, брат Игнат бородат.",
+            "Хвалю халву.",
+            "Хохлатые хохотушки хохотом хохотали."
+          ]
+        },
+        {
+          groupName: "Р, Л, М, Н",
+          sounds: "р, л, м, н",
+          items: [
+            "Всех скороговорок не перескороговоришь, не перевыскороговоришь.",
+            "У нас на дворе-подворье погода размокропогодилась.",
+            "Два дровосека, два дровокола, два дроворуба говорили про Ларьку, про Варьку, про Марину жену.",
+            "Клара-краля кралась к ларю.",
+            "Говорил командир про полковника и про полковницу, про подполковника и про подполковницу, про поручика и про поручицу, про подпоручика и про подпоручицу, про прапорщика и про прапорщицу, про подпрапорщика, а про подпрапорщицу промолчал.",
+            "На дворе трава, на траве дрова – раз дрова, два дрова, три дрова. Не руби дрова на траве двора.",
+            "На дворе дрова, за двором дрова, дрова вширь двора, не вместит двор дров, надо дрова выдворить на дровяной двор.",
+            "На дворе вдовы Варвары два вора дрова воровали, рассердилася вдова, убрала в сарай дрова.",
+            "Курфюрст скомпрометировал ландскнехта.",
+            "Рапортовал да не дорапортовал, дорапортовывал да зарапортовался.",
+            "Рыла свинья белорыла, тупорыла; полдвора рылом изрыла, вырыла, подрыла.",
+            "Съел молодец тридцать три пирога с пирогом, да все с творогом.",
+            "Тридцать три корабля лавировали, лавировали да не вылавировали.",
+            "На мели мы лениво налима ловили. На мели мы лениво ловили линя. О любви не меня ли вы мило молили И в туманы лимана манили меня?",
+            "Карл у Клары украл кораллы, а Клара у Карла украла кларнет.",
+            "Королева Клара строго карала Карла за кражу коралла.",
+            "Карл клал лук на ларь. Клара крала лук с ларя.",
+            "Дробью по перепелам да по тетеревам.",
+            "Мамаша Ромаше дала сыворотку из-под простокваши.",
+            "Расскажите про покупки. Про какие про покупки? Про покупки, про покупки, про покупочки свои.",
+            "Сшит колпак, да не по-колпаковски; вылит колокол, да не по-колоколовски. Надо колпак переколпаковать, перевыколпаковать, надо колокол переколоколовать, перевыколоколовать.",
+            "Протокол про протокол протоколом запротоколировали.",
+            "Была у Фрола, Фролу на Лавра наврала. Подойду к Лавру, на Фрола Лавру навру.",
+            "Король-орел.",
+            "Курьера курьер обгоняет в карьер. бЗ. Маланья-болтунья молоко болтала, выбалтывала, да не выболтала.",
+            "Регулировщик-лигуриец регулировал в Лигурии.",
+            "Полили ли лилию? Видели ли Лидию? Полили лилию, видели Лидию.",
+            "Гонец с галер сгорел.",
+            "Талер тарелка стоит.",
+            "Идти на рать, так бердыш брать.",
+            "Интервьюер интервента интервьюировал.",
+            "Либретто Риголетто.",
+            "Наш Полкан из Байкала лакал. Полкан лакал, но не мелел Байкал.",
+            "Мы ели, ели ершей у ели, их еле-еле у ели доели.",
+            "Не жалела мама мыла. Мама Милу мылом мыла. Мила мыла не любила, мыло Мила уронила.",
+            "Во мраке раки шумят в драке.",
+            "На дороге с утра тарахтят трактора.",
+            "Жри во ржи, да не ржи во ржи.",
+            "Орел на горе, перо на орле, гора под орлом, орел под пером.",
+            "Город Нерль на Нерли-реке.",
+            "На горе Арарат рвала Варвара виноград.",
+            "Из-под Костромы, из-под Костромщины шли четыре мужчины. Говорили они про торги, да про покупки, про крупу да про подкрупки.",
+            "Вахмистр с вахмистршей, ротмистр с ротмистршей.",
+            "Турка курит трубку, курка клюет крупку. Не кури, турка, трубку, не клюй, курка, крупку.",
+            "А мне не до недомогания."
+          ]
+        },
+        {
+          groupName: "З, С, Ж, Ш, Ч, Щ, Ц",
+          sounds: "з, с, ж, ш, ч, щ, ц",
+          items: [
+            "У Сени и Сани в сетях сом с усами.",
+            "У осы не усы, не усища, а усики.",
+            "Везет Сенька Саньку с Сонькой на санках. Санки скок, Сеньку с ног, Саньку в бок, Соньку в лоб, все в сугроб.",
+            "Осип охрип, а Архип осип.",
+            "Не хочет косой косить косой, говорит, коса коса.",
+            "Сачок зацепился за сучок.",
+            "По семеро в сани уселися сами.",
+            "Из кузова в кузов шла перегрузка арбузов. В грозу в грязи от груза арбузов развалился кузов.",
+            "Свиристель свиристит свирелью.",
+            "Две реки: Вазуза с Гжатью, Вазуза с Гжатью.",
+            "Разнервничавшийся конституционалист был обнаружен ассимилировавшимся в Константинополе.",
+            "Шла Саша по шоссе и сосала сушку.",
+            "Цапля чахла, цапля сохла, цапля сдохла.",
+            "Шли сорок мышей, нашли сорок грошей, две мыши поплоше нашли по два гроша.",
+            "Шестнадцать шли мышей и шесть нашли грошей, а мыши, что поплоше, шумливо шарят гроши.",
+            "Чешуйки у щучки, щетинки у чушки.",
+            "Четверть четверика гороха без червоточинки.",
+            "Инцидент с интендантом.",
+            "Прецедент с претендентом.",
+            "Константин констатировал.",
+            "У ежа ежата, у ужа ужата.",
+            "Жутко жуку жить на суку.",
+            "Два щенка щека к щеке щиплют щетку в уголке.",
+            "Тщетно тщится щука ущемить леща.",
+            "Жужжит жужелица, жужжит, да не кружится.",
+            "Яшма в замше замшела.",
+            "В Чите течет Читинка."
+          ]
+        }
+      ],
+      en: [
+        {
+          groupName: "P, B, T, D, K, G",
+          sounds: "p, b, t, d, k, g (plosives)",
+          items: [
+            "Peter Piper picked a peck of pickled peppers. A peck of pickled peppers Peter Piper picked.",
+            "Betty Botter bought some butter, but she said the butter's bitter.",
+            "Give papa a cup of proper coffee in a copper coffee cup.",
+            "A big black bug bit a big black bear, made the big black bear bleed blood.",
+            "Double bubble gum bubbles double.",
+            "Tom threw Tim three thumbtacks through ten thick tin trays.",
+            "Crisp crusts crackle and crunch.",
+            "Two tiny timid toads trying to trot to Tarrytown.",
+            "Kitty caught the kitten kissing kicking kites.",
+            "Quick kiss, quicker click, slick kick.",
+            "Good blood, bad blood, big black dog.",
+            "Can you can a can as a canner can can a can?"
+          ]
+        },
+        {
+          groupName: "S, SH, CH, Z, TH",
+          sounds: "s, sh, ch, z, th (sibilants)",
+          items: [
+            "She sells seashells on the seashore. The shells she sells are seashells, I'm sure.",
+            "Six slippery snails slid slowly seaward.",
+            "The thirty-three thieves thought that they thrilled the throne throughout Thursday.",
+            "Charlie chewed cheese cheerfully in China.",
+            "Fuzzy Wuzzy was a bear. Fuzzy Wuzzy had no hair. Fuzzy Wuzzy wasn't very fuzzy, was he?",
+            "Fresh fried fish, fish fresh fried, fried fish fresh, fish fried fresh.",
+            "Which witch wished which wicked wish?",
+            "Selfish shellfish shell fish safely.",
+            "Six sick hicks nick six slick bricks with picks and sticks.",
+            "Sister Susie's sewing shirts for soldiers.",
+            "Six thick thistle sticks, six thick thistles stick.",
+            "Swan swam over the sea, swim, swan, swim! Swan swam back again, well swum, swan!"
+          ]
+        },
+        {
+          groupName: "R, L, W, V, M, N",
+          sounds: "r, l, w, v, m, n (liquids & glides)",
+          items: [
+            "Red lorry, yellow lorry, red lorry, yellow lorry.",
+            "Unique New York, unique New York, you know you need unique New York.",
+            "Truly rural, truly rural, rural ruler.",
+            "Round and round the rugged rock the ragged rascal ran.",
+            "Willie's really weary, Lucy likes lemon lollipops.",
+            "Many mini miners mined more modern mines.",
+            "Lesser leather never weathered wetter weather better.",
+            "Red leather, yellow leather, red leather, yellow leather.",
+            "Nine nice night nurses nursing nicely at night.",
+            "One-one was a racehorse, Two-two was one too. One-one won one race, Two-two won one too.",
+            "Eleven benevolent elephants elegantly elevated everyone.",
+            "Clean clams crammed in clean cans carelessly."
+          ]
+        }
+      ]
+    };
+
+    let currentTwisterLang = 'ru';
     let currentGroupIdx = 0;
     let currentTwisterIdx = 0;
+    let currentAppLang = localStorage.getItem('vocal_trainer_lang') || 'ru';
+
+    function getActiveTwisterGroups() {
+      return TWISTER_DATABASE[currentTwisterLang] || TWISTER_DATABASE['ru'];
+    }
 
     function renderCurrentTwister() {
-      const grp = TWISTER_GROUPS[currentGroupIdx];
+      const groups = getActiveTwisterGroups();
+      const grp = groups[currentGroupIdx] || groups[0];
       if (!grp || !grp.items || grp.items.length === 0) return;
       if (currentTwisterIdx >= grp.items.length) currentTwisterIdx = 0;
       if (currentTwisterIdx < 0) currentTwisterIdx = grp.items.length - 1;
@@ -3544,41 +3848,145 @@
       const grpLbl = document.getElementById('twisterGroupLabel');
       const idxLbl = document.getElementById('twisterIndexLabel');
       const txtDisp = document.getElementById('twisterTextDisplay');
-      if (grpLbl) grpLbl.textContent = 'Отработка звуков: ' + grp.sounds;
+      const t = TRANSLATIONS[currentAppLang] || TRANSLATIONS['ru'];
+      if (grpLbl) grpLbl.textContent = (t.twisterPracticeSound || 'Отработка: ') + grp.sounds;
       if (idxLbl) idxLbl.textContent = (currentTwisterIdx + 1) + ' / ' + grp.items.length;
       if (txtDisp) txtDisp.textContent = grp.items[currentTwisterIdx];
+
+      const twisterStat = document.getElementById('dashTwisterStat');
+      if (twisterStat) {
+        twisterStat.textContent = `№ ${currentTwisterIdx + 1}`;
+      }
     }
 
     function selectSoundGroup(idx, btn) {
       currentGroupIdx = idx;
       currentTwisterIdx = 0;
-      btn.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      if (btn && btn.parentElement) {
+        btn.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
       renderCurrentTwister();
     }
 
     function nextTwister() {
-      const grp = TWISTER_GROUPS[currentGroupIdx];
+      const groups = getActiveTwisterGroups();
+      const grp = groups[currentGroupIdx] || groups[0];
       currentTwisterIdx = (currentTwisterIdx + 1) % grp.items.length;
       renderCurrentTwister();
     }
 
     function prevTwister() {
-      const grp = TWISTER_GROUPS[currentGroupIdx];
+      const groups = getActiveTwisterGroups();
+      const grp = groups[currentGroupIdx] || groups[0];
       currentTwisterIdx = (currentTwisterIdx - 1 + grp.items.length) % grp.items.length;
       renderCurrentTwister();
     }
 
     function randomTwister() {
-      const grp = TWISTER_GROUPS[currentGroupIdx];
+      const groups = getActiveTwisterGroups();
+      const grp = groups[currentGroupIdx] || groups[0];
       currentTwisterIdx = Math.floor(Math.random() * grp.items.length);
       renderCurrentTwister();
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      renderCurrentTwister();
-    });
+    function setTwisterLanguage(lang) {
+      currentTwisterLang = (lang === 'en') ? 'en' : 'ru';
+      const ruBtn = document.getElementById('twisterLangRuBtn');
+      const enBtn = document.getElementById('twisterLangEnBtn');
+      if (ruBtn) ruBtn.classList.toggle('active', currentTwisterLang === 'ru');
+      if (enBtn) enBtn.classList.toggle('active', currentTwisterLang === 'en');
 
+      const groups = getActiveTwisterGroups();
+      for (let i = 0; i < 3; i++) {
+        const btn = document.getElementById('soundGrpBtn' + i);
+        if (btn && groups[i]) {
+          btn.textContent = groups[i].groupName;
+        }
+      }
+      currentTwisterIdx = 0;
+      renderCurrentTwister();
+    }
+
+    function applyLanguage(lang) {
+      if (lang !== 'ru' && lang !== 'en') lang = 'ru';
+      currentAppLang = lang;
+      try {
+        localStorage.setItem('vocal_trainer_lang', lang);
+      } catch (e) {}
+      const t = TRANSLATIONS[lang];
+
+      // Top logo & lang button
+      const topLogo = document.getElementById('topLogoText');
+      if (topLogo) topLogo.textContent = t.topLogo;
+      const langLabel = document.getElementById('langLabel');
+      if (langLabel) langLabel.textContent = t.langBtn;
+
+      // Tabs
+      const tab0 = document.getElementById('tabBtn0');
+      if (tab0 && tab0.querySelector('span')) tab0.querySelector('span').textContent = t.tab0;
+      const tab1 = document.getElementById('tabBtn1');
+      if (tab1 && tab1.querySelector('span')) tab1.querySelector('span').textContent = t.tab1;
+      const tab2 = document.getElementById('tabBtn2');
+      if (tab2 && tab2.querySelector('span')) tab2.querySelector('span').textContent = t.tab2;
+      const tab3 = document.getElementById('tabBtn3');
+      if (tab3 && tab3.querySelector('span')) tab3.querySelector('span').textContent = t.tab3;
+      const tab4 = document.getElementById('tabBtn4');
+      if (tab4 && tab4.querySelector('span')) tab4.querySelector('span').textContent = t.tab4;
+      const tabWiki = document.getElementById('tabWikiSpan');
+      if (tabWiki) tabWiki.textContent = t.tabWiki;
+
+      // Portal header & cards
+      const pTitle = document.getElementById('portalMainTitle');
+      if (pTitle) pTitle.textContent = t.portalTitle;
+      const pSub = document.getElementById('portalMainSub');
+      if (pSub) pSub.textContent = t.portalSub;
+
+      const c1T = document.getElementById('card1Title'); if (c1T) c1T.textContent = t.card1Title;
+      const c1S = document.getElementById('card1Sub'); if (c1S) c1S.textContent = t.card1Sub;
+      const c1D = document.getElementById('card1Desc'); if (c1D) c1D.textContent = t.card1Desc;
+      const c1B = document.getElementById('card1Btn'); if (c1B) c1B.textContent = t.card1Btn;
+
+      const c2T = document.getElementById('card2Title'); if (c2T) c2T.textContent = t.card2Title;
+      const c2S = document.getElementById('card2Sub'); if (c2S) c2S.textContent = t.card2Sub;
+      const c2D = document.getElementById('card2Desc'); if (c2D) c2D.textContent = t.card2Desc;
+      const c2B = document.getElementById('card2Btn'); if (c2B) c2B.textContent = t.card2Btn;
+
+      const c3T = document.getElementById('card3Title'); if (c3T) c3T.textContent = t.card3Title;
+      const c3S = document.getElementById('card3Sub'); if (c3S) c3S.textContent = t.card3Sub;
+      const c3D = document.getElementById('card3Desc'); if (c3D) c3D.textContent = t.card3Desc;
+      const c3B = document.getElementById('card3Btn'); if (c3B) c3B.textContent = t.card3Btn;
+
+      const c4T = document.getElementById('card4Title'); if (c4T) c4T.textContent = t.card4Title;
+      const c4S = document.getElementById('card4Sub'); if (c4S) c4S.textContent = t.card4Sub;
+      const c4D = document.getElementById('card4Desc'); if (c4D) c4D.textContent = t.card4Desc;
+      const c4B = document.getElementById('card4Btn'); if (c4B) c4B.textContent = t.card4Btn;
+
+      // Diction Section
+      const corkT = document.getElementById('corkExTitle'); if (corkT) corkT.textContent = t.corkTitle;
+      const corkD = document.getElementById('corkExDesc'); if (corkD) corkD.textContent = t.corkDesc;
+      const sGroup = document.getElementById('soundGroupLabelText'); if (sGroup) sGroup.textContent = t.soundGrpLabel;
+      const bPrev = document.getElementById('btnPrevTwister'); if (bPrev) bPrev.textContent = t.btnPrev;
+      const bRand = document.getElementById('btnRandomTwister'); if (bRand) bRand.textContent = t.btnRandom;
+      const bNext = document.getElementById('btnNextTwister'); if (bNext) bNext.textContent = t.btnNext;
+      const cTLabel = document.getElementById('corkTimerLabel'); if (cTLabel) cTLabel.textContent = t.corkTimerLabel;
+      const expT = document.getElementById('explosiveTitle'); if (expT) expT.textContent = t.explosiveTitle;
+      const expD = document.getElementById('explosiveDesc'); if (expD) expD.textContent = t.explosiveDesc;
+      const jawT = document.getElementById('jawTitle'); if (jawT) jawT.textContent = t.jawTitle;
+      const jawD = document.getElementById('jawDesc'); if (jawD) jawD.textContent = t.jawDesc;
+
+      // Synchronize twisters
+      setTwisterLanguage(lang);
+    }
+
+    function toggleAppLanguage() {
+      const nextLang = (currentAppLang === 'ru') ? 'en' : 'ru';
+      applyLanguage(nextLang);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      applyLanguage(currentAppLang);
+    });
 
     /* === COGNITIVE BRAIN GYM SCRIPTS === */
 // Audio Synthesizer (Web Audio API)
@@ -4196,14 +4604,13 @@
 
   </script>
 
-  <!-- SPACE RANGERS 2 STYLE ENCYCLOPEDIA & MEMO MODAL -->
+  <!-- ENCYCLOPEDIA & KNOWLEDGE BASE MODAL -->
   <div id="neuroWikiModal" class="hide" onclick="closeNeuroWiki()">
     <div class="wiki-window" onclick="event.stopPropagation();">
       <div class="wiki-header">
         <div class="wiki-header-title">
           <span>🌌</span>
-          <span>База Знаний & Памятка Нейро-Атласа</span>
-          <span class="wiki-header-badge">Space Rangers Guide</span>
+          <span id="wikiModalMainTitle">База Знаний & Памятка</span>
         </div>
         <div style="display: flex; align-items: center; gap: 10px;">
           <input type="text" id="wikiSearchInput" class="wiki-search-box" placeholder="🔍 Поиск по справке..." oninput="onWikiSearchInput(this.value)">
