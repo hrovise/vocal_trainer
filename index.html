@@ -1371,10 +1371,10 @@
 
         <div class="pills-row">
           <span class="pill-label" id="ayumuSpeedLabel">⏱️ Скорость показа:</span>
-          <button class="btn-pill active" onclick="setAyumuSpeed(2000, this)">🐢 2.0 с</button>
-          <button class="btn-pill" onclick="setAyumuSpeed(1200, this)">⚡ 1.2 с</button>
-          <button class="btn-pill" onclick="setAyumuSpeed(700, this)">🔥 0.7 с</button>
-          <button class="btn-pill" onclick="setAyumuSpeed(400, this)">🐒 0.4 с</button>
+          <button class="btn-pill active" id="aySpd2000" onclick="setAyumuSpeed(2000, this)">🐢 2.0 с</button>
+          <button class="btn-pill" id="aySpd1200" onclick="setAyumuSpeed(1200, this)">⚡ 1.2 с</button>
+          <button class="btn-pill" id="aySpd700" onclick="setAyumuSpeed(700, this)">🔥 0.7 с</button>
+          <button class="btn-pill" id="aySpd400" onclick="setAyumuSpeed(400, this)">🐒 0.4 с</button>
         </div>
 
         <div class="pills-row">
@@ -2028,6 +2028,18 @@
       renderPianoGrid();
     }
 
+        function formatNoteName(solfege) {
+      if (typeof currentAppLang === 'undefined' || currentAppLang !== 'en') return solfege;
+      return solfege
+        .replace(/ДО/g, 'C')
+        .replace(/РЕ/g, 'D')
+        .replace(/МИ/g, 'E')
+        .replace(/ФА/g, 'F')
+        .replace(/СОЛЬ/g, 'G')
+        .replace(/ЛЯ/g, 'A')
+        .replace(/СИ/g, 'B');
+    }
+
     function renderPianoGrid() {
       const grid = document.getElementById('pianoGrid');
       grid.innerHTML = '';
@@ -2056,8 +2068,8 @@
         const btn = document.createElement('button');
         btn.className = 'p-key';
         btn.dataset.freq = k.freq;
-        btn.dataset.label = k.label;
-        btn.innerHTML = `${k.title}<small>${Math.round(k.freq)} Hz</small>`;
+        btn.dataset.label = formatNoteName(k.label);
+        btn.innerHTML = `${formatNoteName(k.title)}<small>${Math.round(k.freq)} Hz</small>`;
         const trigger = (e) => {
           e.preventDefault();
           toggleContinuousTone(btn);
@@ -2152,7 +2164,7 @@
 
       if (currentActiveBtn === btn) {
         stopContinuousTone();
-        badge.textContent = `⏹️ Звук выключен`;
+        badge.textContent = (currentAppLang === 'en' ? '⏹️ Tone stopped' : '⏹️ Звук выключен');
         badge.className = 'badge';
         return;
       }
@@ -2634,6 +2646,31 @@
       document.getElementById('atlasFilterAll').classList.toggle('active', cat === 'all');
       document.getElementById('atlasFilterMale').classList.toggle('active', cat === 'male');
       document.getElementById('atlasFilterFemale').classList.toggle('active', cat === 'female');
+            // Extra UI translations
+      const cTBtn = document.getElementById('corkTimerBtn');
+      if (cTBtn && !timerInterval) cTBtn.textContent = t.corkTimerStart;
+
+      const ayBdg = document.getElementById('ayumuBadge');
+      if (ayBdg) ayBdg.textContent = lang === 'en' ? `Level: ${ayumuDigits} digits` : `Уровень: ${ayumuDigits} цифр`;
+
+      const ayStat = document.getElementById('ayumuStatus');
+      if (ayStat && (typeof ayumuIsActive === 'undefined' || !ayumuIsActive)) ayStat.textContent = t.ayumuInitStatus;
+
+      const spStat = document.getElementById('spanSubText');
+      if (spStat && (typeof spanIsActive === 'undefined' || !spanIsActive)) spStat.textContent = t.spanInitSub;
+
+      const coStat = document.getElementById('corsiStatus');
+      if (coStat && (typeof corsiIsActive === 'undefined' || !corsiIsActive)) coStat.textContent = t.corsiInitStatus;
+
+      const maStatText = document.getElementById('mathStatusText');
+      if (maStatText && (typeof mathIsHidden === 'undefined' || !mathIsHidden)) maStatText.textContent = t.mathInitSub;
+
+      const s20 = document.getElementById('aySpd2000'); if (s20) s20.textContent = lang === 'en' ? '🐢 2.0 s' : '🐢 2.0 с';
+      const s12 = document.getElementById('aySpd1200'); if (s12) s12.textContent = lang === 'en' ? '⚡ 1.2 s' : '⚡ 1.2 с';
+      const s7 = document.getElementById('aySpd700'); if (s7) s7.textContent = lang === 'en' ? '🔥 0.7 s' : '🔥 0.7 с';
+      const s4 = document.getElementById('aySpd400'); if (s4) s4.textContent = lang === 'en' ? '🐒 0.4 s' : '🐒 0.4 с';
+
+      if (typeof renderPianoGrid === 'function') renderPianoGrid();
       renderAtlas();
     }
 
@@ -2987,7 +3024,7 @@
       if (timerInterval) {
         clearInterval(timerInterval);
         timerInterval = null;
-        btn.textContent = 'Старт 2 мин';
+        btn.textContent = (currentAppLang === 'en' ? 'Start 2 min' : 'Старт 2 мин');
         btn.classList.remove('running');
       } else {
         if (secondsLeft <= 0) secondsLeft = 120;
@@ -3784,15 +3821,54 @@
       const mathStat = document.getElementById('dashMathStat');
       const mathTime = document.getElementById('dashMathTime');
       if (mathStat && mathTime) {
-        mathStat.textContent = userProfile.mathLastResult || (isEn ? 'Not solved yet' : 'Ещё не решено');
-        mathTime.textContent = userProfile.mathLastTime ? (isEn ? `Time: ${userProfile.mathLastTime}` : `Время: ${userProfile.mathLastTime}`) : (isEn ? '2-7 digits' : '2-7 знаков');
+        if (userProfile.mathLastResult) {
+          mathStat.textContent = isEn 
+            ? userProfile.mathLastResult.replace(/знаков|знака/g, 'digits') 
+            : userProfile.mathLastResult.replace(/digits/g, 'знаков');
+        } else {
+          mathStat.textContent = isEn ? 'Not solved yet' : 'Ещё не решено';
+        }
+        if (userProfile.mathLastTime) {
+          const tClean = userProfile.mathLastTime.replace('Time: ', '').replace('Время: ', '');
+          const tFormatted = isEn 
+            ? tClean.replace(/сек/g, 'sec').replace(/мин/g, 'min') 
+            : tClean.replace(/sec/g, 'сек').replace(/min/g, 'мин');
+          mathTime.textContent = isEn ? `Time: ${tFormatted}` : `Время: ${tFormatted}`;
+        } else {
+          mathTime.textContent = isEn ? '2-7 digits' : '2-7 знаков';
+        }
       }
 
       const voiceType = document.getElementById('dashVoiceType');
       const voiceRange = document.getElementById('dashVoiceRange');
       if (voiceType && voiceRange) {
-        voiceType.textContent = userProfile.voiceType || (isEn ? 'Baritone' : 'Баритон');
-        voiceRange.textContent = userProfile.voiceRange || (isEn ? 'Warm-up ready' : 'Распевка готова');
+        if (userProfile.voiceType) {
+          const vRaw = userProfile.voiceType;
+          const matched = (typeof VOICE_CATALOG !== 'undefined') 
+            ? VOICE_CATALOG.find(v => v.name === vRaw || v.name_en === vRaw || v.id === vRaw)
+            : null;
+          voiceType.textContent = isEn 
+            ? (matched ? (matched.name_en || matched.name) : vRaw) 
+            : (matched ? matched.name : vRaw);
+        } else {
+          voiceType.textContent = isEn ? 'Baritone' : 'Баритон';
+        }
+
+        if (userProfile.voiceRange) {
+          let rng = userProfile.voiceRange;
+          if (isEn) {
+            rng = rng
+              .replace(/ДО/g, 'C').replace(/РЕ/g, 'D').replace(/МИ/g, 'E')
+              .replace(/ФА/g, 'F').replace(/СОЛЬ/g, 'G').replace(/ЛЯ/g, 'A').replace(/СИ/g, 'B');
+          } else {
+            rng = rng
+              .replace(/C(?=\d|)/g, 'ДО').replace(/D(?=\d|)/g, 'РЕ').replace(/E(?=\d|)/g, 'МИ')
+              .replace(/F(?=\d|)/g, 'ФА').replace(/G(?=\d|)/g, 'СОЛЬ').replace(/A(?=\d|)/g, 'ЛЯ').replace(/B(?=\d|)/g, 'СИ');
+          }
+          voiceRange.textContent = rng;
+        } else {
+          voiceRange.textContent = isEn ? 'Warm-up ready' : 'Распевка готова';
+        }
       }
 
       const twisterStat = document.getElementById('dashTwisterStat');
@@ -4702,7 +4778,7 @@
       ayumuDigits = cnt;
       btn.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      document.getElementById('ayumuBadge').textContent = `Уровень: ${ayumuDigits} цифр`;
+      document.getElementById('ayumuBadge').textContent = (currentAppLang === 'en' ? `Level: ${ayumuDigits} digits` : `Уровень: ${ayumuDigits} цифр`);
     }
 
     function startAyumuRound() {
@@ -4711,7 +4787,7 @@
       ayumuState = 'SHOWING';
       ayumuExpected = 0;
       ayumuStatusEl.style.color = '#58a6ff';
-      ayumuStatusEl.textContent = `👁️ Запомни расположение ${ayumuDigits} цифр!`;
+      ayumuStatusEl.textContent = (currentAppLang === 'en' ? `👁️ Memorize positions of ${ayumuDigits} digits!` : `👁️ Запомни расположение ${ayumuDigits} цифр!`);
       ayumuBtn.style.display = 'none';
 
       const positions = [];
@@ -4744,7 +4820,7 @@
       if (ayumuState !== 'SHOWING') return;
       ayumuState = 'PLAYING';
       ayumuStatusEl.style.color = '#e6edf3';
-      ayumuStatusEl.textContent = '👆 Нажимай по памяти по возрастанию!';
+      ayumuStatusEl.textContent = (currentAppLang === 'en' ? '👆 Tap from memory in ascending order!' : '👆 Нажимай по памяти по возрастанию!');
 
       const cells = ayumuGridEl.querySelectorAll('.cell');
       ayumuNumbers.forEach(item => {
@@ -4788,9 +4864,9 @@
           document.getElementById('ayumuAccuracy').textContent = `${Math.round((ayumuCorrect / ayumuTotal) * 100)}%`;
           soundWin();
           ayumuStatusEl.style.color = '#3fb950';
-          ayumuStatusEl.textContent = `🎉 Отлично! Все ${ayumuDigits} цифр верно!`;
+          ayumuStatusEl.textContent = (currentAppLang === 'en' ? `🎉 Great! All ${ayumuDigits} digits correct!` : `🎉 Отлично! Все ${ayumuDigits} цифр верно!`);
           if (ayumuDigits < 10) ayumuDigits++;
-          document.getElementById('ayumuBadge').textContent = `Уровень: ${ayumuDigits} цифр`;
+          document.getElementById('ayumuBadge').textContent = (currentAppLang === 'en' ? `Level: ${ayumuDigits} digits` : `Уровень: ${ayumuDigits} цифр`);
           ayumuBtn.style.display = 'flex';
           ayumuBtn.style.background = '#238636';
           ayumuBtn.innerHTML = `<span>Следующий уровень: ${ayumuDigits} цифр ➔</span>`;
@@ -4815,7 +4891,7 @@
         });
 
         ayumuStatusEl.style.color = '#da3633';
-        ayumuStatusEl.textContent = `❌ Ошибка! Нужна была цифра ${expected}. Запомни поле!`;
+        ayumuStatusEl.textContent = (currentAppLang === 'en' ? `❌ Missed! Expected digit ${expected}. Memorize the board!` : `❌ Ошибка! Нужна была цифра ${expected}. Запомни поле!`);
         ayumuBtn.style.display = 'flex';
         ayumuBtn.style.background = '#1f6feb';
         ayumuBtn.innerHTML = `<span>Попробовать снова (${ayumuDigits} цифр) ↺</span>`;
@@ -4858,7 +4934,7 @@
         spanSequence.push(Math.floor(Math.random() * 10));
       }
 
-      document.getElementById('spanSubText').textContent = 'Внимание на экран...';
+      document.getElementById('spanSubText').textContent = (currentAppLang === 'en' ? 'Watch the screen...' : 'Внимание на экран...');
       let idx = 0;
 
       const interval = setInterval(() => {
@@ -4875,8 +4951,8 @@
           setTimeout(() => {
             document.getElementById('spanDigitDisplay').textContent = '?';
             document.getElementById('spanSubText').textContent = spanDirection === 'backward'
-              ? '🔄 Введи цифры ЗАДОМ НАПЕРЁД (с конца к началу):'
-              : 'Введи цифры в том же порядке:';
+              ? (currentAppLang === 'en' ? '🔄 Enter digits BACKWARDS (from last to first):' : '🔄 Введи цифры ЗАДОМ НАПЕРЁД (с конца к началу):')
+              : (currentAppLang === 'en' ? 'Enter digits in the same order:' : 'Введи цифры в том же порядке:');
             document.getElementById('spanInputDisplay').textContent = '';
           }, 600);
         }
@@ -4914,17 +4990,17 @@
       if (isCorrect) {
         soundWin();
         subText.style.color = '#3fb950';
-        subText.textContent = `🎉 БРАВО! Абсолютно верно: [${expected.join(', ')}]`;
+        subText.textContent = (currentAppLang === 'en' ? `🎉 BRAVO! Absolutely correct: [${expected.join(', ')}]` : `🎉 БРАВО! Абсолютно верно: [${expected.join(', ')}]`);
         inputDisp.style.borderColor = '#3fb950';
       } else {
         soundError();
         subText.style.color = '#da3633';
-        subText.textContent = `❌ Ошибка! Было: [${spanSequence.join(', ')}], ожидалось: [${expected.join(', ')}]`;
+        subText.textContent = (currentAppLang === 'en' ? `❌ Missed! Was: [${spanSequence.join(', ')}], expected: [${expected.join(', ')}]` : `❌ Ошибка! Было: [${spanSequence.join(', ')}], ожидалось: [${expected.join(', ')}]`);
         inputDisp.style.borderColor = '#da3633';
       }
 
       document.getElementById('btnSpanStart').style.display = 'flex';
-      document.getElementById('btnSpanStart').innerHTML = `<span>Повторить раунд ↺</span>`;
+      document.getElementById('btnSpanStart').innerHTML = `<span>${currentAppLang === 'en' ? 'Repeat round ↺' : 'Повторить раунд ↺'}</span>`;
     }
 
 
@@ -4983,7 +5059,7 @@
       cells.forEach(c => { c.className = 'cell empty'; c.textContent = ''; });
 
       corsiStatusEl.style.color = '#f0883e';
-      corsiStatusEl.textContent = '👀 Следи за вспыхивающими ячейками!';
+      corsiStatusEl.textContent = (currentAppLang === 'en' ? '👀 Watch the flashing blocks!' : '👀 Следи за вспыхивающими ячейками!');
 
       let step = 0;
       const interval = setInterval(() => {
@@ -5006,7 +5082,7 @@
             corsiIsShowing = false;
             corsiCanTap = true;
             corsiStatusEl.style.color = '#e6edf3';
-            corsiStatusEl.textContent = '👆 Нажимай по памяти по той же траектории!';
+            corsiStatusEl.textContent = (currentAppLang === 'en' ? '👆 Tap the same path from memory!' : '👆 Нажимай по памяти по той же траектории!');
             cells.forEach(c => { c.className = 'cell hidden-mask'; c.textContent = '•'; });
           }, 400);
         }
@@ -5040,7 +5116,7 @@
         cellEl.textContent = '✗';
         corsiCanTap = false;
         corsiStatusEl.style.color = '#da3633';
-        corsiStatusEl.textContent = '❌ Неверная ячейка! Попробуй ещё раз.';
+        corsiStatusEl.textContent = (currentAppLang === 'en' ? '❌ Wrong block! Try again.' : '❌ Неверная ячейка! Попробуй ещё раз.');
 
         const cells = corsiGridEl.querySelectorAll('.cell');
         const correctCell = cells[expectedPos];
@@ -5169,7 +5245,7 @@
     function checkMathAnswer() {
       const userStr = document.getElementById('mathUserAnswer').value.trim();
       if (!userStr) {
-        alert('Пожалуйста, введи полученный результат умножения!');
+        alert(currentAppLang === 'en' ? 'Please enter the multiplication result!' : 'Пожалуйста, введи полученный результат умножения!');
         return;
       }
 
@@ -5199,27 +5275,27 @@
         userProfile.mathLastTime = timeStr;
         saveUserProfile();
         resBox.innerHTML = `
-          <div style="font-size: 18px; font-weight: 900; color: #3fb950;">🎉 ГЕНИАЛЬНО! АБСОЛЮТНО ТОЧНО!</div>
+          <div style="font-size: 18px; font-weight: 900; color: #3fb950;">${currentAppLang === 'en' ? '🎉 BRILLIANT! ABSOLUTELY SPOT-ON!' : '🎉 ГЕНИАЛЬНО! АБСОЛЮТНО ТОЧНО!'}</div>
           <div style="font-size: 13px; color: #fff; margin-top: 6px;">
             ${mathNum1} × ${mathNum2} = <b style="color: #3fb950;">${correctVal.toLocaleString('ru-RU')}</b>
           </div>
-          <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Время счёта: <b>${timeStr}</b></div>
-          <button class="btn-main" style="margin-top: 10px;" onclick="generateMathProblem()">Следующий пример ➔</button>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">${currentAppLang === 'en' ? 'Calculation time:' : 'Время счёта:'} <b>${timeStr}</b></div>
+          <button class="btn-main" style="margin-top: 10px;" onclick="generateMathProblem()">${currentAppLang === 'en' ? 'Next problem ➔' : 'Следующий пример ➔'}</button>
         `;
       } else {
         soundError();
         const diff = userVal > correctVal ? (userVal - correctVal) : (correctVal - userVal);
         resBox.style.borderColor = '#da3633';
         resBox.innerHTML = `
-          <div style="font-size: 18px; font-weight: 900; color: #da3633;">❌ Ошибка в расчетах</div>
+          <div style="font-size: 18px; font-weight: 900; color: #da3633;">${currentAppLang === 'en' ? '❌ Calculation error' : '❌ Ошибка в расчетах'}</div>
           <div style="font-size: 13px; color: #fff; margin-top: 6px;">
-            Твой ответ: <b style="color: #da3633;">${userVal.toLocaleString('ru-RU')}</b><br>
-            Правильный ответ: <b style="color: #3fb950;">${correctVal.toLocaleString('ru-RU')}</b>
+            ${currentAppLang === 'en' ? 'Your answer:' : 'Твой ответ:'} <b style="color: #da3633;">${userVal.toLocaleString(currentAppLang === 'en' ? 'en-US' : 'ru-RU')}</b><br>
+            ${currentAppLang === 'en' ? 'Correct answer:' : 'Правильный ответ:'} <b style="color: #3fb950;">${correctVal.toLocaleString(currentAppLang === 'en' ? 'en-US' : 'ru-RU')}</b>
           </div>
           <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
-            Разница: ${diff.toLocaleString('ru-RU')} • Время: ${timeStr}
+            ${currentAppLang === 'en' ? 'Difference:' : 'Разница:'} ${diff.toLocaleString(currentAppLang === 'en' ? 'en-US' : 'ru-RU')} • ${currentAppLang === 'en' ? 'Time:' : 'Время:'} ${timeStr}
           </div>
-          <button class="btn-secondary" style="margin-top: 10px; width: 100%;" onclick="generateMathProblem()">Попробовать другой пример ↺</button>
+          <button class="btn-secondary" style="margin-top: 10px; width: 100%;" onclick="generateMathProblem()">${currentAppLang === 'en' ? 'Try another problem ↺' : 'Попробовать другой пример ↺'}</button>
         `;
       }
     }
