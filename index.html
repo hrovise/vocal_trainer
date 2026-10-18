@@ -1234,11 +1234,11 @@
         <div style="display: flex; align-items: center; gap: 8px;">
           <span style="font-size: 20px;">🏆</span>
           <div>
-            <div style="font-size: 15px; font-weight: 800; color: #fff;">Твой прогресс за неделю</div>
+            <div style="font-size: 15px; font-weight: 800; color: #fff;" id="storageTitleText">Твой прогресс за неделю</div>
             <div style="font-size: 11px; color: #8b949e;" id="storageTtlNotice">Срок хранения: скользящие 7 дней с последнего визита</div>
           </div>
         </div>
-        <button class="btn-secondary" style="font-size: 11px; padding: 5px 10px; border-color: #da3633; color: #f85149;" onclick="userClearStorage()">
+        <button class="btn-secondary" style="font-size: 11px; padding: 5px 10px; border-color: #da3633; color: #f85149;" onclick="userClearStorage()" id="storageClearBtn">
           🗑️ Очистить кэш
         </button>
       </div>
@@ -1246,36 +1246,36 @@
       <!-- Quick Stats Pills Grid -->
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-top: 12px;">
         <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px; text-align: center;">
-          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase; font-weight: bold;">🐒 Тест Аюму</div>
+          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase; font-weight: bold;" id="dashLabelAyumu">🐒 Тест Аюму</div>
           <div style="font-size: 15px; font-weight: 800; color: #58a6ff; margin-top: 2px;" id="dashAyumuStat">—</div>
           <div style="font-size: 10px; color: #8b949e;" id="dashAyumuAcc">—</div>
         </div>
 
         <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px; text-align: center;">
-          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase; font-weight: bold;">🧮 Устный счёт</div>
+          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase; font-weight: bold;" id="dashLabelMath">🧮 Устный счёт</div>
           <div style="font-size: 15px; font-weight: 800; color: #3fb950; margin-top: 2px;" id="dashMathStat">—</div>
           <div style="font-size: 10px; color: #8b949e;" id="dashMathTime">—</div>
         </div>
 
         <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px; text-align: center;">
-          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase; font-weight: bold;">🎙️ Голос</div>
+          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase; font-weight: bold;" id="dashLabelVoice">🎙️ Голос</div>
           <div style="font-size: 15px; font-weight: 800; color: #f0883e; margin-top: 2px;" id="dashVoiceType">—</div>
           <div style="font-size: 10px; color: #8b949e;" id="dashVoiceRange">—</div>
         </div>
 
         <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px; text-align: center;">
-          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase; font-weight: bold;">🗣️ Скороговорки</div>
+          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase; font-weight: bold;" id="dashLabelTwisters">🗣️ Скороговорки</div>
           <div style="font-size: 15px; font-weight: 800; color: #a371f7; margin-top: 2px;" id="dashTwisterStat">—</div>
           <div style="font-size: 10px; color: #8b949e;" id="dashTwisterSub">110 в базе</div>
         </div>
       </div>
 
-      <div style="font-size: 11px; color: #8b949e; margin-top: 10px; line-height: 1.4; border-top: 1px solid #21262d; padding-top: 8px;">
-        ℹ️ <b>Как работает память:</b> Все твои результаты хранятся 100% на твоем устройстве. Если ты не заходишь <b>более 7 дней</b>, кэш сбрасывается для чистоты следующей недели. При каждом новом визите таймер автоматически обновляется на новую неделю! Аудиозаписи голоса хранятся только в оперативной памяти и не перегружают устройство.
+      <div style="font-size: 11px; color: #8b949e; margin-top: 10px; line-height: 1.4; border-top: 1px solid #21262d; padding-top: 8px;" id="storageExplainer">
+        ℹ️ <b>Как работает память и хранение:</b> Все твои результаты и рекорды сохраняются на 100% локально на твоем устройстве. Если ты не заходишь <b>более 7 дней</b>, кэш мягко сбрасывается для чистоты нового недельного цикла. При каждом посещении таймер автоматически продлевается на новую неделю! Аудиозаписи голоса хранятся исключительно в оперативной памяти (RAM) для защиты твоей приватности и не перегружают накопитель.
       </div>
     </div>
 
-    <div style="margin-top: 14px; text-align: center; font-size: 11px; color: #8b949e;">
+    <div style="margin-top: 14px; text-align: center; font-size: 11px; color: #8b949e;" id="privacyFooterNotice">
       💡 Все вычисления и обработка звука выполняются 100% локально на твоем устройстве без отправки в интернет.
     </div>
   </div>
@@ -1346,31 +1346,31 @@
     <div class="mem-tabs">
       <button class="mem-tab active" id="memTabBtn1" onclick="switchMemSubTab(1, this)">
         <span class="icon">🐒</span>
-        <span>Аюму</span>
+        <span id="memSubTab1Text">Аюму</span>
       </button>
       <button class="mem-tab" id="memTabBtn2" onclick="switchMemSubTab(2, this)">
         <span class="icon">🔢</span>
-        <span>Цепочка</span>
+        <span id="memSubTab2Text">Цепочка</span>
       </button>
       <button class="mem-tab" id="memTabBtn3" onclick="switchMemSubTab(3, this)">
         <span class="icon">🌵</span>
-        <span>Корси</span>
+        <span id="memSubTab3Text">Корси</span>
       </button>
       <button class="mem-tab" id="memTabBtn4" onclick="switchMemSubTab(4, this)">
         <span class="icon">🧮</span>
-        <span>Устный счёт</span>
+        <span id="memSubTab4Text">Устный счёт</span>
       </button>
     </div>
 
     <div class="mem-pane active" id="memPane1">
       <div class="mem-card">
         <div class="card-title">
-          <span>🐒 Тест Аюму (Пространственная память)</span>
+          <span id="ayumuTitleText">🐒 Тест Аюму (Пространственная память)</span>
           <span class="badge-pill" id="ayumuBadge">Уровень: 4 цифры</span>
         </div>
 
         <div class="pills-row">
-          <span class="pill-label">⏱️ Скорость показа:</span>
+          <span class="pill-label" id="ayumuSpeedLabel">⏱️ Скорость показа:</span>
           <button class="btn-pill active" onclick="setAyumuSpeed(2000, this)">🐢 2.0 с</button>
           <button class="btn-pill" onclick="setAyumuSpeed(1200, this)">⚡ 1.2 с</button>
           <button class="btn-pill" onclick="setAyumuSpeed(700, this)">🔥 0.7 с</button>
@@ -1378,7 +1378,7 @@
         </div>
 
         <div class="pills-row">
-          <span class="pill-label">🎯 Стартовать с цифр:</span>
+          <span class="pill-label" id="ayumuStartLabel">🎯 Стартовать с цифр:</span>
           <button class="btn-pill active" onclick="setAyumuStart(4, this)">4</button>
           <button class="btn-pill" onclick="setAyumuStart(5, this)">5</button>
           <button class="btn-pill" onclick="setAyumuStart(6, this)">6</button>
@@ -1391,15 +1391,15 @@
         <div class="stats-grid">
           <div class="stat-box">
             <div class="stat-val" id="ayumuStreak">0</div>
-            <div class="stat-lbl">Серия</div>
+            <div class="stat-lbl" id="ayumuStreakLbl">Серия</div>
           </div>
           <div class="stat-box">
             <div class="stat-val" id="ayumuBest">4</div>
-            <div class="stat-lbl">Рекорд цифр</div>
+            <div class="stat-lbl" id="ayumuBestLbl">Рекорд цифр</div>
           </div>
           <div class="stat-box">
             <div class="stat-val" id="ayumuAccuracy">100%</div>
-            <div class="stat-lbl">Точность</div>
+            <div class="stat-lbl" id="ayumuAccLbl">Точность</div>
           </div>
         </div>
 
@@ -1410,7 +1410,7 @@
         <div class="board-grid" id="ayumuGrid"></div>
 
         <button class="btn-main" id="btnAyumuStart" onclick="startAyumuRound()">
-          <span>▶️ Начать раунд</span>
+          <span id="btnAyumuStartText">▶️ Начать раунд</span>
         </button>
       </div>
     </div>
@@ -1421,18 +1421,18 @@
     <div class="mem-pane" id="memPane2">
       <div class="mem-card">
         <div class="card-title">
-          <span>🔢 Числовая цепочка (Digit Span)</span>
+          <span id="spanTitleText">🔢 Числовая цепочка (Digit Span)</span>
           <span class="badge-pill" id="spanBadge">Длина: 4 цифры</span>
         </div>
 
         <div class="pills-row">
-          <span class="pill-label">Направление:</span>
+          <span class="pill-label" id="spanDirLabel">Направление:</span>
           <button class="btn-pill active" id="spanDirForward" onclick="setSpanDirection('forward')">Прямой порядок</button>
           <button class="btn-pill" id="spanDirBackward" onclick="setSpanDirection('backward')">🔄 Задом наперёд</button>
         </div>
 
         <div class="pills-row">
-          <span class="pill-label">Длина цепочки:</span>
+          <span class="pill-label" id="spanLengthLabel">Длина цепочки:</span>
           <button class="btn-pill active" onclick="setSpanLength(4, this)">4</button>
           <button class="btn-pill" onclick="setSpanLength(5, this)">5</button>
           <button class="btn-pill" onclick="setSpanLength(6, this)">6</button>
@@ -1468,7 +1468,7 @@
         </div>
 
         <button class="btn-main" id="btnSpanStart" onclick="startSpanRound()">
-          <span>▶️ Старт показа цифр</span>
+          <span id="btnSpanStartText">▶️ Старт показа цифр</span>
         </button>
       </div>
     </div>
@@ -1479,12 +1479,12 @@
     <div class="mem-pane" id="memPane3">
       <div class="mem-card">
         <div class="card-title">
-          <span>🌵 Блоки Корси (Пространственный след)</span>
+          <span id="corsiTitleText">🌵 Блоки Корси (Пространственный след)</span>
           <span class="badge-pill" id="corsiBadge">Длина следа: 4</span>
         </div>
 
         <div class="pills-row">
-          <span class="pill-label">Сложность (шагов):</span>
+          <span class="pill-label" id="corsiLengthLabel">Сложность (шагов):</span>
           <button class="btn-pill active" onclick="setCorsiLength(4, this)">4</button>
           <button class="btn-pill" onclick="setCorsiLength(5, this)">5</button>
           <button class="btn-pill" onclick="setCorsiLength(6, this)">6</button>
@@ -1499,7 +1499,7 @@
         <div class="board-grid" id="corsiGrid"></div>
 
         <button class="btn-main" id="btnCorsiStart" onclick="startCorsiRound()">
-          <span>▶️ Запустить цепочку</span>
+          <span id="btnCorsiStartText">▶️ Запустить цепочку</span>
         </button>
       </div>
     </div>
@@ -1510,13 +1510,13 @@
     <div class="mem-pane" id="memPane4">
       <div class="mem-card">
         <div class="card-title">
-          <span>🧮 Умножение в уме вслепую</span>
+          <span id="mathTitleText">🧮 Умножение в уме вслепую</span>
           <span class="badge-pill" id="mathDigitsBadge">3 × 3 знака</span>
         </div>
 
         <!-- Digit Selectors (2 to 7) -->
         <div class="pills-row">
-          <span class="pill-label">1-е число:</span>
+          <span class="pill-label" id="mathDigits1Label">1-е число:</span>
           <button class="btn-pill" onclick="setMathDigits1(2, this)">2</button>
           <button class="btn-pill active" onclick="setMathDigits1(3, this)">3</button>
           <button class="btn-pill" onclick="setMathDigits1(4, this)">4</button>
@@ -1526,7 +1526,7 @@
         </div>
 
         <div class="pills-row">
-          <span class="pill-label">2-е число:</span>
+          <span class="pill-label" id="mathDigits2Label">2-е число:</span>
           <button class="btn-pill" onclick="setMathDigits2(2, this)">2</button>
           <button class="btn-pill active" onclick="setMathDigits2(3, this)">3</button>
           <button class="btn-pill" onclick="setMathDigits2(4, this)">4</button>
@@ -1538,22 +1538,22 @@
         <!-- Checkbox filters -->
         <div class="checkbox-row" style="flex-wrap: wrap; gap: 12px; margin: 12px 0;">
           <label class="checkbox-label" title="Не включать единицу (чтобы не было тривиального умножения на 1)">
-            <input type="checkbox" id="chkExclude1" onchange="generateMathProblem()" checked> 🚫 Без 1 (нет ×1)
+            <input type="checkbox" id="chkExclude1" onchange="generateMathProblem()" checked> <span id="chkExclude1Text">🚫 Без 1 (нет ×1)</span>
           </label>
           <label class="checkbox-label" title="Не включать двойку (чтобы не было простого удвоения)">
-            <input type="checkbox" id="chkExclude2" onchange="generateMathProblem()" checked> 🚫 Без 2 (нет ×2)
+            <input type="checkbox" id="chkExclude2" onchange="generateMathProblem()" checked> <span id="chkExclude2Text">🚫 Без 2 (нет ×2)</span>
           </label>
           <label class="checkbox-label" title="Не включать ноль (чтобы не пропускать разряды в столбике)">
-            <input type="checkbox" id="chkExclude0" onchange="generateMathProblem()" checked> 🚫 Без 0 (без пропусков)
+            <input type="checkbox" id="chkExclude0" onchange="generateMathProblem()" checked> <span id="chkExclude0Text">🚫 Без 0 (без пропусков)</span>
           </label>
           <label class="checkbox-label" title="Избегать повтора одной цифры подряд (например, 777 или 44)">
-            <input type="checkbox" id="chkNoRepetitions" onchange="generateMathProblem()" checked> 🚫 Без дублей подряд
+            <input type="checkbox" id="chkNoRepetitions" onchange="generateMathProblem()" checked> <span id="chkNoRepetitionsText">🚫 Без дублей подряд</span>
           </label>
         </div>
 
         <!-- Problem Card -->
         <div class="math-screen">
-          <div style="font-size: 11px; color: var(--text-muted);">ПРИМЕР ДЛЯ ВЫЧИСЛЕНИЯ В СТОЛБИК:</div>
+          <div style="font-size: 11px; color: var(--text-muted);" id="mathProblemHeader">ПРИМЕР ДЛЯ ВЫЧИСЛЕНИЯ В СТОЛБИК:</div>
           <div class="math-problem" id="mathProblemText">478 × 639</div>
           <div class="timer-badge" id="mathTimer">00:00</div>
           <div id="mathSubMsg" style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">
@@ -1563,21 +1563,21 @@
 
         <!-- Actions -->
         <div id="mathPreStartRow" style="display: flex; gap: 8px;">
-          <button class="btn-secondary" style="flex: 1;" onclick="generateMathProblem()">🎲 Другие числа</button>
-          <button class="btn-main" style="flex: 2;" onclick="startMathTimer()">🙈 Скрыть и начать счёт</button>
+          <button class="btn-secondary" style="flex: 1;" onclick="generateMathProblem()" id="btnMathReroll">🎲 Другие числа</button>
+          <button class="btn-main" style="flex: 2;" onclick="startMathTimer()" id="btnMathHideStart">🙈 Скрыть и начать счёт</button>
         </div>
 
         <!-- In-Progress Row -->
         <div id="mathInProgressRow" style="display: none; flex-direction: column; gap: 8px;">
           <div style="display: flex; gap: 8px;">
-            <button class="btn-secondary" style="flex: 1;" onclick="peekMathProblem()">👁️ Подсмотреть</button>
-            <button class="btn-secondary" style="flex: 1; border-color: #da3633; color: #f85149;" onclick="cancelMathProblem()">Отмена ↺</button>
+            <button class="btn-secondary" style="flex: 1;" onclick="peekMathProblem()" id="btnMathPeek">👁️ Подсмотреть</button>
+            <button class="btn-secondary" style="flex: 1; border-color: #da3633; color: #f85149;" onclick="cancelMathProblem()" id="btnMathCancel">Отмена ↺</button>
           </div>
           
           <input type="number" class="math-input" id="mathUserAnswer" placeholder="Введи результат умножения" inputmode="numeric">
           
-          <button class="btn-main" onclick="checkMathAnswer()">
-            <span>✓ Ответ готов — проверить результат!</span>
+          <button class="btn-main" onclick="checkMathAnswer()" id="btnMathSubmit">
+            <span id="btnMathSubmitText">✓ Ответ готов — проверить результат!</span>
           </button>
         </div>
 
@@ -1681,11 +1681,11 @@
     <div class="diag-wrap">
       
       <div class="diag-card">
-        <div style="font-size: 16px; font-weight: 800; color: #58a6ff; margin-bottom: 4px;">
+        <div style="font-size: 16px; font-weight: 800; color: #58a6ff; margin-bottom: 4px;" id="voiceRecHeaderTitle">
           🎙️ Голосовой Диктофон & Анализ «ДО / ПОСЛЕ»
         </div>
-        <div style="font-size: 12px; color: #8b949e; line-height: 1.4; margin-bottom: 12px;">
-          Нажми «Начать запись», протяни гласную («А-а-а-а») или прочти скороговорку. Ты сможешь <b>сразу послушать себя со стороны</b>, а алгоритм определит твой диапазон и тип голоса.
+        <div style="font-size: 12px; color: #8b949e; line-height: 1.4; margin-bottom: 12px;" id="voiceRecHeaderDesc">
+          Запиши свой базовый эталон (10–30 сек), напевая гласную или читая текст, а после распевки сделай проверяющий тест. Система покажет динамику изменения частоты, точные граничные ноты и наглядно сопоставит результат «ДО» и «ПОСЛЕ».
         </div>
 
         <!-- Baseline Status Banner -->
@@ -1842,13 +1842,13 @@
       <!-- Vocal Palette Atlas (10 voice types) -->
       <div class="diag-card" style="margin-top: 14px; margin-bottom: 12px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-          <div style="font-size: 15px; font-weight: 800; color: #fff;">
+          <div style="font-size: 15px; font-weight: 800; color: #fff;" id="atlasHeaderTitle">
             🎨 Атлас тембров & Распевки
           </div>
-          <span style="font-size: 11px; color: #8b949e; background: #21262d; padding: 2px 8px; border-radius: 6px;">10 типов голоса</span>
+          <span style="font-size: 11px; color: #8b949e; background: #21262d; padding: 2px 8px; border-radius: 6px;" id="atlasBadgeText">10 типов голоса</span>
         </div>
-        <div style="font-size: 12px; color: #8b949e; line-height: 1.35; margin-bottom: 10px;">
-          Выбери свой или желаемый тембр: изучи диапазон, советы и включи опорные звуки распевки (Rhodes sustain):
+        <div style="font-size: 12px; color: #8b949e; line-height: 1.35; margin-bottom: 10px;" id="atlasHeaderDesc">
+          Акустический справочник 10 мировых вокальных типов (система Fach). Изучай границы рабочего диапазона, природные обертоны, рекомендации педагогов и включай эталонные тона клавиш Rhodes для точной интонации:
         </div>
 
         <!-- Filter tabs -->
@@ -1864,8 +1864,8 @@
       <!-- History of measurements -->
       <div class="history-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <span style="font-size: 12px; font-weight: bold; color: #8b949e;">История замеров и твоих аудиозаписей:</span>
-          <button style="background: none; border: none; color: #da3633; font-size: 10px; cursor: pointer;" onclick="clearHistory()">Очистить</button>
+          <span style="font-size: 12px; font-weight: bold; color: #8b949e;" id="historyTitleText">История замеров и твоих аудиозаписей:</span>
+          <button style="background: none; border: none; color: #da3633; font-size: 10px; cursor: pointer;" onclick="clearHistory()" id="historyClearBtn">Очистить</button>
         </div>
         <div id="historyList"></div>
       </div>
@@ -3566,6 +3566,8 @@
         tab3: "🗣️ Дикция",
         tab4: "📊 Диапазон",
         tabWiki: "📖 Справка",
+
+        // Portal Header & Cards
         portalTitle: "Нейро-Атлас Мастерства",
         portalSub: "Комплексная система тренировки оперативной памяти, точного интонирования голоса и сценической речи",
         card1Title: "Вокальная Лаборатория",
@@ -3584,7 +3586,62 @@
         card4Sub: "Атлас & Диктофон",
         card4Desc: "Запись гласной с мгновенным прослушиванием «ДО / ПОСЛЕ», расчет крайних нот и полный акустический справочник 10 типов певческого голоса.",
         card4Btn: "Диагностика Голоса ➔",
-        corkTitle: "Метод Винной Пробки & Скороговорки",
+
+        // Storage Dashboard Widget
+        storageTitle: "Твой прогресс за неделю",
+        storageTtlNotice: "Срок хранения: скользящие 7 дней с последнего визита",
+        storageClearBtn: "🗑️ Очистить кэш",
+        dashLabelAyumu: "🐒 Тест Аюму",
+        dashLabelMath: "🧮 Устный счёт",
+        dashLabelVoice: "🎙️ Голос",
+        dashLabelTwisters: "🗣️ Скороговорки",
+        dashTwisterSub: "110 в базе",
+        storageExplainer: "ℹ️ <b>Как работает память и хранение:</b> Все твои результаты и рекорды сохраняются на 100% локально на твоем устройстве. Если ты не заходишь <b>более 7 дней</b>, кэш мягко сбрасывается для чистоты нового недельного цикла. При каждом посещении таймер автоматически продлевается на новую неделю! Аудиозаписи голоса хранятся исключительно в оперативной памяти (RAM) для защиты твоей приватности и не перегружают накопитель.",
+        privacyFooter: "💡 Все вычисления и обработка звука выполняются 100% локально на твоем устройстве без отправки в интернет.",
+
+        // Memory Section (Tab 2)
+        memSubTab1: "Аюму",
+        memSubTab2: "Цепочка",
+        memSubTab3: "Корси",
+        memSubTab4: "Устный счёт",
+        ayumuTitle: "🐒 Тест Аюму (Пространственная память)",
+        ayumuSpeed: "⏱️ Скорость показа:",
+        ayumuStartDigits: "🎯 Стартовать с цифр:",
+        ayumuStreakLbl: "Серия",
+        ayumuBestLbl: "Рекорд цифр",
+        ayumuAccLbl: "Точность",
+        ayumuInitStatus: "Нажми «Начать раунд», чтобы начать",
+        ayumuStartBtn: "▶️ Начать раунд",
+        spanTitle: "🔢 Числовая цепочка (Digit Span)",
+        spanDir: "Направление:",
+        spanForward: "Прямой порядок",
+        spanBackward: "🔄 Задом наперёд",
+        spanLength: "Длина цепочки:",
+        spanInitSub: "Нажми «Старт показа»",
+        spanStartBtn: "▶️ Старт показа цифр",
+        corsiTitle: "🌵 Блоки Корси (Пространственный след)",
+        corsiLength: "Сложность (шагов):",
+        corsiInitStatus: "Следи за вспыхивающими ячейками и повтори их путь",
+        corsiStartBtn: "▶️ Запустить цепочку",
+        mathTitle: "🧮 Умножение в уме вслепую",
+        mathDigits1: "1-е число:",
+        mathDigits2: "2-е число:",
+        mathEx1: "🚫 Без 1 (нет ×1)",
+        mathEx2: "🚫 Без 2 (нет ×2)",
+        mathEx0: "🚫 Без 0 (без пропусков)",
+        mathExRep: "🚫 Без дублей подряд",
+        mathProblemHdr: "ПРИМЕР ДЛЯ ВЫЧИСЛЕНИЯ В СТОЛБИК:",
+        mathInitSub: "Нажми «Скрыть числа и начать счёт»",
+        mathRerollBtn: "🎲 Другие числа",
+        mathHideStartBtn: "🙈 Скрыть и начать счёт",
+        mathPeekBtn: "👁️ Подсмотреть",
+        mathCancelBtn: "Отмена ↺",
+        mathInputPlaceholder: "Введи результат умножения",
+        mathSubmitBtn: "✓ Ответ готов — проверить результат!",
+
+        // Diction Section (Tab 3)
+        corkTitle: "🍾 1. Метод винной пробки & Скороговорки",
+        corkExTime: "2 мин",
         corkDesc: "Зажми пробку или карандаш передними зубами на 1–1.5 см. Выбери группу звуков и отрабатывай артикуляцию, преодолевая сопротивление мышц.",
         soundGrpLabel: "Группа звуков:",
         btnPrev: "◀ Назад",
@@ -3593,11 +3650,30 @@
         corkTimerLabel: "Таймер читки с пробкой:",
         corkTimerStart: "Старт 2 мин",
         corkTimerStop: "Стоп",
-        explosiveTitle: "Артикуляционные Слоги (Взрывные согласные)",
-        explosiveDesc: "Произноси энергично, акцентируя губы и диафрагму:",
-        jawTitle: "Освобождение Челюсти & Зевок",
-        jawDesc: "Опусти челюсть свободно вниз на 2 пальца, почувствуй купол мягкого нёба (полузевок). Произноси плавно:",
-        twisterPracticeSound: "Отработка: "
+        explosiveTitle: "💥 2. Взрывные дикторские слоги",
+        explosiveTime: "1 мин",
+        explosiveDesc: "Стреляй звуком! Произноси слоги энергично, акцентируя каждый согласный ударными губами:",
+        jawTitle: "🗡️ 3. Разминка челюсти & «Укол шпаги»",
+        jawTime: "1.5 мин",
+        jawDesc: "1. <b>Круговые движения челюстью</b>: 8 раз по часовой, 8 раз против.<br>2. <b>«Укол шпаги»</b>: язык с силой упирается изнутри попеременно в правую и левую щеку.<br>3. <b>Сброс зажима</b>: сделай выдох со звуком «Бр-р-р-р» (вибрация расслабленных губ).",
+        twisterPracticeSound: "Отработка: ",
+
+        // Range Section (Tab 4)
+        voiceRecHeaderTitle: "🎙️ Голосовой Диктофон & Анализ «ДО / ПОСЛЕ»",
+        voiceRecHeaderDesc: "Запиши свой базовый эталон (10–30 сек), напевая гласную или читая текст, а после распевки сделай проверяющий тест. Система покажет динамику изменения частоты, точные граничные ноты и наглядно сопоставит результат «ДО» и «ПОСЛЕ».",
+        baselineTitleEmpty: "Эталонный голос не записан",
+        baselineSubEmpty: "Запиши эталон (до 30 сек), чтобы отслеживать прогресс",
+        btnRecordBaselineText: "📌 1. Записать Эталон",
+        btnRecordTestText: "🔬 2. Проверяющий тест",
+        btnStopRecordVoiceText: "⏹️ Завершить запись и проанализировать",
+        atlasHeaderTitle: "🎨 Атлас тембров & Распевки",
+        atlasBadgeText: "10 типов голоса",
+        atlasHeaderDesc: "Акустический справочник 10 мировых вокальных типов (система Fach). Изучай границы рабочего диапазона, природные обертоны, рекомендации педагогов и включай эталонные тона клавиш Rhodes для точной интонации:",
+        atlasFilterAll: "Все (10)",
+        atlasFilterMale: "🧔 Мужские (7)",
+        atlasFilterFemale: "👩 Женские (3)",
+        historyTitle: "История замеров и твоих аудиозаписей:",
+        historyClear: "Очистить"
       },
       en: {
         docTitle: "🧠🎙️ Neuro-Atlas | Vocal, Memory & Diction",
@@ -3609,6 +3685,8 @@
         tab3: "🗣️ Diction",
         tab4: "📊 Range",
         tabWiki: "📖 Reference",
+
+        // Portal Header & Cards
         portalTitle: "Neuro-Atlas of Mastery",
         portalSub: "Comprehensive cognitive workout: working memory, pitch intonation & stage diction",
         card1Title: "Vocal Laboratory",
@@ -3627,8 +3705,63 @@
         card4Sub: "Atlas & Recorder",
         card4Desc: "Record voice sample with instant 'BEFORE / AFTER' comparison, vocal range note finder, and full 10-type voice reference.",
         card4Btn: "Diagnose Voice ➔",
-        corkTitle: "Wine Cork Technique & Tongue-Twisters",
-        corkDesc: "Hold a cork or pencil between front teeth (1-1.5 cm). Select a phonetic group and speak clearly against resistance.",
+
+        // Storage Dashboard Widget
+        storageTitle: "Weekly Progress Dashboard",
+        storageTtlNotice: "Retention: rolling 7 days from last visit",
+        storageClearBtn: "🗑️ Clear cache",
+        dashLabelAyumu: "🐒 Ayumu Test",
+        dashLabelMath: "🧮 Mental Math",
+        dashLabelVoice: "🎙️ Voice",
+        dashLabelTwisters: "🗣️ Twisters",
+        dashTwisterSub: "36 in library",
+        storageExplainer: "ℹ️ <b>How memory & local storage work:</b> All your scores and records are stored 100% locally on your device. If you don't visit for <b>more than 7 days</b>, the cache gently resets for a fresh weekly training cycle. Each new visit automatically renews your 7-day window! Voice recordings are kept in RAM only for your privacy and zero storage clutter.",
+        privacyFooter: "💡 All calculations and audio processing are performed 100% locally on your device without sending data to the internet.",
+
+        // Memory Section (Tab 2)
+        memSubTab1: "Ayumu",
+        memSubTab2: "Digit Span",
+        memSubTab3: "Corsi",
+        memSubTab4: "Mental Math",
+        ayumuTitle: "🐒 Ayumu Test (Spatial Flash Span)",
+        ayumuSpeed: "⏱️ Flash speed:",
+        ayumuStartDigits: "🎯 Start with digits:",
+        ayumuStreakLbl: "Streak",
+        ayumuBestLbl: "Best Digits",
+        ayumuAccLbl: "Accuracy",
+        ayumuInitStatus: "Click «Start round» to begin",
+        ayumuStartBtn: "▶️ Start round",
+        spanTitle: "🔢 Digit Span (Memory Recall)",
+        spanDir: "Direction:",
+        spanForward: "Forward order",
+        spanBackward: "🔄 Backward order",
+        spanLength: "Span length:",
+        spanInitSub: "Click «Start sequence»",
+        spanStartBtn: "▶️ Start digit sequence",
+        corsiTitle: "🌵 Corsi Blocks (Spatial Sequence)",
+        corsiLength: "Steps length:",
+        corsiInitStatus: "Watch highlighted blocks and repeat the path",
+        corsiStartBtn: "▶️ Start block sequence",
+        mathTitle: "🧮 Blind Mental Multiplication",
+        mathDigits1: "1st number:",
+        mathDigits2: "2nd number:",
+        mathEx1: "🚫 No 1 (no ×1)",
+        mathEx2: "🚫 No 2 (no ×2)",
+        mathEx0: "🚫 No 0 (no zeros)",
+        mathExRep: "🚫 No repeats",
+        mathProblemHdr: "LONG MULTIPLICATION PROBLEM:",
+        mathInitSub: "Click «Hide & start timer»",
+        mathRerollBtn: "🎲 New numbers",
+        mathHideStartBtn: "🙈 Hide & start",
+        mathPeekBtn: "👁️ Peek",
+        mathCancelBtn: "Cancel ↺",
+        mathInputPlaceholder: "Enter calculation result",
+        mathSubmitBtn: "✓ Submit answer!",
+
+        // Diction Section (Tab 3)
+        corkTitle: "🍾 1. Wine Cork Method & Tongue-Twisters",
+        corkExTime: "2 min",
+        corkDesc: "Hold a cork or pencil with your front teeth (1–1.5 cm). Select a sound group and practice clear articulation against resistance.",
         soundGrpLabel: "Sound group:",
         btnPrev: "◀ Prev",
         btnRandom: "🎲 Random",
@@ -3636,11 +3769,30 @@
         corkTimerLabel: "Cork reading timer:",
         corkTimerStart: "Start 2 min",
         corkTimerStop: "Stop",
-        explosiveTitle: "Articulation Syllables (Plosive Consonants)",
-        explosiveDesc: "Pronounce energetically, engaging lips and diaphragm:",
-        jawTitle: "Jaw Release & Yawn Dome",
-        jawDesc: "Drop jaw freely down 2 finger-widths, lift soft palate dome. Vocalize smoothly:",
-        twisterPracticeSound: "Target sounds: "
+        explosiveTitle: "💥 2. Explosive Articulation Syllables",
+        explosiveTime: "1 min",
+        explosiveDesc: "Shoot the sound! Pronounce syllables vigorously, accentuating each consonant with sharp lip attacks:",
+        jawTitle: "🗡️ 3. Jaw Release & Sword-Thrust Drill",
+        jawTime: "1.5 min",
+        jawDesc: "1. <b>Jaw rotations</b>: 8 times clockwise, 8 times counter-clockwise.<br>2. <b>Sword-thrust</b>: press tongue firmly against inner right and left cheek alternately.<br>3. <b>Tension release</b>: exhale through loose lips with a \"Br-r-r-r\" trill.",
+        twisterPracticeSound: "Target sounds: ",
+
+        // Range Section (Tab 4)
+        voiceRecHeaderTitle: "🎙️ Voice Recorder & 'BEFORE / AFTER' Analysis",
+        voiceRecHeaderDesc: "Record your baseline voice (10–30 sec) on a sustained vowel or speech excerpt, then run a verification test after warm-up. The engine tracks pitch dynamics, calculates exact boundary notes, and provides an instant 'BEFORE vs AFTER' comparison.",
+        baselineTitleEmpty: "No baseline voice recorded",
+        baselineSubEmpty: "Record a baseline sample (up to 30 sec) to track your progress",
+        btnRecordBaselineText: "📌 1. Record Baseline",
+        btnRecordTestText: "🔬 2. Verification Test",
+        btnStopRecordVoiceText: "⏹️ Stop Recording & Analyze",
+        atlasHeaderTitle: "🎨 Timbre Atlas & Warm-ups",
+        atlasBadgeText: "10 voice types",
+        atlasHeaderDesc: "Acoustic classification of 10 classical vocal types (Fach system). Explore pitch boundaries, natural overtones, vocal pedagogy tips, and trigger sustained Rhodes piano reference tones for precise intonation:",
+        atlasFilterAll: "All (10)",
+        atlasFilterMale: "🧔 Male (7)",
+        atlasFilterFemale: "👩 Female (3)",
+        historyTitle: "Measurement history & recorded takes:",
+        historyClear: "Clear"
       }
     };
 
@@ -3940,7 +4092,7 @@
       const tabWiki = document.getElementById('tabWikiSpan');
       if (tabWiki) tabWiki.textContent = t.tabWiki;
 
-      // Portal header & cards
+      // Portal Header & Cards
       const pTitle = document.getElementById('portalMainTitle');
       if (pTitle) pTitle.textContent = t.portalTitle;
       const pSub = document.getElementById('portalMainSub');
@@ -3966,8 +4118,61 @@
       const c4D = document.getElementById('card4Desc'); if (c4D) c4D.textContent = t.card4Desc;
       const c4B = document.getElementById('card4Btn'); if (c4B) c4B.textContent = t.card4Btn;
 
-      // Diction Section
+      // Storage Dashboard Widget
+      const sTitle = document.getElementById('storageTitleText'); if (sTitle) sTitle.textContent = t.storageTitle;
+      const sTtl = document.getElementById('storageTtlNotice'); if (sTtl) sTtl.textContent = t.storageTtlNotice;
+      const sClear = document.getElementById('storageClearBtn'); if (sClear) sClear.textContent = t.storageClearBtn;
+      const dAyumu = document.getElementById('dashLabelAyumu'); if (dAyumu) dAyumu.textContent = t.dashLabelAyumu;
+      const dMath = document.getElementById('dashLabelMath'); if (dMath) dMath.textContent = t.dashLabelMath;
+      const dVoice = document.getElementById('dashLabelVoice'); if (dVoice) dVoice.textContent = t.dashLabelVoice;
+      const dTwist = document.getElementById('dashLabelTwisters'); if (dTwist) dTwist.textContent = t.dashLabelTwisters;
+      const dTwistSub = document.getElementById('dashTwisterSub'); if (dTwistSub) dTwistSub.textContent = t.dashTwisterSub;
+      const sExpl = document.getElementById('storageExplainer'); if (sExpl) sExpl.innerHTML = t.storageExplainer;
+      const privF = document.getElementById('privacyFooterNotice'); if (privF) privF.textContent = t.privacyFooter;
+
+      // Memory Section (Tab 2)
+      const mSub1 = document.getElementById('memSubTab1Text'); if (mSub1) mSub1.textContent = t.memSubTab1;
+      const mSub2 = document.getElementById('memSubTab2Text'); if (mSub2) mSub2.textContent = t.memSubTab2;
+      const mSub3 = document.getElementById('memSubTab3Text'); if (mSub3) mSub3.textContent = t.memSubTab3;
+      const mSub4 = document.getElementById('memSubTab4Text'); if (mSub4) mSub4.textContent = t.memSubTab4;
+
+      const ayTitle = document.getElementById('ayumuTitleText'); if (ayTitle) ayTitle.textContent = t.ayumuTitle;
+      const aySpd = document.getElementById('ayumuSpeedLabel'); if (aySpd) aySpd.textContent = t.ayumuSpeed;
+      const ayStDig = document.getElementById('ayumuStartLabel'); if (ayStDig) ayStDig.textContent = t.ayumuStartDigits;
+      const ayStrk = document.getElementById('ayumuStreakLbl'); if (ayStrk) ayStrk.textContent = t.ayumuStreakLbl;
+      const ayBst = document.getElementById('ayumuBestLbl'); if (ayBst) ayBst.textContent = t.ayumuBestLbl;
+      const ayAcc = document.getElementById('ayumuAccLbl'); if (ayAcc) ayAcc.textContent = t.ayumuAccLbl;
+      const ayStartBtn = document.getElementById('btnAyumuStartText'); if (ayStartBtn) ayStartBtn.textContent = t.ayumuStartBtn;
+
+      const spTitle = document.getElementById('spanTitleText'); if (spTitle) spTitle.textContent = t.spanTitle;
+      const spDir = document.getElementById('spanDirLabel'); if (spDir) spDir.textContent = t.spanDir;
+      const spFwd = document.getElementById('spanDirForward'); if (spFwd) spFwd.textContent = t.spanForward;
+      const spBwd = document.getElementById('spanDirBackward'); if (spBwd) spBwd.textContent = t.spanBackward;
+      const spLen = document.getElementById('spanLengthLabel'); if (spLen) spLen.textContent = t.spanLength;
+      const spStartBtn = document.getElementById('btnSpanStartText'); if (spStartBtn) spStartBtn.textContent = t.spanStartBtn;
+
+      const coTitle = document.getElementById('corsiTitleText'); if (coTitle) coTitle.textContent = t.corsiTitle;
+      const coLen = document.getElementById('corsiLengthLabel'); if (coLen) coLen.textContent = t.corsiLength;
+      const coStartBtn = document.getElementById('btnCorsiStartText'); if (coStartBtn) coStartBtn.textContent = t.corsiStartBtn;
+
+      const maTitle = document.getElementById('mathTitleText'); if (maTitle) maTitle.textContent = t.mathTitle;
+      const maDig1 = document.getElementById('mathDigits1Label'); if (maDig1) maDig1.textContent = t.mathDigits1;
+      const maDig2 = document.getElementById('mathDigits2Label'); if (maDig2) maDig2.textContent = t.mathDigits2;
+      const chk1 = document.getElementById('chkExclude1Text'); if (chk1) chk1.textContent = t.mathEx1;
+      const chk2 = document.getElementById('chkExclude2Text'); if (chk2) chk2.textContent = t.mathEx2;
+      const chk0 = document.getElementById('chkExclude0Text'); if (chk0) chk0.textContent = t.mathEx0;
+      const chkRep = document.getElementById('chkNoRepetitionsText'); if (chkRep) chkRep.textContent = t.mathExRep;
+      const maHdr = document.getElementById('mathProblemHeader'); if (maHdr) maHdr.textContent = t.mathProblemHdr;
+      const maReroll = document.getElementById('btnMathReroll'); if (maReroll) maReroll.textContent = t.mathRerollBtn;
+      const maHide = document.getElementById('btnMathHideStart'); if (maHide) maHide.textContent = t.mathHideStartBtn;
+      const maPeek = document.getElementById('btnMathPeek'); if (maPeek) maPeek.textContent = t.mathPeekBtn;
+      const maCancel = document.getElementById('btnMathCancel'); if (maCancel) maCancel.textContent = t.mathCancelBtn;
+      const maInput = document.getElementById('mathUserAnswer'); if (maInput) maInput.placeholder = t.mathInputPlaceholder;
+      const maSubmit = document.getElementById('btnMathSubmitText'); if (maSubmit) maSubmit.textContent = t.mathSubmitBtn;
+
+      // Diction Section (Tab 3)
       const corkT = document.getElementById('corkExTitle'); if (corkT) corkT.textContent = t.corkTitle;
+      const corkTime = document.getElementById('corkExTime'); if (corkTime) corkTime.textContent = t.corkExTime;
       const corkD = document.getElementById('corkExDesc'); if (corkD) corkD.textContent = t.corkDesc;
       const sGroup = document.getElementById('soundGroupLabelText'); if (sGroup) sGroup.textContent = t.soundGrpLabel;
       const bPrev = document.getElementById('btnPrevTwister'); if (bPrev) bPrev.textContent = t.btnPrev;
@@ -3975,9 +4180,27 @@
       const bNext = document.getElementById('btnNextTwister'); if (bNext) bNext.textContent = t.btnNext;
       const cTLabel = document.getElementById('corkTimerLabel'); if (cTLabel) cTLabel.textContent = t.corkTimerLabel;
       const expT = document.getElementById('explosiveTitle'); if (expT) expT.textContent = t.explosiveTitle;
+      const expTime = document.getElementById('explosiveTime'); if (expTime) expTime.textContent = t.explosiveTime;
       const expD = document.getElementById('explosiveDesc'); if (expD) expD.textContent = t.explosiveDesc;
       const jawT = document.getElementById('jawTitle'); if (jawT) jawT.textContent = t.jawTitle;
-      const jawD = document.getElementById('jawDesc'); if (jawD) jawD.textContent = t.jawDesc;
+      const jawTime = document.getElementById('jawTime'); if (jawTime) jawTime.textContent = t.jawTime;
+      const jawD = document.getElementById('jawDesc'); if (jawD) jawD.innerHTML = t.jawDesc;
+
+      // Range Section (Tab 4)
+      const vRecT = document.getElementById('voiceRecHeaderTitle'); if (vRecT) vRecT.textContent = t.voiceRecHeaderTitle;
+      const vRecD = document.getElementById('voiceRecHeaderDesc'); if (vRecD) vRecD.textContent = t.voiceRecHeaderDesc;
+      const btnRecBase = document.getElementById('btnRecordBaseline'); if (btnRecBase) btnRecBase.querySelector('span').textContent = t.btnRecordBaselineText;
+      const btnRecTest = document.getElementById('btnRecordTest'); if (btnRecTest) btnRecTest.querySelector('span').textContent = t.btnRecordTestText;
+      const btnStopRec = document.getElementById('btnStopRecordVoice'); if (btnStopRec) btnStopRec.querySelector('span').textContent = t.btnStopRecordVoiceText;
+
+      const atT = document.getElementById('atlasHeaderTitle'); if (atT) atT.textContent = t.atlasHeaderTitle;
+      const atB = document.getElementById('atlasBadgeText'); if (atB) atB.textContent = t.atlasBadgeText;
+      const atD = document.getElementById('atlasHeaderDesc'); if (atD) atD.textContent = t.atlasHeaderDesc;
+      const atAll = document.getElementById('atlasFilterAll'); if (atAll) atAll.textContent = t.atlasFilterAll;
+      const atMale = document.getElementById('atlasFilterMale'); if (atMale) atMale.textContent = t.atlasFilterMale;
+      const atFem = document.getElementById('atlasFilterFemale'); if (atFem) atFem.textContent = t.atlasFilterFemale;
+      const hTitle = document.getElementById('historyTitleText'); if (hTitle) hTitle.textContent = t.historyTitle;
+      const hClear = document.getElementById('historyClearBtn'); if (hClear) hClear.textContent = t.historyClear;
 
       // Synchronize twisters
       setTwisterLanguage(lang);
