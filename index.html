@@ -996,6 +996,53 @@
 
     </div>
 
+    <!-- 7-DAY PROGRESS & LOCAL STORAGE WIDGET -->
+    <div class="mem-card" style="margin-top: 14px; border: 1px solid #30363d; background: #0d1117; width: 100%;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 20px;">🏆</span>
+          <div>
+            <div style="font-size: 15px; font-weight: 800; color: #fff;">Твой прогресс за неделю</div>
+            <div style="font-size: 11px; color: #8b949e;" id="storageTtlNotice">Срок хранения: скользящие 7 дней с последнего визита</div>
+          </div>
+        </div>
+        <button class="btn-secondary" style="font-size: 11px; padding: 5px 10px; border-color: #da3633; color: #f85149;" onclick="userClearStorage()">
+          🗑️ Очистить кэш
+        </button>
+      </div>
+
+      <!-- Quick Stats Pills Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-top: 12px;">
+        <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px; text-align: center;">
+          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase; font-weight: bold;">🐒 Тест Аюму</div>
+          <div style="font-size: 15px; font-weight: 800; color: #58a6ff; margin-top: 2px;" id="dashAyumuStat">—</div>
+          <div style="font-size: 10px; color: #8b949e;" id="dashAyumuAcc">—</div>
+        </div>
+
+        <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px; text-align: center;">
+          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase; font-weight: bold;">🧮 Устный счёт</div>
+          <div style="font-size: 15px; font-weight: 800; color: #3fb950; margin-top: 2px;" id="dashMathStat">—</div>
+          <div style="font-size: 10px; color: #8b949e;" id="dashMathTime">—</div>
+        </div>
+
+        <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px; text-align: center;">
+          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase; font-weight: bold;">🎙️ Голос</div>
+          <div style="font-size: 15px; font-weight: 800; color: #f0883e; margin-top: 2px;" id="dashVoiceType">—</div>
+          <div style="font-size: 10px; color: #8b949e;" id="dashVoiceRange">—</div>
+        </div>
+
+        <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px; text-align: center;">
+          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase; font-weight: bold;">🗣️ Скороговорки</div>
+          <div style="font-size: 15px; font-weight: 800; color: #a371f7; margin-top: 2px;" id="dashTwisterStat">—</div>
+          <div style="font-size: 10px; color: #8b949e;" id="dashTwisterSub">110 в базе</div>
+        </div>
+      </div>
+
+      <div style="font-size: 11px; color: #8b949e; margin-top: 10px; line-height: 1.4; border-top: 1px solid #21262d; padding-top: 8px;">
+        ℹ️ <b>Как работает память:</b> Все твои результаты хранятся 100% на твоем устройстве. Если ты не заходишь <b>более 7 дней</b>, кэш сбрасывается для чистоты следующей недели. При каждом новом визите таймер автоматически обновляется на новую неделю! Аудиозаписи голоса хранятся только в оперативной памяти и не перегружают устройство.
+      </div>
+    </div>
+
     <div style="margin-top: 14px; text-align: center; font-size: 11px; color: #8b949e;">
       💡 Все вычисления и обработка звука выполняются 100% локально на твоем устройстве без отправки в интернет.
     </div>
@@ -2225,6 +2272,9 @@
       const advice = matched.advice;
       const drill = '🎯 Опорные ноты распевки: ' + matched.notes.map(n => n.name).join(', ');
       lastMatchedVoiceId = matched.id;
+      userProfile.voiceType = matched.name;
+      userProfile.voiceRange = `${minNote.name} – ${maxNote.name}`;
+      saveUserProfile();
 
       lastVoiceRecordData = {
         voiceType, title, desc, advice, drill,
@@ -2562,6 +2612,123 @@
   
 
     
+    
+    /* === 7-DAY ROLLING LOCAL STORAGE & NEURO-PROGRESS ENGINE === */
+    const STORAGE_KEY = 'neuro_atlas_user_profile';
+    const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+
+    let userProfile = {
+      lastActive: Date.now(),
+      ayumuBest: 0,
+      ayumuAccuracy: '100%',
+      ayumuTotal: 0,
+      ayumuCorrect: 0,
+      mathLastResult: '',
+      mathLastTime: '',
+      voiceType: 'Баритон',
+      voiceRange: 'A2 – E4',
+      lastTwisterGroup: 0,
+      lastTwisterIndex: 0
+    };
+
+    function loadUserProfile() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          const now = Date.now();
+          if (now - parsed.lastActive > SEVEN_DAYS_MS) {
+            // More than 7 days passed -> clean storage as requested
+            localStorage.removeItem(STORAGE_KEY);
+            console.log('7-day inactivity reached: localStorage cleaned.');
+          } else {
+            // Renew rolling token
+            userProfile = Object.assign(userProfile, parsed);
+            userProfile.lastActive = now;
+            saveUserProfile();
+          }
+        } else {
+          userProfile.lastActive = Date.now();
+          saveUserProfile();
+        }
+      } catch(e) {
+        console.error('loadUserProfile error:', e);
+      }
+      renderDashboardWidget();
+    }
+
+    function saveUserProfile() {
+      try {
+        userProfile.lastActive = Date.now();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(userProfile));
+        renderDashboardWidget();
+      } catch(e) {}
+    }
+
+    function userClearStorage() {
+      if (confirm('Очистить всю сохраненную статистику и историю тренировок?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem('vocal_history');
+        userProfile = {
+          lastActive: Date.now(),
+          ayumuBest: 0,
+          ayumuAccuracy: '100%',
+          ayumuTotal: 0,
+          ayumuCorrect: 0,
+          mathLastResult: '',
+          mathLastTime: '',
+          voiceType: 'Баритон',
+          voiceRange: 'A2 – E4',
+          lastTwisterGroup: 0,
+          lastTwisterIndex: 0
+        };
+        renderDashboardWidget();
+        if (typeof renderHistory === 'function') renderHistory();
+        alert('🧹 Локальное хранилище полностью очищено!');
+      }
+    }
+
+    function renderDashboardWidget() {
+      const ttlNotice = document.getElementById('storageTtlNotice');
+      if (ttlNotice) {
+        const remainingMs = SEVEN_DAYS_MS - (Date.now() - userProfile.lastActive);
+        const days = Math.max(1, Math.ceil(remainingMs / (24 * 60 * 60 * 1000)));
+        ttlNotice.innerHTML = `Срок хранения: <b style="color: #3fb950;">ещё ${days} дн.</b> (обновляется при каждом входе)`;
+      }
+
+      const ayumuStat = document.getElementById('dashAyumuStat');
+      const ayumuAcc = document.getElementById('dashAyumuAcc');
+      if (ayumuStat && ayumuAcc) {
+        ayumuStat.textContent = userProfile.ayumuBest > 0 ? `${userProfile.ayumuBest} цифр` : 'Нет данных';
+        ayumuAcc.textContent = userProfile.ayumuTotal > 0 ? `Точность ${userProfile.ayumuAccuracy}` : 'Пройди раунд';
+      }
+
+      const mathStat = document.getElementById('dashMathStat');
+      const mathTime = document.getElementById('dashMathTime');
+      if (mathStat && mathTime) {
+        mathStat.textContent = userProfile.mathLastResult || 'Не решал';
+        mathTime.textContent = userProfile.mathLastTime ? `Время: ${userProfile.mathLastTime}` : '2-7 знаков';
+      }
+
+      const voiceType = document.getElementById('dashVoiceType');
+      const voiceRange = document.getElementById('dashVoiceRange');
+      if (voiceType && voiceRange) {
+        voiceType.textContent = userProfile.voiceType || 'Баритон';
+        voiceRange.textContent = userProfile.voiceRange || 'Распевка готова';
+      }
+
+      const twisterStat = document.getElementById('dashTwisterStat');
+      if (twisterStat) {
+        twisterStat.textContent = `№ ${userProfile.lastTwisterIndex + 1}`;
+      }
+    }
+
+    // Call loadUserProfile on startup
+    window.addEventListener('DOMContentLoaded', () => {
+      loadUserProfile();
+    });
+
+
     /* === 110 TONGUE-TWISTERS INTERACTIVE PAGINATION MODULE === */
     const TWISTER_GROUPS = [{"sounds": "б, п, в, ф, г, к, д, т, х", "items": ["Добыл бобов бобыль.", "Вакул бабу обул, да и Вакула баба обула.", "От топота копыт пыль по полю летит.", "Бык тупогуб, тупогубенький бычок, у быка бела губа была тупа.", "Колпак на колпаке, под колпаком колпак.", "Верзила Вавила весело ворочал вилы.", "Около кола колокола, около ворот коловорот.", "Шакал шагал, шакал скакал.", "Купи кипу пик, пик кипу купи. Купи кипу пуха, кипу пуха купи.", "Повар Петр, повар Павел. Петр плавал, Павел плавал.", "Ткет ткач ткани на платки Тани.", "Водовоз вез воду из-под водопровода.", "Наш голова вашего голову головой переголовил, перевыголовил.", "Вашему пономарю нашего пономаря не перепономарить, не перевыпономарить; наш пономарь вашего пономаря перепономарит, перевыпономарит.", "В один, Клим, клин колоти.", "Стоит копна с подприкопёночком.", "В поле полет Фрося просо, сорняки выносит Фрося.", "Краб крабу сделал грабли. Подал грабли крабу краб: сено граблями, краб, грабь!", "У елки иголки колки.", "Кукушка кукушонку купила капюшон. Надел кукушонок капюшон. Как в капюшоне он смешон!", "Все бобры для своих бобрят добры. Бобры берут для бобрят бобы. Бобры, бывает, будоражат бобрят, давая им бобы.", "Забыл Панкрат Кондратов домкрат, а Панкрату без домкрата не поднять на тракте трактор. И ждет на тракте трактор домкрат.", "На меду медовик, а мне не до медовика.", "Пришел Прокоп, кипел укроп, ушел Прокоп, кипел укроп; как при Прокопе кипел укроп, так и без Прокопа кипел укроп.", "Шли три попа, три Прокопия-попа, три Прокопьевича, говорили про попа, про Прокопия-попа, про Прокопьевича.", "Однажды галок поп пугая, в кустах увидел попугая, и говорит тот попугай: пугать ты галок, поп, пугай, но галок, поп, в кустах пугая, пугать не смей ты попугая.", "Волховал волхв в хлеву с волхвами.", "Бомбардир бонбоньерками бомбардировал барышень.", "У Феофана Митрофаньча три сына Феофанычи.", "У нас гость унес трость.", "Фараонов фаворит на сапфир сменил нефрит.", "Рододендроны из дендрария даны родителями.", "К Габсбургам из Страсбурга.", "Сидел тетерев на дереве, а тетерка с тетеревятами на ветке.", "Брит Клим брат, брит Глеб брат, брат Игнат бородат.", "Хвалю халву.", "Хохлатые хохотушки хохотом хохотали."]}, {"sounds": "р, л, м, н", "items": ["Всех скороговорок не перескороговоришь, не перевыскороговоришь.", "У нас на дворе-подворье погода размокропогодилась.", "Два дровосека, два дровокола, два дроворуба говорили про Ларьку, про Варьку, про Марину жену.", "Клара-краля кралась к ларю.", "Говорил командир про полковника и про полковницу, про подполковника и про подполковницу, про поручика и про поручицу, про подпоручика и про подпоручицу, про прапорщика и про прапорщицу, про подпрапорщика, а про подпрапорщицу промолчал.", "На дворе трава, на траве дрова – раз дрова, два дрова, три дрова. Не руби дрова на траве двора.", "На дворе дрова, за двором дрова, дрова вширь двора, не вместит двор дров, надо дрова выдворить на дровяной двор.", "На дворе вдовы Варвары два вора дрова воровали, рассердилася вдова, убрала в сарай дрова.", "Курфюрст скомпрометировал ландскнехта.", "Рапортовал да не дорапортовал, дорапортовывал да зарапортовался.", "Рыла свинья белорыла, тупорыла; полдвора рылом изрыла, вырыла, подрыла.", "Съел молодец тридцать три пирога с пирогом, да все с творогом.", "Тридцать три корабля лавировали, лавировали да не вылавировали.", "На мели мы лениво налима ловили. На мели мы лениво ловили линя. О любви не меня ли вы мило молили И в туманы лимана манили меня?", "Карл у Клары украл кораллы, а Клара у Карла украла кларнет.", "Королева Клара строго карала Карла за кражу коралла.", "Карл клал лук на ларь. Клара крала лук с ларя.", "Дробью по перепелам да по тетеревам.", "Мамаша Ромаше дала сыворотку из-под простокваши.", "Расскажите про покупки. Про какие про покупки? Про покупки, про покупки, про покупочки свои.", "Сшит колпак, да не по-колпаковски; вылит колокол, да не по-колоколовски. Надо колпак переколпаковать, перевыколпаковать, надо колокол переколоколовать, перевыколоколовать.", "Протокол про протокол протоколом запротоколировали.", "Была у Фрола, Фролу на Лавра наврала. Подойду к Лавру, на Фрола Лавру навру.", "Король-орел.", "Курьера курьер обгоняет в карьер. бЗ. Маланья-болтунья молоко болтала, выбалтывала, да не выболтала.", "Регулировщик-лигуриец регулировал в Лигурии.", "Полили ли лилию? Видели ли Лидию? Полили лилию, видели Лидию.", "Гонец с галер сгорел.", "Талер тарелка стоит.", "Идти на рать, так бердыш брать.", "Интервьюер интервента интервьюировал.", "Либретто Риголетто.", "Наш Полкан из Байкала лакал. Полкан лакал, но не мелел Байкал.", "Мы ели, ели ершей у ели, их еле-еле у ели доели.", "Не жалела мама мыла. Мама Милу мылом мыла. Мила мыла не любила, мыло Мила уронила.", "Во мраке раки шумят в драке.", "На дороге с утра тарахтят трактора.", "Жри во ржи, да не ржи во ржи.", "Орел на горе, перо на орле, гора под орлом, орел под пером.", "Город Нерль на Нерли-реке.", "На горе Арарат рвала Варвара виноград.", "Из-под Костромы, из-под Костромщины шли четыре мужчины. Говорили они про торги, да про покупки, про крупу да про подкрупки.", "Вахмистр с вахмистршей, ротмистр с ротмистршей.", "Турка курит трубку, курка клюет крупку. Не кури, турка, трубку, не клюй, курка, крупку.", "А мне не до недомогания."]}, {"sounds": "з, с, ж, ш, ч, щ, ц", "items": ["У Сени и Сани в сетях сом с усами.", "У осы не усы, не усища, а усики.", "Везет Сенька Саньку с Сонькой на санках. Санки скок, Сеньку с ног, Саньку в бок, Соньку в лоб, все в сугроб.", "Осип охрип, а Архип осип.", "Не хочет косой косить косой, говорит, коса коса.", "Сачок зацепился за сучок.", "По семеро в сани уселися сами.", "Из кузова в кузов шла перегрузка арбузов. В грозу в грязи от груза арбузов развалился кузов.", "Свиристель свиристит свирелью.", "Две реки: Вазуза с Гжатью, Вазуза с Гжатью.", "Разнервничавшийся конституционалист был обнаружен ассимилировавшимся в Константинополе.", "Шла Саша по шоссе и сосала сушку.", "Цапля чахла, цапля сохла, цапля сдохла.", "Шли сорок мышей, нашли сорок грошей, две мыши поплоше нашли по два гроша.", "Шестнадцать шли мышей и шесть нашли грошей, а мыши, что поплоше, шумливо шарят гроши.", "Чешуйки у щучки, щетинки у чушки.", "Четверть четверика гороха без червоточинки.", "Инцидент с интендантом.", "Прецедент с претендентом.", "Константин констатировал.", "У ежа ежата, у ужа ужата.", "Жутко жуку жить на суку.", "Два щенка щека к щеке щиплют щетку в уголке.", "Тщетно тщится щука ущемить леща.", "Жужжит жужелица, жужжит, да не кружится.", "Яшма в замше замшела.", "В Чите течет Читинка."]}];
     let currentGroupIdx = 0;
@@ -2772,6 +2939,11 @@
           ayumuTotal++;
           ayumuCorrect++;
           if (ayumuDigits > ayumuBest) ayumuBest = ayumuDigits;
+          userProfile.ayumuBest = ayumuBest;
+          userProfile.ayumuAccuracy = `${Math.round((ayumuCorrect / ayumuTotal) * 100)}%`;
+          userProfile.ayumuTotal = ayumuTotal;
+          userProfile.ayumuCorrect = ayumuCorrect;
+          saveUserProfile();
           document.getElementById('ayumuStreak').textContent = ayumuStreak;
           document.getElementById('ayumuBest').textContent = ayumuBest;
           document.getElementById('ayumuAccuracy').textContent = `${Math.round((ayumuCorrect / ayumuTotal) * 100)}%`;
@@ -3184,6 +3356,9 @@
       if (isCorrect) {
         soundWin();
         resBox.style.borderColor = '#3fb950';
+        userProfile.mathLastResult = `${mathDigits1}×${mathDigits2} знаков`;
+        userProfile.mathLastTime = timeStr;
+        saveUserProfile();
         resBox.innerHTML = `
           <div style="font-size: 18px; font-weight: 900; color: #3fb950;">🎉 ГЕНИАЛЬНО! АБСОЛЮТНО ТОЧНО!</div>
           <div style="font-size: 13px; color: #fff; margin-top: 6px;">
