@@ -1874,6 +1874,8 @@
   </div>
 
   <script>
+    let currentAppLang = localStorage.getItem('vocal_trainer_lang') || 'ru';
+
     // Audio Context and Synthesizer State
     let audioCtx = null;
     let synthCtx = null;
@@ -4329,7 +4331,7 @@
     let currentTwisterLang = 'ru';
     let currentGroupIdx = 0;
     let currentTwisterIdx = 0;
-    let currentAppLang = localStorage.getItem('vocal_trainer_lang') || 'ru';
+    // currentAppLang already declared at top of script
 
     function getActiveTwisterGroups() {
       return TWISTER_DATABASE[currentTwisterLang] || TWISTER_DATABASE['ru'];
