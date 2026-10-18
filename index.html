@@ -484,6 +484,71 @@
     .h-title { font-size: 12px; font-weight: bold; color: #fff; }
     .h-sub { font-size: 10px; color: #8b949e; }
     .h-stat { font-size: 11px; font-weight: bold; color: #58a6ff; }
+
+    /* Atlas Styles */
+    .atlas-item {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      overflow: hidden;
+      transition: all 0.15s;
+    }
+    .atlas-item.expanded {
+      border-color: #58a6ff;
+    }
+    .atlas-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .atlas-title { font-size: 13px; font-weight: bold; color: #e6edf3; }
+    .atlas-sub { font-size: 11px; color: #8b949e; margin-top: 2px; }
+    .atlas-body {
+      padding: 12px;
+      border-top: 1px solid #21262d;
+      font-size: 12px;
+      color: #e6edf3;
+      line-height: 1.4;
+      display: none;
+    }
+    .atlas-item.expanded .atlas-body { display: block; }
+    .atlas-info-box {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 8px 10px;
+      margin: 8px 0;
+      font-size: 11px;
+      color: #8b949e;
+    }
+    .atlas-info-box div { margin-bottom: 4px; }
+    .atlas-info-box div:last-child { margin-bottom: 0; }
+    .atlas-note-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #21262d;
+      border: 1px solid #30363d;
+      color: #e6edf3;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      margin: 3px 4px 3px 0;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .atlas-note-pill:active { transform: scale(0.96); }
+    .atlas-note-pill.playing {
+      background: #238636 !important;
+      border-color: #3fb950 !important;
+      color: #fff !important;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(46, 160, 67, 0.4);
+    }
   </style>
 </head>
 <body>
@@ -677,6 +742,26 @@
           </div>
         </div>
 
+      <!-- Vocal Palette Atlas (10 voice types) -->
+      <div class="diag-card" style="margin-top: 14px; margin-bottom: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <div style="font-size: 15px; font-weight: 800; color: #fff;">
+            🎨 Атлас тембров & Распевки
+          </div>
+          <span style="font-size: 11px; color: #8b949e; background: #21262d; padding: 2px 8px; border-radius: 6px;">10 типов голоса</span>
+        </div>
+        <div style="font-size: 12px; color: #8b949e; line-height: 1.35; margin-bottom: 10px;">
+          Выбери свой или желаемый тембр: изучи диапазон, советы и включи опорные звуки распевки (Rhodes sustain):
+        </div>
+
+        <!-- Filter tabs -->
+        <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+          <button class="oct-btn active" id="atlasFilterAll" onclick="filterAtlas('all')">Все (10)</button>
+          <button class="oct-btn" id="atlasFilterMale" onclick="filterAtlas('male')">🧔 Мужские (7)</button>
+          <button class="oct-btn" id="atlasFilterFemale" onclick="filterAtlas('female')">👩 Женские (3)</button>
+        </div>
+
+        <div id="atlasList"></div>
       </div>
 
       <!-- History of measurements -->
@@ -1007,6 +1092,261 @@
       document.getElementById('recStatusBox').style.display = 'none';
     }
 
+    // 10 Full World Vocal Palette Catalog
+    const VOICE_CATALOG = [
+      {
+        id: 'bass_profundo',
+        name: 'Бас-Профундо',
+        category: 'male',
+        title: '🌋 Бас-Профундо (Октавист)',
+        icon: '🧔‍♂️',
+        range: 'A1 – C3 (55–130 Гц)',
+        desc: 'Редчайший ультранизкий сейсмический голос. Звучит мощно, утробно, напоминая гул органной трубы.',
+        character: 'Фундаментальный авторитет, эпический голос кинотрейлеров.',
+        advice: 'Твой главный козырь — низкий грудной резонатор. Обязательно давай связкам отдых и не форсируй верха.',
+        examples: 'Юрий Вишняков, Владимир Пасюков, Тим Стормс',
+        notes: [
+          { name: 'C2 (65 Гц)', freq: 65.41 },
+          { name: 'E2 (82 Гц)', freq: 82.41 },
+          { name: 'G2 (98 Гц)', freq: 98.00 },
+          { name: 'C3 (131 Гц)', freq: 130.81 }
+        ]
+      },
+      {
+        id: 'central_bass',
+        name: 'Центральный Бас',
+        category: 'male',
+        title: '🧔 Центральный Бас',
+        icon: '🎙️',
+        range: 'E2 – A3 (82–220 Гц)',
+        desc: 'Густой, массивный тембр с сочным бархатным низом и глубокой опорой на грудь.',
+        character: 'Голос уверенности, силы и мудрости. Идеален для дикторов документалок и аудиокниг.',
+        advice: 'Работай над четкостью взрывных согласных (П, Т, К), чтобы низкий тембр не превращался в кашу.',
+        examples: 'Юрий Левитан, Федор Шаляпин, Леонард Коэн',
+        notes: [
+          { name: 'E2 (82 Гц)', freq: 82.41 },
+          { name: 'G2 (98 Гц)', freq: 98.00 },
+          { name: 'B2 (123 Гц)', freq: 123.47 },
+          { name: 'D3 (147 Гц)', freq: 146.83 }
+        ]
+      },
+      {
+        id: 'bass_baritone',
+        name: 'Бас-Баритон',
+        category: 'male',
+        title: '⚡ Бас-Баритон (Универсальный)',
+        icon: '📻',
+        range: 'G2 – D4 (98–294 Гц)',
+        desc: 'Мощный гибридный диапазон: тяжелые басовые низы сочетаются с легким выходом в речевую середину.',
+        character: 'Богатый, плотный, драматичный тембр.',
+        advice: 'Следи за переходным регистром (в районе 180–200 Гц), тренируй плавный переход к миксту.',
+        examples: 'Муслим Магомаев, Джонни Кэш, Баста',
+        notes: [
+          { name: 'G2 (98 Гц)', freq: 98.00 },
+          { name: 'C3 (131 Гц)', freq: 130.81 },
+          { name: 'E3 (165 Гц)', freq: 164.81 },
+          { name: 'G3 (196 Гц)', freq: 196.00 }
+        ]
+      },
+      {
+        id: 'dramatic_baritone',
+        name: 'Драматический Баритон',
+        category: 'male',
+        title: '🎙️ Драматический Баритон',
+        icon: '📻',
+        range: 'A2 – E4 (110–330 Гц)',
+        desc: 'Классический мужественный тембр, глубокий и одновременно звонкий. Самый востребованный голос на радио.',
+        character: 'Уверенность, солидность, притягивает внимание с первых секунд.',
+        advice: 'Твой речевой центр — 125–160 Гц. Фокусируйся на дыхании животом (диафрагмой).',
+        examples: 'Владимир Высоцкий, Джеймс Хэтфилд, Джордж Клуни',
+        notes: [
+          { name: 'A2 (110 Гц)', freq: 110.00 },
+          { name: 'C3 (131 Гц)', freq: 130.81 },
+          { name: 'E3 (165 Гц)', freq: 164.81 },
+          { name: 'A3 (220 Гц)', freq: 220.00 }
+        ]
+      },
+      {
+        id: 'lyric_baritone',
+        name: 'Лирический Баритон',
+        category: 'male',
+        title: '📻 Лирический Баритон',
+        icon: '🎙️',
+        range: 'B2 – F#4 (123–370 Гц)',
+        desc: 'Мягкий, благородный, тёплый тембр. Самый комфортный для восприятия в подкастах и беседах.',
+        character: 'Доверительный, интеллигентный, мягкий бархат.',
+        advice: 'Не перегружай связки форсированием низов — используй свою естественную подвижность и теплоту.',
+        examples: 'Валерий Меладзе, Фрэнк Синатра, Мэттью Макконахи',
+        notes: [
+          { name: 'B2 (123 Гц)', freq: 123.47 },
+          { name: 'D3 (147 Гц)', freq: 146.83 },
+          { name: 'F3 (175 Гц)', freq: 174.61 },
+          { name: 'B3 (247 Гц)', freq: 246.94 }
+        ]
+      },
+      {
+        id: 'dramatic_tenor',
+        name: 'Драматический Тенор',
+        category: 'male',
+        title: '🎺 Драматический Тенор',
+        icon: '⚡',
+        range: 'C3 – A4 (131–440 Гц)',
+        desc: 'Плотный, сильный мужской голос с мощным выходом на высокие ноты.',
+        character: 'Энергичный, пробивной, героический звук.',
+        advice: 'Следи за расслаблением нижней челюсти на верхах, тренируйся с винной пробкой в зубах.',
+        examples: 'Лучано Паваротти, Брюс Дикинсон',
+        notes: [
+          { name: 'C3 (131 Гц)', freq: 130.81 },
+          { name: 'E3 (165 Гц)', freq: 164.81 },
+          { name: 'G3 (196 Гц)', freq: 196.00 },
+          { name: 'C4 (262 Гц)', freq: 261.63 }
+        ]
+      },
+      {
+        id: 'lyric_tenor',
+        name: 'Лирический Тенор',
+        category: 'male',
+        title: '🕊️ Лирический Тенор',
+        icon: '✨',
+        range: 'D3 – C5 (147–523 Гц)',
+        desc: 'Светлый, звонкий, серебристый и чрезвычайно полетный мужской голос.',
+        character: 'Легкий, вдохновляющий, легко прорезает любой фоновый шум.',
+        advice: 'Развивай грудные резонаторы («мычание» на нотах 140–160 Гц), чтобы голос звучал плотнее.',
+        examples: 'Фредди Меркьюри, Стинг, Честер Беннингтон',
+        notes: [
+          { name: 'D3 (147 Гц)', freq: 146.83 },
+          { name: 'F3 (175 Гц)', freq: 174.61 },
+          { name: 'A3 (220 Гц)', freq: 220.00 },
+          { name: 'D4 (294 Гц)', freq: 293.66 }
+        ]
+      },
+      {
+        id: 'contralto',
+        name: 'Контральто',
+        category: 'female',
+        title: '🌹 Контральто (Глубокий женский)',
+        icon: '🎷',
+        range: 'D3 – F4 (147–349 Гц)',
+        desc: 'Самый низкий и редкий женский голос. Обладает глубоким, бархатистым грудным звучанием.',
+        character: 'Чувственный, густой, дымчатый, джазовый оттенок.',
+        advice: 'Твой уникальный низ звучит гипнотически. Делай упор на связную плавную речь без резких атак.',
+        examples: 'Адель, Эми Уайнхаус, Шер, Тони Брэкстон',
+        notes: [
+          { name: 'D3 (147 Гц)', freq: 146.83 },
+          { name: 'F3 (175 Гц)', freq: 174.61 },
+          { name: 'A3 (220 Гц)', freq: 220.00 },
+          { name: 'D4 (294 Гц)', freq: 293.66 }
+        ]
+      },
+      {
+        id: 'mezzo_soprano',
+        name: 'Меццо-Сопрано',
+        category: 'female',
+        title: '🌸 Меццо-Сопрано (Центральный женский)',
+        icon: '🌺',
+        range: 'F3 – C5 (175–523 Гц)',
+        desc: 'Самый распространенный и гармоничный женский голос. Идеальный баланс груди и звонкого верха.',
+        character: 'Теплый, богатый обертонами, эмоциональный и очень выразительный.',
+        advice: 'Твой речевой оптимум — 190–240 Гц. Держи дыхательную опору, чтобы не зажимать горло.',
+        examples: 'Бейонсе, Леди Гага, Рианна, Селин Дион',
+        notes: [
+          { name: 'F3 (175 Гц)', freq: 174.61 },
+          { name: 'A3 (220 Гц)', freq: 220.00 },
+          { name: 'C4 (262 Гц)', freq: 261.63 },
+          { name: 'F4 (349 Гц)', freq: 349.23 }
+        ]
+      },
+      {
+        id: 'soprano',
+        name: 'Сопрано',
+        category: 'female',
+        title: '🕊️ Сопрано (Высокий женский)',
+        icon: '💎',
+        range: 'B3 – E5 (247–659 Гц)',
+        desc: 'Высокий, чистый, кристальный и полетный голос с прозрачным звонким звучанием.',
+        character: 'Свежий, звонкий, привлекающий внимание.',
+        advice: 'Уделяй максимум внимания мягкой атаке звука без резкого смыкания связок («на зевке»).',
+        examples: 'Ариана Гранде, Мэрайя Кэри, Монсеррат Кабалье',
+        notes: [
+          { name: 'A3 (220 Гц)', freq: 220.00 },
+          { name: 'C4 (262 Гц)', freq: 261.63 },
+          { name: 'E4 (330 Гц)', freq: 329.63 },
+          { name: 'A4 (440 Гц)', freq: 440.00 }
+        ]
+      }
+    ];
+
+    let currentAtlasFilter = 'all';
+    let expandedAtlasId = null;
+
+    function filterAtlas(cat) {
+      currentAtlasFilter = cat;
+      document.getElementById('atlasFilterAll').classList.toggle('active', cat === 'all');
+      document.getElementById('atlasFilterMale').classList.toggle('active', cat === 'male');
+      document.getElementById('atlasFilterFemale').classList.toggle('active', cat === 'female');
+      renderAtlas();
+    }
+
+    function toggleAtlasItem(id) {
+      expandedAtlasId = (expandedAtlasId === id) ? null : id;
+      renderAtlas();
+    }
+
+    function toggleAtlasNote(btn, freq, noteName) {
+      if (currentActiveBtn === btn) {
+        stopCurrentTone();
+      } else {
+        stopCurrentTone();
+        startSustainedPianoTone(freq);
+        btn.classList.add('playing');
+        currentActiveBtn = btn;
+      }
+    }
+
+    function renderAtlas() {
+      const container = document.getElementById('atlasList');
+      if (!container) return;
+
+      const items = VOICE_CATALOG.filter(v => currentAtlasFilter === 'all' || v.category === currentAtlasFilter);
+
+      container.innerHTML = items.map(v => {
+        const isExp = expandedAtlasId === v.id;
+        const notesHtml = v.notes.map(n => `
+          <button class="atlas-note-pill" onclick="toggleAtlasNote(this, ${n.freq}, '${n.name}')">
+            <span>🎵</span> <b>${n.name}</b>
+          </button>
+        `).join('');
+
+        return `
+          <div class="atlas-item ${isExp ? 'expanded' : ''}" id="atlasCard_${v.id}">
+            <div class="atlas-head" onclick="toggleAtlasItem('${v.id}')">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 18px;">${v.icon}</span>
+                <div>
+                  <div class="atlas-title">${v.title}</div>
+                  <div class="atlas-sub">${v.range}</div>
+                </div>
+              </div>
+              <span style="font-size: 14px; color: #8b949e;">${isExp ? '▲' : '▼'}</span>
+            </div>
+            <div class="atlas-body">
+              <div>${v.desc}</div>
+              <div class="atlas-info-box">
+                <div><b style="color: #f0883e;">🎭 Характер:</b> ${v.character}</div>
+                <div><b style="color: #3fb950;">💡 Совет:</b> ${v.advice}</div>
+                <div><b style="color: #d29922;">⭐ Звёзды:</b> ${v.examples}</div>
+              </div>
+              <div style="font-size: 11px; font-weight: bold; color: #58a6ff; margin-bottom: 4px;">
+                🎹 Нажми ноту для распевки (Rhodes sustain):
+              </div>
+              <div>${notesHtml}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    renderAtlas();
+
     function analyzeRecordedVoice() {
       document.getElementById('recPlayerBox').style.display = 'block';
 
@@ -1024,61 +1364,28 @@
       const minNote = freqToClosestNote(pMin);
       const maxNote = freqToClosestNote(pMax);
 
-      let voiceType = 'Баритон';
-      let title = '📻 Баритон (Золотой стандарт радио & подкастов)';
-      let desc = 'Твой голос звучит в плотном, бархатном мужском речевом регистре. Отличная основа для дикторской речи!';
-      let advice = 'Твой речевой центр находится на нотах ДО 3 — МИ 3. Удерживай дыхание диафрагмой, чтобы звук не взлетал в нос.';
-      let drill = '🎯 Рекомендованные распевки: A2, C3, E3, A3';
-
-      if (pMin <= 95) {
-        if (pMax <= 270) {
-          voiceType = 'Бас';
-          title = '🧔 Бас (Глубокий низ)';
-          desc = 'Мощный, густой тембр с доминирующим грудным резонансом. Идеален для авторитетной дикторской речи и аудиокниг.';
-          advice = 'Не форсируй верха. Твой козырь — бархат в низах (70–120 Гц). Работай над артикуляцией согласных.';
-          drill = '🎯 Рекомендованные распевки: C2, E2, G2, C3';
-        } else {
-          voiceType = 'Бас-Баритон';
-          title = '🎙️ Бас-Баритон (Универсальный тяжелый голос)';
-          desc = 'Широкий диапазон: низкий грудной бас с выходом в яркую речевую середину.';
-          advice = 'Фокусируйся на сглаживании переходных нот (около 180–200 Гц), чтобы не терять плотность.';
-          drill = '🎯 Рекомендованные распевки: D2, A2, D3, F3';
-        }
+      let matched = VOICE_CATALOG[3]; // default Dramatic Baritone
+      if (pMin <= 75) {
+        matched = VOICE_CATALOG[0]; // Bass profundo
+      } else if (pMin <= 95) {
+        matched = (pMax <= 240) ? VOICE_CATALOG[1] : VOICE_CATALOG[2]; // Central bass or Bass-baritone
       } else if (pMin <= 125) {
-        if (pMax > 330) {
-          voiceType = 'Драматический Тенор';
-          title = '🎺 Драматический Тенор (Плотный звонкий голос)';
-          desc = 'Мужественный голос с легким выходом на высокие звонкие обертоны.';
-          advice = 'Следи за расслаблением челюсти на нотах выше 250 Гц (тренируйся с винной пробкой).';
-          drill = '🎯 Рекомендованные распевки: C3, E3, G3, C4';
-        }
-      } else if (pMin <= 175) {
-        if (pMax <= 400) {
-          voiceType = 'Тенор';
-          title = '⚡ Тенор (Высокий мужской тембр)';
-          desc = 'Светлый, полетный голос. Легко привлекает внимание и пробивает посторонний шум.';
-          advice = 'Развивай грудной резонатор упражнениями «стон» и «мычание», чтобы добавить веса.';
-          drill = '🎯 Рекомендованные распевки: E3, G3, C4, E4';
-        } else {
-          voiceType = 'Контральто';
-          title = '🌹 Контральто (Глубокий женский голос)';
-          desc = 'Редчайший женский тембр с глубоким бархатным грудным звучанием.';
-          advice = 'Используй свой уникальный низ для проникновенной, доверительной речи.';
-          drill = '🎯 Рекомендованные распевки: F3, A3, C4, F4';
-        }
-      } else if (pMin <= 230) {
-        voiceType = 'Меццо-сопрано';
-        title = '🌸 Меццо-Сопрано (Насыщенный женский голос)';
-        desc = 'Богатый тембр с идеальным балансом грудного и головного резонаторов.';
-        advice = 'Твой рабочий центр — 180–240 Гц. Делай упор на четкость взрывных согласных.';
-        drill = '🎯 Рекомендованные распевки: A3, C4, E4, A4';
+        matched = (pMax <= 320) ? VOICE_CATALOG[3] : VOICE_CATALOG[4]; // Dramatic or Lyric baritone
+      } else if (pMin <= 155) {
+        matched = (pMax <= 420) ? VOICE_CATALOG[5] : VOICE_CATALOG[6]; // Dramatic or Lyric tenor
+      } else if (pMin <= 185) {
+        matched = VOICE_CATALOG[7]; // Contralto
+      } else if (pMin <= 240) {
+        matched = VOICE_CATALOG[8]; // Mezzo
       } else {
-        voiceType = 'Сопрано';
-        title = '🕊️ Сопрано (Высокий женский голос)';
-        desc = 'Легкий, кристально чистый, полетный голос.';
-        advice = 'Уделяй внимание расслаблению гортани и мягкой атаке звука без зажима.';
-        drill = '🎯 Рекомендованные распевки: C4, E4, G4, C5';
+        matched = VOICE_CATALOG[9]; // Soprano
       }
+
+      const voiceType = matched.name;
+      const title = matched.title;
+      const desc = matched.desc;
+      const advice = matched.advice;
+      const drill = '🎯 Опорные ноты распевки: ' + matched.notes.map(n => n.name).join(', ');
 
       lastVoiceRecordData = {
         voiceType, title, desc, advice, drill,
