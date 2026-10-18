@@ -975,7 +975,255 @@
     </div>
   </div>
 
-  <!-- TAB 2: DICTION EXERCISES -->
+  
+  <!-- TAB 2: MEMORY & COGNITIVE GYM (ПАМЯТЬ И УМНЫЙ СЧЁТ) -->
+  <div class="tab-content" id="tabContent2">
+    <!-- Sub navigation for 4 cognitive modes -->
+    <div class="mem-tabs">
+      <button class="mem-tab active" id="memTabBtn1" onclick="switchMemSubTab(1, this)">
+        <span class="icon">🐒</span>
+        <span>Аюму</span>
+      </button>
+      <button class="mem-tab" id="memTabBtn2" onclick="switchMemSubTab(2, this)">
+        <span class="icon">🔢</span>
+        <span>Цепочка</span>
+      </button>
+      <button class="mem-tab" id="memTabBtn3" onclick="switchMemSubTab(3, this)">
+        <span class="icon">🌵</span>
+        <span>Корси</span>
+      </button>
+      <button class="mem-tab" id="memTabBtn4" onclick="switchMemSubTab(4, this)">
+        <span class="icon">🧮</span>
+        <span>Устный счёт</span>
+      </button>
+    </div>
+
+    <div class="mem-pane active" id="memPane1">
+      <div class="mem-card">
+        <div class="card-title">
+          <span>🐒 Тест Аюму (Пространственная память)</span>
+          <span class="badge-pill" id="ayumuBadge">Уровень: 4 цифры</span>
+        </div>
+
+        <div class="pills-row">
+          <span class="pill-label">⏱️ Скорость показа:</span>
+          <button class="btn-pill active" onclick="setAyumuSpeed(2000, this)">🐢 2.0 с</button>
+          <button class="btn-pill" onclick="setAyumuSpeed(1200, this)">⚡ 1.2 с</button>
+          <button class="btn-pill" onclick="setAyumuSpeed(700, this)">🔥 0.7 с</button>
+          <button class="btn-pill" onclick="setAyumuSpeed(400, this)">🐒 0.4 с</button>
+        </div>
+
+        <div class="pills-row">
+          <span class="pill-label">🎯 Стартовать с цифр:</span>
+          <button class="btn-pill active" onclick="setAyumuStart(4, this)">4</button>
+          <button class="btn-pill" onclick="setAyumuStart(5, this)">5</button>
+          <button class="btn-pill" onclick="setAyumuStart(6, this)">6</button>
+          <button class="btn-pill" onclick="setAyumuStart(7, this)">7</button>
+          <button class="btn-pill" onclick="setAyumuStart(8, this)">8</button>
+          <button class="btn-pill" onclick="setAyumuStart(9, this)">9</button>
+          <button class="btn-pill" onclick="setAyumuStart(10, this)">10</button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-val" id="ayumuStreak">0</div>
+            <div class="stat-lbl">Серия</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val" id="ayumuBest">4</div>
+            <div class="stat-lbl">Рекорд цифр</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val" id="ayumuAccuracy">100%</div>
+            <div class="stat-lbl">Точность</div>
+          </div>
+        </div>
+
+        <div style="font-size: 13px; font-weight: bold; text-align: center; min-height: 18px; color: #58a6ff;" id="ayumuStatus">
+          Нажми «Начать раунд», чтобы начать
+        </div>
+
+        <div class="board-grid" id="ayumuGrid"></div>
+
+        <button class="btn-main" id="btnAyumuStart" onclick="startAyumuRound()">
+          <span>▶️ Начать раунд</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: DIGIT SPAN (Тест Векслера Прямо / Задом наперёд) -->
+    <!-- ========================================== -->
+    <div class="mem-pane" id="memPane2">
+      <div class="mem-card">
+        <div class="card-title">
+          <span>🔢 Числовая цепочка (Digit Span)</span>
+          <span class="badge-pill" id="spanBadge">Длина: 4 цифры</span>
+        </div>
+
+        <div class="pills-row">
+          <span class="pill-label">Направление:</span>
+          <button class="btn-pill active" id="spanDirForward" onclick="setSpanDirection('forward')">Прямой порядок</button>
+          <button class="btn-pill" id="spanDirBackward" onclick="setSpanDirection('backward')">🔄 Задом наперёд</button>
+        </div>
+
+        <div class="pills-row">
+          <span class="pill-label">Длина цепочки:</span>
+          <button class="btn-pill active" onclick="setSpanLength(4, this)">4</button>
+          <button class="btn-pill" onclick="setSpanLength(5, this)">5</button>
+          <button class="btn-pill" onclick="setSpanLength(6, this)">6</button>
+          <button class="btn-pill" onclick="setSpanLength(7, this)">7</button>
+          <button class="btn-pill" onclick="setSpanLength(8, this)">8</button>
+          <button class="btn-pill" onclick="setSpanLength(9, this)">9</button>
+        </div>
+
+        <div class="digit-flash-screen">
+          <div class="digit-big" id="spanDigitDisplay">—</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 8px;" id="spanSubText">
+            Нажми «Старт показа»
+          </div>
+        </div>
+
+        <!-- Input Box -->
+        <div class="input-display" id="spanInputDisplay">...</div>
+
+        <!-- Touch Numpad -->
+        <div class="numpad-grid">
+          <button class="numpad-btn" onclick="spanInputKey(1)">1</button>
+          <button class="numpad-btn" onclick="spanInputKey(2)">2</button>
+          <button class="numpad-btn" onclick="spanInputKey(3)">3</button>
+          <button class="numpad-btn" onclick="spanInputKey(4)">4</button>
+          <button class="numpad-btn" onclick="spanInputKey(5)">5</button>
+          <button class="numpad-btn" onclick="spanInputKey(6)">6</button>
+          <button class="numpad-btn" onclick="spanInputKey(7)">7</button>
+          <button class="numpad-btn" onclick="spanInputKey(8)">8</button>
+          <button class="numpad-btn" onclick="spanInputKey(9)">9</button>
+          <button class="numpad-btn" onclick="spanClearInput()" style="color: #da3633;">⌫</button>
+          <button class="numpad-btn" onclick="spanInputKey(0)">0</button>
+          <button class="numpad-btn" onclick="spanSubmit()" style="background: #238636; color: #fff;">✓</button>
+        </div>
+
+        <button class="btn-main" id="btnSpanStart" onclick="startSpanRound()">
+          <span>▶️ Старт показа цифр</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: CORSI SPATIAL TRACKER («Суслики / Кактусы») -->
+    <!-- ========================================== -->
+    <div class="mem-pane" id="memPane3">
+      <div class="mem-card">
+        <div class="card-title">
+          <span>🌵 Блоки Корси (Пространственный след)</span>
+          <span class="badge-pill" id="corsiBadge">Длина следа: 4</span>
+        </div>
+
+        <div class="pills-row">
+          <span class="pill-label">Сложность (шагов):</span>
+          <button class="btn-pill active" onclick="setCorsiLength(4, this)">4</button>
+          <button class="btn-pill" onclick="setCorsiLength(5, this)">5</button>
+          <button class="btn-pill" onclick="setCorsiLength(6, this)">6</button>
+          <button class="btn-pill" onclick="setCorsiLength(7, this)">7</button>
+          <button class="btn-pill" onclick="setCorsiLength(8, this)">8</button>
+        </div>
+
+        <div style="font-size: 13px; font-weight: bold; text-align: center; min-height: 18px; color: #f0883e;" id="corsiStatus">
+          Следи за вспыхивающими ячейками и повтори их путь
+        </div>
+
+        <div class="board-grid" id="corsiGrid"></div>
+
+        <button class="btn-main" id="btnCorsiStart" onclick="startCorsiRound()">
+          <span>▶️ Запустить цепочку</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: BLIND MENTAL MATH (Умножение вслепую) -->
+    <!-- ========================================== -->
+    <div class="mem-pane" id="memPane4">
+      <div class="mem-card">
+        <div class="card-title">
+          <span>🧮 Умножение в уме вслепую</span>
+          <span class="badge-pill" id="mathDigitsBadge">3 × 3 знака</span>
+        </div>
+
+        <!-- Digit Selectors (2 to 7) -->
+        <div class="pills-row">
+          <span class="pill-label">1-е число:</span>
+          <button class="btn-pill" onclick="setMathDigits1(2, this)">2</button>
+          <button class="btn-pill active" onclick="setMathDigits1(3, this)">3</button>
+          <button class="btn-pill" onclick="setMathDigits1(4, this)">4</button>
+          <button class="btn-pill" onclick="setMathDigits1(5, this)">5</button>
+          <button class="btn-pill" onclick="setMathDigits1(6, this)">6</button>
+          <button class="btn-pill" onclick="setMathDigits1(7, this)">7 знаков</button>
+        </div>
+
+        <div class="pills-row">
+          <span class="pill-label">2-е число:</span>
+          <button class="btn-pill" onclick="setMathDigits2(2, this)">2</button>
+          <button class="btn-pill active" onclick="setMathDigits2(3, this)">3</button>
+          <button class="btn-pill" onclick="setMathDigits2(4, this)">4</button>
+          <button class="btn-pill" onclick="setMathDigits2(5, this)">5</button>
+          <button class="btn-pill" onclick="setMathDigits2(6, this)">6</button>
+          <button class="btn-pill" onclick="setMathDigits2(7, this)">7 знаков</button>
+        </div>
+
+        <!-- Checkbox filters -->
+        <div class="checkbox-row" style="flex-wrap: wrap; gap: 12px; margin: 12px 0;">
+          <label class="checkbox-label" title="Не включать единицу (чтобы не было тривиального умножения на 1)">
+            <input type="checkbox" id="chkExclude1" onchange="generateMathProblem()" checked> 🚫 Без 1 (нет ×1)
+          </label>
+          <label class="checkbox-label" title="Не включать двойку (чтобы не было простого удвоения)">
+            <input type="checkbox" id="chkExclude2" onchange="generateMathProblem()" checked> 🚫 Без 2 (нет ×2)
+          </label>
+          <label class="checkbox-label" title="Не включать ноль (чтобы не пропускать разряды в столбике)">
+            <input type="checkbox" id="chkExclude0" onchange="generateMathProblem()" checked> 🚫 Без 0 (без пропусков)
+          </label>
+          <label class="checkbox-label" title="Избегать повтора одной цифры подряд (например, 777 или 44)">
+            <input type="checkbox" id="chkNoRepetitions" onchange="generateMathProblem()" checked> 🚫 Без дублей подряд
+          </label>
+        </div>
+
+        <!-- Problem Card -->
+        <div class="math-screen">
+          <div style="font-size: 11px; color: var(--text-muted);">ПРИМЕР ДЛЯ ВЫЧИСЛЕНИЯ В СТОЛБИК:</div>
+          <div class="math-problem" id="mathProblemText">478 × 639</div>
+          <div class="timer-badge" id="mathTimer">00:00</div>
+          <div id="mathSubMsg" style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">
+            Нажми «Скрыть числа и начать счёт»
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div id="mathPreStartRow" style="display: flex; gap: 8px;">
+          <button class="btn-secondary" style="flex: 1;" onclick="generateMathProblem()">🎲 Другие числа</button>
+          <button class="btn-main" style="flex: 2;" onclick="startMathTimer()">🙈 Скрыть и начать счёт</button>
+        </div>
+
+        <!-- In-Progress Row -->
+        <div id="mathInProgressRow" style="display: none; flex-direction: column; gap: 8px;">
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-secondary" style="flex: 1;" onclick="peekMathProblem()">👁️ Подсмотреть</button>
+            <button class="btn-secondary" style="flex: 1; border-color: #da3633; color: #f85149;" onclick="cancelMathProblem()">Отмена ↺</button>
+          </div>
+          
+          <input type="number" class="math-input" id="mathUserAnswer" placeholder="Введи результат умножения" inputmode="numeric">
+          
+          <button class="btn-main" onclick="checkMathAnswer()">
+            <span>✓ Я посчитал — проверить ответ!</span>
+          </button>
+        </div>
+
+        <!-- Result Box -->
+        <div id="mathResultBox" style="display: none; background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 12px; text-align: center;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: DICTION EXERCISES -->
   <div class="tab-content" id="tabContent3">
     <div class="diction-wrap">
       
@@ -2804,7 +3052,14 @@
       }
     }
 
-    generateMathProblem();
+    
+    // Safe initialization on window load
+    window.addEventListener('DOMContentLoaded', () => {
+      if (typeof initAyumuGrid === 'function' && document.getElementById('ayumuGrid')) initAyumuGrid();
+      if (typeof initCorsiGrid === 'function' && document.getElementById('corsiGrid')) initCorsiGrid();
+      if (typeof generateMathProblem === 'function' && document.getElementById('mathProblemText')) generateMathProblem();
+    });
+
   </script>
 </body>
 </html>
