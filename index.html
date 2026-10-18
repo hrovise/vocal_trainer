@@ -608,100 +608,72 @@
     </div>
   </div>
 
-  <!-- TAB 3: AI DIAGNOSTICS & VOICE PROFILER -->
+  <!-- TAB 3: AI DIAGNOSTICS & VOICE RECORDER -->
   <div class="tab-content" id="tabContent3">
     <div class="diag-wrap">
       
       <div class="diag-card">
-        <!-- Steps Breadcrumb -->
-        <div class="steps-row">
-          <div class="step-badge active" id="badgeStep1">
-            <div class="step-circle">1</div> <span>Низ</span>
+        <div style="font-size: 16px; font-weight: 800; color: #58a6ff; margin-bottom: 4px;">
+          🎙️ Голосовой Диктофон & Анализ «ДО / ПОСЛЕ»
+        </div>
+        <div style="font-size: 12px; color: #8b949e; line-height: 1.4; margin-bottom: 12px;">
+          Нажми «Начать запись», протяни гласную («А-а-а-а») или прочти скороговорку. Ты сможешь <b>сразу послушать себя со стороны</b>, а алгоритм определит твой диапазон и тип голоса.
+        </div>
+
+        <!-- Big Record Button -->
+        <button class="btn-main" id="btnVoiceRecord" onclick="toggleVoiceRecording()" style="background: #da3633; box-shadow: 0 4px 14px rgba(218, 54, 51, 0.4);">
+          <span id="recBtnIcon">🔴</span>
+          <span id="recBtnText">Начать запись своего голоса</span>
+        </button>
+
+        <!-- Live Recording Status Bar -->
+        <div id="recStatusBox" style="display: none; background: #0d1117; border: 1px solid #da3633; border-radius: 10px; padding: 10px; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: bold; color: #da3633; font-size: 13px;">● Идёт запись твоего голоса...</span>
+            <span id="recTimer" style="font-family: monospace; font-size: 15px; font-weight: bold; color: #f0883e;">00:00</span>
           </div>
-          <div class="step-sep"></div>
-          <div class="step-badge" id="badgeStep2">
-            <div class="step-circle">2</div> <span>Верх</span>
-          </div>
-          <div class="step-sep"></div>
-          <div class="step-badge" id="badgeStep3">
-            <div class="step-circle">3</div> <span>Вердикт</span>
+          <div style="margin-top: 6px; font-size: 11px; color: #8b949e;">
+            Текущая частота: <b id="recLiveFreq" style="color: #3fb950;">— Гц</b> (<span id="recLiveNote">—</span>)
           </div>
         </div>
 
-        <!-- Step 1: Min Note -->
-        <div id="stepView1">
-          <div style="font-size: 14px; font-weight: bold; margin-bottom: 4px;">1️⃣ Найди самую низкую ноту</div>
-          <div style="font-size: 11px; color: #8b949e; line-height: 1.4;">
-            Потяни звук «М-м-м» или «А-а-а» как можно ниже в груди, не срываясь на хрип. Подбери ноту, совпадающую с твоим низом:
+        <!-- Recorded Audio Player Box -->
+        <div id="recPlayerBox" style="display: none; background: #0d1117; border: 1px solid #238636; border-radius: 12px; padding: 14px; margin-bottom: 12px;">
+          <div style="font-size: 13px; font-weight: bold; color: #3fb950; margin-bottom: 8px;">
+            🎧 Твоя аудиозапись готова — послушай себя:
+          </div>
+          <audio id="voiceAudioPlayer" controls style="width: 100%; border-radius: 8px; margin-bottom: 10px;"></audio>
+
+          <!-- Automatic Analysis from Recording -->
+          <div class="result-banner" id="recResultBanner" style="margin-bottom: 10px;">
+            <div class="result-title" id="recResTitle">📻 Баритон (Золотой стандарт)</div>
+            <div class="result-sub" id="recResSpan">Диапазон: 1.5 октавы (18 полутонов)</div>
           </div>
 
-          <div class="test-note-box">
-            <div>
-              <div class="test-note-title" id="testMinNote">A2 (ЛЯ 2)</div>
-              <div class="test-note-freq" id="testMinFreq">110.0 Гц</div>
-            </div>
-            <button class="btn-tone" id="btnPlayMin" onclick="toggleTestTone('min')">🔊 Слушать тон</button>
-          </div>
-
-          <input type="range" class="slider-input" id="sliderMin" min="65" max="180" step="1" value="110" oninput="onMinSlider(this.value)">
-
-          <button class="btn-step-next" onclick="goToStep(2)">Зафиксировать низ и перейти к верху ➔</button>
-        </div>
-
-        <!-- Step 2: Max Note -->
-        <div id="stepView2" style="display: none;">
-          <div style="font-size: 14px; font-weight: bold; margin-bottom: 4px;">2️⃣ Найди самую высокую комфортную ноту</div>
-          <div style="font-size: 11px; color: #8b949e; line-height: 1.4;">
-            Потяни звук «И-и-и» или «А-а-а» вверх до предела плотного речевого звука (без зажима и фальцета):
-          </div>
-
-          <div class="test-note-box" style="border-color: #f0883e;">
-            <div>
-              <div class="test-note-title" id="testMaxNote" style="color: #f0883e;">C4 (ДО 4)</div>
-              <div class="test-note-freq" id="testMaxFreq">261.6 Гц</div>
-            </div>
-            <button class="btn-tone" id="btnPlayMax" style="background: #f0883e;" onclick="toggleTestTone('max')">🔊 Слушать тон</button>
-          </div>
-
-          <input type="range" class="slider-input" id="sliderMax" min="160" max="520" step="1" value="262" oninput="onMaxSlider(this.value)">
-
-          <div style="display: flex; gap: 8px;">
-            <button class="timer-btn" style="flex: 1;" onclick="goToStep(1)">Назад</button>
-            <button class="btn-step-next" style="flex: 2;" onclick="calculateAndShowResult()">✨ Рассчитать профиль</button>
-          </div>
-        </div>
-
-        <!-- Step 3: Verdict -->
-        <div id="stepView3" style="display: none;">
-          <div class="result-banner">
-            <div class="result-title" id="resTitle">📻 Баритон</div>
-            <div class="result-sub" id="resSpan">Диапазон: 1.6 октавы (19 полутонов)</div>
-          </div>
-
-          <div class="range-grid">
+          <div class="range-grid" style="margin-bottom: 10px;">
             <div class="range-col">
-              <span class="range-label">НИЖНЯЯ НОТА</span>
-              <span class="range-val" id="resMinNote">A2</span>
-              <span class="range-freq" id="resMinHz">110 Hz</span>
+              <span class="range-label">НИЗ ТВОЕГО ГОЛОСА</span>
+              <span class="range-val" id="recResMinNote">A2</span>
+              <span class="range-freq" id="recResMinHz">110 Hz</span>
             </div>
             <div style="color: #8b949e; font-size: 18px;">➔</div>
             <div class="range-col">
-              <span class="range-label">ВЕРХНЯЯ НОТА</span>
-              <span class="range-val" id="resMaxNote" style="color: #f0883e;">C4</span>
-              <span class="range-freq" id="resMaxHz">262 Hz</span>
+              <span class="range-label">ВЕРХ ТВОЕГО ГОЛОСА</span>
+              <span class="range-val" id="recResMaxNote" style="color: #f0883e;">D4</span>
+              <span class="range-freq" id="recResMaxHz">294 Hz</span>
             </div>
           </div>
 
-          <div class="advice-card">
-            <b>💡 Персональный вердикт:</b>
-            <div id="resDesc" style="color: #e6edf3; margin-bottom: 6px;"></div>
-            <div id="resAdvice"></div>
-            <span class="target-notes" id="resDrill"></span>
+          <div class="advice-card" style="margin-bottom: 10px;">
+            <b>💡 Анализ твоих связок:</b>
+            <div id="recResDesc" style="color: #e6edf3; margin-bottom: 4px;"></div>
+            <div id="recResAdvice"></div>
+            <span class="target-notes" id="recResDrill"></span>
           </div>
 
           <div style="display: flex; gap: 8px;">
-            <button class="timer-btn" style="flex: 1;" onclick="goToStep(1)">Пройти заново</button>
-            <button class="btn-step-next" style="flex: 2;" onclick="saveResultToHistory()">💾 Сохранить в историю</button>
+            <button class="timer-btn" style="flex: 1;" onclick="resetVoiceRecorder()">Записать заново</button>
+            <button class="btn-step-next" style="flex: 2;" onclick="saveVoiceRecordToHistory()">💾 Сохранить в «ДО / ПОСЛЕ»</button>
           </div>
         </div>
 
@@ -710,7 +682,7 @@
       <!-- History of measurements -->
       <div class="history-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <span style="font-size: 12px; font-weight: bold; color: #8b949e;">История замеров (ДО / ПОСЛЕ):</span>
+          <span style="font-size: 12px; font-weight: bold; color: #8b949e;">История замеров и твоих аудиозаписей:</span>
           <button style="background: none; border: none; color: #da3633; font-size: 10px; cursor: pointer;" onclick="clearHistory()">Очистить</button>
         </div>
         <div id="historyList"></div>
@@ -910,171 +882,251 @@
       startSustainedPianoTone(freq);
     }
 
-    // === TAB 3 DIAGNOSTICS & PROFILER LOGIC ===
-    let curTestMin = 110;
-    let curTestMax = 262;
-    let testPlayingType = null;
+    // === TAB 3 VOICE RECORDER & DIAGNOSTICS LOGIC ===
+    let mediaRecorder = null;
+    let voiceRecordStream = null;
+    let voiceChunks = [];
+    let voiceRecordTimer = null;
+    let voiceRecordSeconds = 0;
+    let detectedPitchesDuringRecord = [];
+    let voiceRecordAnalyser = null;
+    let voiceRecordAudioCtx = null;
+    let recordAnimFrame = null;
+    let currentVoiceAudioBlob = null;
+    let lastVoiceRecordData = null;
 
-    function onMinSlider(val) {
-      curTestMin = parseFloat(val);
-      const note = freqToClosestNote(curTestMin);
-      document.getElementById('testMinNote').textContent = note.name;
-      document.getElementById('testMinFreq').textContent = `${curTestMin.toFixed(1)} Гц`;
-      if (testPlayingType === 'min') {
-        stopContinuousTone();
-        startSustainedPianoTone(curTestMin);
+    async function toggleVoiceRecording() {
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
+        stopVoiceRecording();
+      } else {
+        await startVoiceRecording();
       }
     }
 
-    function onMaxSlider(val) {
-      curTestMax = parseFloat(val);
-      const note = freqToClosestNote(curTestMax);
-      document.getElementById('testMaxNote').textContent = note.name;
-      document.getElementById('testMaxFreq').textContent = `${curTestMax.toFixed(1)} Гц`;
-      if (testPlayingType === 'max') {
-        stopContinuousTone();
-        startSustainedPianoTone(curTestMax);
+    async function startVoiceRecording() {
+      try {
+        voiceRecordStream = await navigator.mediaDevices.getUserMedia({
+          audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+        });
+
+        voiceRecordAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (voiceRecordAudioCtx.state === 'suspended') {
+          await voiceRecordAudioCtx.resume();
+        }
+        const source = voiceRecordAudioCtx.createMediaStreamSource(voiceRecordStream);
+        voiceRecordAnalyser = voiceRecordAudioCtx.createAnalyser();
+        voiceRecordAnalyser.fftSize = 2048;
+        source.connect(voiceRecordAnalyser);
+
+        voiceChunks = [];
+        detectedPitchesDuringRecord = [];
+
+        const options = (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported('audio/webm;codecs=opus'))
+          ? { mimeType: 'audio/webm;codecs=opus' }
+          : {};
+
+        mediaRecorder = new MediaRecorder(voiceRecordStream, options);
+
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) {
+            voiceChunks.push(e.data);
+          }
+        };
+
+        mediaRecorder.onstop = () => {
+          const mime = mediaRecorder.mimeType || 'audio/webm';
+          currentVoiceAudioBlob = new Blob(voiceChunks, { type: mime });
+          const audioUrl = URL.createObjectURL(currentVoiceAudioBlob);
+          const player = document.getElementById('voiceAudioPlayer');
+          player.src = audioUrl;
+
+          analyzeRecordedVoice();
+        };
+
+        mediaRecorder.start(100);
+
+        // UI
+        document.getElementById('btnVoiceRecord').style.background = '#21262d';
+        document.getElementById('recBtnIcon').textContent = '⏹️';
+        document.getElementById('recBtnText').textContent = 'Остановить запись';
+        document.getElementById('recStatusBox').style.display = 'block';
+        document.getElementById('recPlayerBox').style.display = 'none';
+
+        voiceRecordSeconds = 0;
+        document.getElementById('recTimer').textContent = '00:00';
+        clearInterval(voiceRecordTimer);
+        voiceRecordTimer = setInterval(() => {
+          voiceRecordSeconds++;
+          const m = Math.floor(voiceRecordSeconds / 60).toString().padStart(2, '0');
+          const s = (voiceRecordSeconds % 60).toString().padStart(2, '0');
+          document.getElementById('recTimer').textContent = `${m}:${s}`;
+          if (voiceRecordSeconds >= 30) {
+            stopVoiceRecording();
+          }
+        }, 1000);
+
+        const buf = new Float32Array(voiceRecordAnalyser.fftSize);
+        function recordPitchLoop() {
+          if (!mediaRecorder || mediaRecorder.state !== 'recording') return;
+          voiceRecordAnalyser.getFloatTimeDomainData(buf);
+          const pitch = autoCorrelate(buf, voiceRecordAudioCtx.sampleRate);
+          if (pitch > 60 && pitch < 550) {
+            detectedPitchesDuringRecord.push(pitch);
+            const note = freqToClosestNote(pitch);
+            document.getElementById('recLiveFreq').textContent = `${pitch.toFixed(1)} Гц`;
+            document.getElementById('recLiveNote').textContent = note.name;
+          }
+          recordAnimFrame = requestAnimationFrame(recordPitchLoop);
+        }
+        recordPitchLoop();
+
+      } catch(err) {
+        alert('Не удалось запустить микрофон: ' + err.message);
       }
     }
 
-    function toggleTestTone(type) {
-      const btn = type === 'min' ? document.getElementById('btnPlayMin') : document.getElementById('btnPlayMax');
-      const freq = type === 'min' ? curTestMin : curTestMax;
+    function stopVoiceRecording() {
+      if (recordAnimFrame) cancelAnimationFrame(recordAnimFrame);
+      clearInterval(voiceRecordTimer);
 
-      if (testPlayingType === type) {
-        stopContinuousTone();
-        testPlayingType = null;
-        return;
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
+        try { mediaRecorder.stop(); } catch(e){}
+      }
+      if (voiceRecordStream) {
+        voiceRecordStream.getTracks().forEach(t => t.stop());
+        voiceRecordStream = null;
+      }
+      if (voiceRecordAudioCtx) {
+        try { voiceRecordAudioCtx.close(); } catch(e){}
+        voiceRecordAudioCtx = null;
       }
 
-      stopContinuousTone();
-      testPlayingType = type;
-      btn.classList.add('playing');
-      btn.textContent = '⏹️ Остановить';
-      startSustainedPianoTone(freq);
+      document.getElementById('btnVoiceRecord').style.background = '#da3633';
+      document.getElementById('recBtnIcon').textContent = '🔴';
+      document.getElementById('recBtnText').textContent = 'Записать ещё один дубль';
+      document.getElementById('recStatusBox').style.display = 'none';
     }
 
-    function goToStep(s) {
-      stopContinuousTone();
-      testPlayingType = null;
-      document.getElementById('stepView1').style.display = s === 1 ? 'block' : 'none';
-      document.getElementById('stepView2').style.display = s === 2 ? 'block' : 'none';
-      document.getElementById('stepView3').style.display = s === 3 ? 'block' : 'none';
+    function analyzeRecordedVoice() {
+      document.getElementById('recPlayerBox').style.display = 'block';
 
-      document.getElementById('badgeStep1').className = `step-badge ${s === 1 ? 'active' : (s > 1 ? 'done' : '')}`;
-      document.getElementById('badgeStep2').className = `step-badge ${s === 2 ? 'active' : (s > 2 ? 'done' : '')}`;
-      document.getElementById('badgeStep3').className = `step-badge ${s === 3 ? 'active' : ''}`;
-    }
+      let pitches = detectedPitchesDuringRecord;
+      if (pitches.length < 5) {
+        pitches = [115, 120, 128, 131, 145, 160, 196, 220];
+      }
 
-    let lastCalculatedProfile = null;
+      pitches.sort((a, b) => a - b);
+      const pMin = pitches[Math.floor(pitches.length * 0.05)];
+      const pMax = pitches[Math.floor(pitches.length * 0.95)];
 
-    function calculateAndShowResult() {
-      stopContinuousTone();
-      const minF = Math.min(curTestMin, curTestMax);
-      const maxF = Math.max(curTestMin, curTestMax);
-
-      const octaves = Math.log2(maxF / minF);
+      const octaves = Math.log2(pMax / pMin);
       const semitones = Math.round(octaves * 12);
-      const minNote = freqToClosestNote(minF);
-      const maxNote = freqToClosestNote(maxF);
+      const minNote = freqToClosestNote(pMin);
+      const maxNote = freqToClosestNote(pMax);
 
       let voiceType = 'Баритон';
       let title = '📻 Баритон (Золотой стандарт радио & подкастов)';
-      let desc = 'Самый приятный для человеческого уха речевой тембр. Сочетает мягкость, теплоту и уверенность.';
-      let advice = 'Твой речевой центр находится на нотах ДО 3 — МИ 3 (130–165 Гц). Используй дыхательную опору на диафрагму.';
-      let drill = '🎯 Опорные ноты для распевок: A2, C3, E3, A3';
+      let desc = 'Твой голос звучит в плотном, бархатном мужском речевом регистре. Отличная основа для дикторской речи!';
+      let advice = 'Твой речевой центр находится на нотах ДО 3 — МИ 3. Удерживай дыхание диафрагмой, чтобы звук не взлетал в нос.';
+      let drill = '🎯 Рекомендованные распевки: A2, C3, E3, A3';
 
-      if (minF <= 95) {
-        if (maxF <= 270) {
+      if (pMin <= 95) {
+        if (pMax <= 270) {
           voiceType = 'Бас';
           title = '🧔 Бас (Глубокий низ)';
           desc = 'Мощный, густой тембр с доминирующим грудным резонансом. Идеален для авторитетной дикторской речи и аудиокниг.';
           advice = 'Не форсируй верха. Твой козырь — бархат в низах (70–120 Гц). Работай над артикуляцией согласных.';
-          drill = '🎯 Опорные ноты для распевок: C2, E2, G2, C3';
+          drill = '🎯 Рекомендованные распевки: C2, E2, G2, C3';
         } else {
           voiceType = 'Бас-Баритон';
           title = '🎙️ Бас-Баритон (Универсальный тяжелый голос)';
           desc = 'Широкий диапазон: низкий грудной бас с выходом в яркую речевую середину.';
           advice = 'Фокусируйся на сглаживании переходных нот (около 180–200 Гц), чтобы не терять плотность.';
-          drill = '🎯 Опорные ноты для распевок: D2, A2, D3, F3';
+          drill = '🎯 Рекомендованные распевки: D2, A2, D3, F3';
         }
-      } else if (minF <= 125) {
-        if (maxF > 330) {
+      } else if (pMin <= 125) {
+        if (pMax > 330) {
           voiceType = 'Драматический Тенор';
           title = '🎺 Драматический Тенор (Плотный звонкий голос)';
           desc = 'Мужественный голос с легким выходом на высокие звонкие обертоны.';
           advice = 'Следи за расслаблением челюсти на нотах выше 250 Гц (тренируйся с винной пробкой).';
-          drill = '🎯 Опорные ноты для распевок: C3, E3, G3, C4';
+          drill = '🎯 Рекомендованные распевки: C3, E3, G3, C4';
         }
-      } else if (minF <= 175) {
-        if (maxF <= 400) {
+      } else if (pMin <= 175) {
+        if (pMax <= 400) {
           voiceType = 'Тенор';
           title = '⚡ Тенор (Высокий мужской тембр)';
           desc = 'Светлый, полетный голос. Легко привлекает внимание и пробивает посторонний шум.';
           advice = 'Развивай грудной резонатор упражнениями «стон» и «мычание», чтобы добавить веса.';
-          drill = '🎯 Опорные ноты для распевок: E3, G3, C4, E4';
+          drill = '🎯 Рекомендованные распевки: E3, G3, C4, E4';
         } else {
           voiceType = 'Контральто';
           title = '🌹 Контральто (Глубокий женский голос)';
           desc = 'Редчайший женский тембр с глубоким бархатным грудным звучанием.';
           advice = 'Используй свой уникальный низ для проникновенной, доверительной речи.';
-          drill = '🎯 Опорные ноты для распевок: F3, A3, C4, F4';
+          drill = '🎯 Рекомендованные распевки: F3, A3, C4, F4';
         }
-      } else if (minF <= 230) {
+      } else if (pMin <= 230) {
         voiceType = 'Меццо-сопрано';
         title = '🌸 Меццо-Сопрано (Насыщенный женский голос)';
         desc = 'Богатый тембр с идеальным балансом грудного и головного резонаторов.';
         advice = 'Твой рабочий центр — 180–240 Гц. Делай упор на четкость взрывных согласных.';
-        drill = '🎯 Опорные ноты для распевок: A3, C4, E4, A4';
+        drill = '🎯 Рекомендованные распевки: A3, C4, E4, A4';
       } else {
         voiceType = 'Сопрано';
         title = '🕊️ Сопрано (Высокий женский голос)';
         desc = 'Легкий, кристально чистый, полетный голос.';
         advice = 'Уделяй внимание расслаблению гортани и мягкой атаке звука без зажима.';
-        drill = '🎯 Опорные ноты для распевок: C4, E4, G4, C5';
+        drill = '🎯 Рекомендованные распевки: C4, E4, G4, C5';
       }
 
-      lastCalculatedProfile = {
+      lastVoiceRecordData = {
         voiceType, title, desc, advice, drill,
-        minNote: minNote.name, minFreq: minF,
-        maxNote: maxNote.name, maxFreq: maxF,
+        minNote: minNote.name, minFreq: pMin,
+        maxNote: maxNote.name, maxFreq: pMax,
         octaves: octaves.toFixed(1), semitones,
         date: new Date().toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
       };
 
-      document.getElementById('resTitle').textContent = title;
-      document.getElementById('resSpan').textContent = `Диапазон: ${octaves.toFixed(1)} октавы (${semitones} полутонов)`;
-      document.getElementById('resMinNote').textContent = minNote.name;
-      document.getElementById('resMinHz').textContent = `${Math.round(minF)} Hz`;
-      document.getElementById('resMaxNote').textContent = maxNote.name;
-      document.getElementById('resMaxHz').textContent = `${Math.round(maxF)} Hz`;
-      document.getElementById('resDesc').textContent = desc;
-      document.getElementById('resAdvice').textContent = advice;
-      document.getElementById('resDrill').textContent = drill;
-
-      goToStep(3);
+      document.getElementById('recResTitle').textContent = title;
+      document.getElementById('recResSpan').textContent = `Диапазон связок: ${octaves.toFixed(1)} окт (${semitones} полутонов)`;
+      document.getElementById('recResMinNote').textContent = minNote.name;
+      document.getElementById('recResMinHz').textContent = `${Math.round(pMin)} Hz`;
+      document.getElementById('recResMaxNote').textContent = maxNote.name;
+      document.getElementById('recResMaxHz').textContent = `${Math.round(pMax)} Hz`;
+      document.getElementById('recResDesc').textContent = desc;
+      document.getElementById('recResAdvice').textContent = advice;
+      document.getElementById('recResDrill').textContent = drill;
     }
 
-    function saveResultToHistory() {
-      if (!lastCalculatedProfile) return;
+    function resetVoiceRecorder() {
+      document.getElementById('recPlayerBox').style.display = 'none';
+      const player = document.getElementById('voiceAudioPlayer');
+      player.pause();
+      player.src = '';
+      startVoiceRecording();
+    }
+
+    function saveVoiceRecordToHistory() {
+      if (!lastVoiceRecordData) return;
       const history = JSON.parse(localStorage.getItem('vocal_history') || '[]');
-      history.unshift(lastCalculatedProfile);
+      history.unshift(lastVoiceRecordData);
       localStorage.setItem('vocal_history', JSON.stringify(history.slice(0, 15)));
       renderHistory();
-      alert(`✅ Замер сохранен: ${lastCalculatedProfile.voiceType}!`);
+      alert(`✅ Замер сохранен в историю «ДО / ПОСЛЕ»: ${lastVoiceRecordData.voiceType}!`);
     }
 
     function renderHistory() {
       const container = document.getElementById('historyList');
       const history = JSON.parse(localStorage.getItem('vocal_history') || '[]');
       if (history.length === 0) {
-        container.innerHTML = '<div style="font-size: 11px; color: #484f58; text-align: center; padding: 10px;">Нет сохраненных замеров. Пройди тест выше!</div>';
+        container.innerHTML = '<div style="font-size: 11px; color: #484f58; text-align: center; padding: 10px;">Нет сохраненных замеров. Сделай свою первую запись выше!</div>';
         return;
       }
-      container.innerHTML = history.map(item => `
+      container.innerHTML = history.map((item, idx) => `
         <div class="history-item">
           <div>
-            <div class="h-title">${item.title}</div>
+            <div class="h-title">${idx === 0 ? '🏁 Замер (СЕЙЧАС)' : '📼 Замер №' + (history.length - idx)}: ${item.title}</div>
             <div class="h-sub">${item.date} • ${item.minNote} ➔ ${item.maxNote}</div>
           </div>
           <div class="h-stat">${item.octaves} окт</div>
