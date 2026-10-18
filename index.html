@@ -902,7 +902,10 @@
 
   <!-- Navigation Tabs -->
   <div class="nav-tabs">
-    <button class="tab-btn active" id="tabBtn1" onclick="switchTab(1)">
+    <button class="tab-btn active" id="tabBtn0" onclick="switchTab(0)">
+      <span>🏠 Главная</span>
+    </button>
+    <button class="tab-btn" id="tabBtn1" onclick="switchTab(1)">
       <span>🎙️ Вокал</span>
     </button>
     <button class="tab-btn" id="tabBtn2" onclick="switchTab(2)">
@@ -916,8 +919,90 @@
     </button>
   </div>
 
+  
+  <!-- TAB 0: HOME / WELCOME DASHBOARD (ГЛАВНАЯ СТРАНИЦА ХАБА) -->
+  <div class="tab-content active" id="tabContent0">
+    <div style="width: 100%; text-align: center; padding: 10px 0 16px;">
+      <div style="font-size: 24px; font-weight: 900; background: linear-gradient(135deg, #58a6ff, #3fb950); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        Нейро-Атлас Мастерства
+      </div>
+      <div style="font-size: 13px; color: #8b949e; margin-top: 6px; line-height: 1.4;">
+        Комплексная система тренировки оперативной памяти, точного интонирования голоса и сценической речи
+      </div>
+    </div>
+
+    <!-- Hub Cards Navigation Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; width: 100%;">
+      
+      <!-- Card 1: Vocal -->
+      <div class="mem-card" style="cursor: pointer; border-color: rgba(88, 166, 255, 0.4); transition: transform 0.15s, border-color 0.15s;" onclick="switchTab(1)" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 28px;">🎙️</span>
+          <span class="badge-pill" style="color: #58a6ff; border-color: #58a6ff;">Тюнер & Распевка</span>
+        </div>
+        <div style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">Вокальная Лаборатория</div>
+        <div style="font-size: 12px; color: #8b949e; line-height: 1.4;">
+          Точный тюнер с определением нот и центов на лету. Персональная распевка на фортепиано под баритон, тенор, бас, меццо или сопрано.
+        </div>
+        <button class="btn-main" style="margin-top: 6px; padding: 10px; font-size: 13px;" onclick="event.stopPropagation(); switchTab(1);">
+          Открыть Вокал ➔
+        </button>
+      </div>
+
+      <!-- Card 2: Memory -->
+      <div class="mem-card" style="cursor: pointer; border-color: rgba(63, 185, 80, 0.4); transition: transform 0.15s, border-color 0.15s;" onclick="switchTab(2)" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 28px;">🧠</span>
+          <span class="badge-pill" style="color: #3fb950; border-color: #3fb950;">Brain Gym</span>
+        </div>
+        <div style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">Тренировка Памяти & Счёт</div>
+        <div style="font-size: 12px; color: #8b949e; line-height: 1.4;">
+          4 когнитивных режима: Тест Аюму (зрительная фиксация), Числовая цепочка (прямо и задом наперёд), Блоки Корси и слепой устный счёт от 2 до 7 знаков.
+        </div>
+        <button class="btn-main" style="margin-top: 6px; padding: 10px; font-size: 13px; background: #238636;" onclick="event.stopPropagation(); switchTab(2);">
+          Тренировать Память ➔
+        </button>
+      </div>
+
+      <!-- Card 3: Diction -->
+      <div class="mem-card" style="cursor: pointer; border-color: rgba(240, 136, 62, 0.4); transition: transform 0.15s, border-color 0.15s;" onclick="switchTab(3)" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 28px;">🗣️</span>
+          <span class="badge-pill" style="color: #f0883e; border-color: #f0883e;">Речь & Скороговорки</span>
+        </div>
+        <div style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">Дикция & Артикуляция</div>
+        <div style="font-size: 12px; color: #8b949e; line-height: 1.4;">
+          Большая библиотека из 110 скороговорок с удобной пагинацией по группам звуков (Б-П-В-Ф, Р-Л-М-Н, З-С-Ж-Ш-Ч-Щ), метод пробки и снятие зажимов.
+        </div>
+        <button class="btn-main" style="margin-top: 6px; padding: 10px; font-size: 13px; background: #b05012;" onclick="event.stopPropagation(); switchTab(3);">
+          Перейти к Дикции ➔
+        </button>
+      </div>
+
+      <!-- Card 4: Range Diagnostics -->
+      <div class="mem-card" style="cursor: pointer; border-color: rgba(163, 113, 247, 0.4); transition: transform 0.15s, border-color 0.15s;" onclick="switchTab(4)" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 28px;">📊</span>
+          <span class="badge-pill" style="color: #a371f7; border-color: #a371f7;">Атлас & Диктофон</span>
+        </div>
+        <div style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">Диапазон & Тембр Голоса</div>
+        <div style="font-size: 12px; color: #8b949e; line-height: 1.4;">
+          Запись гласной с мгновенным прослушиванием «ДО / ПОСЛЕ», расчет крайних нот и полный акустический справочник 10 типов певческого голоса.
+        </div>
+        <button class="btn-main" style="margin-top: 6px; padding: 10px; font-size: 13px; background: #6e40c9;" onclick="event.stopPropagation(); switchTab(4);">
+          Диагностика Голоса ➔
+        </button>
+      </div>
+
+    </div>
+
+    <div style="margin-top: 14px; text-align: center; font-size: 11px; color: #8b949e;">
+      💡 Все вычисления и обработка звука выполняются 100% локально на твоем устройстве без отправки в интернет.
+    </div>
+  </div>
+
   <!-- TAB 1: PITCH TRAINER -->
-  <div class="tab-content active" id="tabContent1">
+  <div class="tab-content" id="tabContent1">
     <div class="top-bar">
       <div class="app-title">Вокальный Тренажёр</div>
       <div class="vu-wrapper">
@@ -1227,23 +1312,44 @@
   <div class="tab-content" id="tabContent3">
     <div class="diction-wrap">
       
-      <!-- 1. Cork / Pencil -->
+      <!-- 1. Cork / Pencil & Interactive Tongue-Twisters Library -->
       <div class="ex-card">
         <div class="ex-header">
-          <div class="ex-title">🍾 1. Метод винной пробки / карандаша</div>
+          <div class="ex-title">🍾 1. Метод винной пробки & Скороговорки</div>
           <div class="ex-time">2 мин</div>
         </div>
         <div class="ex-desc">
-          Зажми винную пробку (или карандаш) передними зубами на 1–1.5 см. Читай текст вслух, преодолевая сопротивление, максимально четко работая губами и языком.
+          Зажми пробку или карандаш передними зубами на 1–1.5 см. Выбери группу звуков и отрабатывай артикуляцию, преодолевая сопротивление мышц.
         </div>
-        <div class="speech-text">
-          «Круговая порука мажет как копоть,<br>
-          Я беру чью-то руку, а чувствую локоть.<br>
-          Я ищу сколько глаз, а чувствую взгляд,<br>
-          Где выше один — там все промолчат...»
+
+        <!-- Sound Groups Selector Pills -->
+        <div class="pills-row" style="margin: 8px 0;">
+          <span class="pill-label">Группа звуков:</span>
+          <button class="btn-pill active" id="soundGrpBtn0" onclick="selectSoundGroup(0, this)">Б, П, В, Ф, Г, К, Д, Т, Х</button>
+          <button class="btn-pill" id="soundGrpBtn1" onclick="selectSoundGroup(1, this)">Р, Л, М, Н</button>
+          <button class="btn-pill" id="soundGrpBtn2" onclick="selectSoundGroup(2, this)">З, С, Ж, Ш, Ч, Щ, Ц</button>
         </div>
+
+        <!-- Twister Card Display -->
+        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 12px; margin: 8px 0; min-height: 100px; display: flex; flex-direction: column; justify-content: center; position: relative;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-size: 11px; font-weight: bold; color: #58a6ff;" id="twisterGroupLabel">Отработка: Б, П, В, Ф, Г, К, Д, Т, Х</span>
+            <span style="font-size: 11px; color: #8b949e;" id="twisterIndexLabel">1 / 37</span>
+          </div>
+          <div class="speech-text" id="twisterTextDisplay" style="font-size: 15px; font-weight: 600; line-height: 1.5; color: #fff; text-align: left; margin: 4px 0;">
+            Добыл бобов бобыль.
+          </div>
+          
+          <!-- Navigation & Random Buttons -->
+          <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button class="btn-secondary" style="flex: 1; padding: 8px;" onclick="prevTwister()">◀ Назад</button>
+            <button class="btn-secondary" style="flex: 1; padding: 8px;" onclick="randomTwister()">🎲 Случайная</button>
+            <button class="btn-secondary" style="flex: 1; padding: 8px;" onclick="nextTwister()">Вперёд ▶</button>
+          </div>
+        </div>
+
         <div class="timer-bar">
-          <span>Таймер читки:</span>
+          <span>Таймер читки с пробкой:</span>
           <span class="timer-display" id="corkTimerDisplay">02:00</span>
           <button class="timer-btn" id="corkTimerBtn" onclick="toggleTimer()">Старт 2 мин</button>
         </div>
@@ -1435,14 +1541,15 @@
       return closest;
     }
 
-    // Main Tab Switching (1=Vocal, 2=Memory, 3=Diction, 4=Diagnostics)
+    // Main Tab Switching (0=Home, 1=Vocal, 2=Memory, 3=Diction, 4=Diagnostics)
     function switchTab(num) {
       document.querySelectorAll('.tab-btn').forEach((b, i) => {
-        b.classList.toggle('active', i === (num - 1));
+        b.classList.toggle('active', i === num);
       });
       document.querySelectorAll('.tab-content').forEach((c, i) => {
-        c.classList.toggle('active', i === (num - 1));
+        c.classList.toggle('active', i === num);
       });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       if (num === 1) {
         resizeCanvas();
       } else {
@@ -2453,6 +2560,57 @@
       }
     }
   
+
+    
+    /* === 110 TONGUE-TWISTERS INTERACTIVE PAGINATION MODULE === */
+    const TWISTER_GROUPS = [{"sounds": "б, п, в, ф, г, к, д, т, х", "items": ["Добыл бобов бобыль.", "Вакул бабу обул, да и Вакула баба обула.", "От топота копыт пыль по полю летит.", "Бык тупогуб, тупогубенький бычок, у быка бела губа была тупа.", "Колпак на колпаке, под колпаком колпак.", "Верзила Вавила весело ворочал вилы.", "Около кола колокола, около ворот коловорот.", "Шакал шагал, шакал скакал.", "Купи кипу пик, пик кипу купи. Купи кипу пуха, кипу пуха купи.", "Повар Петр, повар Павел. Петр плавал, Павел плавал.", "Ткет ткач ткани на платки Тани.", "Водовоз вез воду из-под водопровода.", "Наш голова вашего голову головой переголовил, перевыголовил.", "Вашему пономарю нашего пономаря не перепономарить, не перевыпономарить; наш пономарь вашего пономаря перепономарит, перевыпономарит.", "В один, Клим, клин колоти.", "Стоит копна с подприкопёночком.", "В поле полет Фрося просо, сорняки выносит Фрося.", "Краб крабу сделал грабли. Подал грабли крабу краб: сено граблями, краб, грабь!", "У елки иголки колки.", "Кукушка кукушонку купила капюшон. Надел кукушонок капюшон. Как в капюшоне он смешон!", "Все бобры для своих бобрят добры. Бобры берут для бобрят бобы. Бобры, бывает, будоражат бобрят, давая им бобы.", "Забыл Панкрат Кондратов домкрат, а Панкрату без домкрата не поднять на тракте трактор. И ждет на тракте трактор домкрат.", "На меду медовик, а мне не до медовика.", "Пришел Прокоп, кипел укроп, ушел Прокоп, кипел укроп; как при Прокопе кипел укроп, так и без Прокопа кипел укроп.", "Шли три попа, три Прокопия-попа, три Прокопьевича, говорили про попа, про Прокопия-попа, про Прокопьевича.", "Однажды галок поп пугая, в кустах увидел попугая, и говорит тот попугай: пугать ты галок, поп, пугай, но галок, поп, в кустах пугая, пугать не смей ты попугая.", "Волховал волхв в хлеву с волхвами.", "Бомбардир бонбоньерками бомбардировал барышень.", "У Феофана Митрофаньча три сына Феофанычи.", "У нас гость унес трость.", "Фараонов фаворит на сапфир сменил нефрит.", "Рододендроны из дендрария даны родителями.", "К Габсбургам из Страсбурга.", "Сидел тетерев на дереве, а тетерка с тетеревятами на ветке.", "Брит Клим брат, брит Глеб брат, брат Игнат бородат.", "Хвалю халву.", "Хохлатые хохотушки хохотом хохотали."]}, {"sounds": "р, л, м, н", "items": ["Всех скороговорок не перескороговоришь, не перевыскороговоришь.", "У нас на дворе-подворье погода размокропогодилась.", "Два дровосека, два дровокола, два дроворуба говорили про Ларьку, про Варьку, про Марину жену.", "Клара-краля кралась к ларю.", "Говорил командир про полковника и про полковницу, про подполковника и про подполковницу, про поручика и про поручицу, про подпоручика и про подпоручицу, про прапорщика и про прапорщицу, про подпрапорщика, а про подпрапорщицу промолчал.", "На дворе трава, на траве дрова – раз дрова, два дрова, три дрова. Не руби дрова на траве двора.", "На дворе дрова, за двором дрова, дрова вширь двора, не вместит двор дров, надо дрова выдворить на дровяной двор.", "На дворе вдовы Варвары два вора дрова воровали, рассердилася вдова, убрала в сарай дрова.", "Курфюрст скомпрометировал ландскнехта.", "Рапортовал да не дорапортовал, дорапортовывал да зарапортовался.", "Рыла свинья белорыла, тупорыла; полдвора рылом изрыла, вырыла, подрыла.", "Съел молодец тридцать три пирога с пирогом, да все с творогом.", "Тридцать три корабля лавировали, лавировали да не вылавировали.", "На мели мы лениво налима ловили. На мели мы лениво ловили линя. О любви не меня ли вы мило молили И в туманы лимана манили меня?", "Карл у Клары украл кораллы, а Клара у Карла украла кларнет.", "Королева Клара строго карала Карла за кражу коралла.", "Карл клал лук на ларь. Клара крала лук с ларя.", "Дробью по перепелам да по тетеревам.", "Мамаша Ромаше дала сыворотку из-под простокваши.", "Расскажите про покупки. Про какие про покупки? Про покупки, про покупки, про покупочки свои.", "Сшит колпак, да не по-колпаковски; вылит колокол, да не по-колоколовски. Надо колпак переколпаковать, перевыколпаковать, надо колокол переколоколовать, перевыколоколовать.", "Протокол про протокол протоколом запротоколировали.", "Была у Фрола, Фролу на Лавра наврала. Подойду к Лавру, на Фрола Лавру навру.", "Король-орел.", "Курьера курьер обгоняет в карьер. бЗ. Маланья-болтунья молоко болтала, выбалтывала, да не выболтала.", "Регулировщик-лигуриец регулировал в Лигурии.", "Полили ли лилию? Видели ли Лидию? Полили лилию, видели Лидию.", "Гонец с галер сгорел.", "Талер тарелка стоит.", "Идти на рать, так бердыш брать.", "Интервьюер интервента интервьюировал.", "Либретто Риголетто.", "Наш Полкан из Байкала лакал. Полкан лакал, но не мелел Байкал.", "Мы ели, ели ершей у ели, их еле-еле у ели доели.", "Не жалела мама мыла. Мама Милу мылом мыла. Мила мыла не любила, мыло Мила уронила.", "Во мраке раки шумят в драке.", "На дороге с утра тарахтят трактора.", "Жри во ржи, да не ржи во ржи.", "Орел на горе, перо на орле, гора под орлом, орел под пером.", "Город Нерль на Нерли-реке.", "На горе Арарат рвала Варвара виноград.", "Из-под Костромы, из-под Костромщины шли четыре мужчины. Говорили они про торги, да про покупки, про крупу да про подкрупки.", "Вахмистр с вахмистршей, ротмистр с ротмистршей.", "Турка курит трубку, курка клюет крупку. Не кури, турка, трубку, не клюй, курка, крупку.", "А мне не до недомогания."]}, {"sounds": "з, с, ж, ш, ч, щ, ц", "items": ["У Сени и Сани в сетях сом с усами.", "У осы не усы, не усища, а усики.", "Везет Сенька Саньку с Сонькой на санках. Санки скок, Сеньку с ног, Саньку в бок, Соньку в лоб, все в сугроб.", "Осип охрип, а Архип осип.", "Не хочет косой косить косой, говорит, коса коса.", "Сачок зацепился за сучок.", "По семеро в сани уселися сами.", "Из кузова в кузов шла перегрузка арбузов. В грозу в грязи от груза арбузов развалился кузов.", "Свиристель свиристит свирелью.", "Две реки: Вазуза с Гжатью, Вазуза с Гжатью.", "Разнервничавшийся конституционалист был обнаружен ассимилировавшимся в Константинополе.", "Шла Саша по шоссе и сосала сушку.", "Цапля чахла, цапля сохла, цапля сдохла.", "Шли сорок мышей, нашли сорок грошей, две мыши поплоше нашли по два гроша.", "Шестнадцать шли мышей и шесть нашли грошей, а мыши, что поплоше, шумливо шарят гроши.", "Чешуйки у щучки, щетинки у чушки.", "Четверть четверика гороха без червоточинки.", "Инцидент с интендантом.", "Прецедент с претендентом.", "Константин констатировал.", "У ежа ежата, у ужа ужата.", "Жутко жуку жить на суку.", "Два щенка щека к щеке щиплют щетку в уголке.", "Тщетно тщится щука ущемить леща.", "Жужжит жужелица, жужжит, да не кружится.", "Яшма в замше замшела.", "В Чите течет Читинка."]}];
+    let currentGroupIdx = 0;
+    let currentTwisterIdx = 0;
+
+    function renderCurrentTwister() {
+      const grp = TWISTER_GROUPS[currentGroupIdx];
+      if (!grp || !grp.items || grp.items.length === 0) return;
+      if (currentTwisterIdx >= grp.items.length) currentTwisterIdx = 0;
+      if (currentTwisterIdx < 0) currentTwisterIdx = grp.items.length - 1;
+
+      const grpLbl = document.getElementById('twisterGroupLabel');
+      const idxLbl = document.getElementById('twisterIndexLabel');
+      const txtDisp = document.getElementById('twisterTextDisplay');
+      if (grpLbl) grpLbl.textContent = 'Отработка звуков: ' + grp.sounds;
+      if (idxLbl) idxLbl.textContent = (currentTwisterIdx + 1) + ' / ' + grp.items.length;
+      if (txtDisp) txtDisp.textContent = grp.items[currentTwisterIdx];
+    }
+
+    function selectSoundGroup(idx, btn) {
+      currentGroupIdx = idx;
+      currentTwisterIdx = 0;
+      btn.parentElement.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCurrentTwister();
+    }
+
+    function nextTwister() {
+      const grp = TWISTER_GROUPS[currentGroupIdx];
+      currentTwisterIdx = (currentTwisterIdx + 1) % grp.items.length;
+      renderCurrentTwister();
+    }
+
+    function prevTwister() {
+      const grp = TWISTER_GROUPS[currentGroupIdx];
+      currentTwisterIdx = (currentTwisterIdx - 1 + grp.items.length) % grp.items.length;
+      renderCurrentTwister();
+    }
+
+    function randomTwister() {
+      const grp = TWISTER_GROUPS[currentGroupIdx];
+      currentTwisterIdx = Math.floor(Math.random() * grp.items.length);
+      renderCurrentTwister();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCurrentTwister();
+    });
+
 
     /* === COGNITIVE BRAIN GYM SCRIPTS === */
 // Audio Synthesizer (Web Audio API)
