@@ -3,12 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#0f111a">
+  <meta name="theme-color" content="#060911">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
   <title>🧠 Vocal Brain Trainer | Voice, Memory & Diction</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🧠%3C/text%3E%3C/svg%3E">
   <style>
+    :root {
+      /* Dark Modern Studio Tokens */
+      --bg-deep: #060911;
+      --bg-surface: #0a0f1b;
+      --bg-surface-elevated: #111827;
+      --bg-card: rgba(15, 23, 38, 0.78);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-glow: rgba(0, 229, 255, 0.35);
+      
+      --text-main: #f0f6fc;
+      --text-muted: #8b949e;
+      --text-dim: #484f58;
+
+      --accent-cyan: #00e5ff;
+      --accent-cyan-glow: rgba(0, 229, 255, 0.25);
+      --accent-purple: #a855f7;
+      --accent-purple-glow: rgba(168, 85, 247, 0.25);
+      --accent-green: #10b981;
+      --accent-green-glow: rgba(16, 185, 129, 0.25);
+      --accent-amber: #f59e0b;
+      --accent-amber-glow: rgba(245, 158, 11, 0.25);
+      --accent-orange: #f0883e;
+
+      /* Legacy compatibility aliases */
+      --green: #10b981;
+      --green-glow: rgba(16, 185, 129, 0.4);
+      --red: #ef4444;
+      --red-glow: rgba(239, 68, 68, 0.4);
+      --accent-glow: rgba(0, 229, 255, 0.35);
+      --orange: #f0883e;
+      --orange-glow: rgba(240, 136, 62, 0.4);
+      --card-bg: rgba(15, 23, 38, 0.78);
+
+      /* Typography */
+      --font-display: 'Space Grotesk', -apple-system, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+      /* Motion */
+      --ease-snappy: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
     * { 
       box-sizing: border-box; 
       margin: 0; 
@@ -18,15 +64,18 @@
       -webkit-user-select: none;
     }
     body {
-      background: #0f111a;
-      color: #e6edf3;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-deep);
+      background-image: radial-gradient(circle at 50% -10%, #11223b 0%, #060911 75%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: var(--font-body);
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      padding: 10px 12px 24px;
+      padding: 10px 12px 32px;
       overflow-x: hidden;
+      letter-spacing: -0.01em;
     }
 
     /* Tabs Navigation Bar */
@@ -34,34 +83,189 @@
       width: 100%;
       max-width: 600px;
       display: flex;
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 12px;
+      background: rgba(10, 15, 27, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
       padding: 4px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       gap: 4px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     }
     .tab-btn {
       flex: 1;
       background: transparent;
-      border: none;
-      color: #8b949e;
+      border: 1px solid transparent;
+      color: var(--text-muted);
       padding: 10px 4px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 4px;
-      transition: all 0.15s ease-in-out;
+      transition: all 0.2s var(--ease-snappy);
       touch-action: manipulation;
     }
+    .tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.04);
+    }
     .tab-btn.active {
-      background: #21262d;
-      color: #58a6ff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      background: rgba(0, 229, 255, 0.12);
+      border-color: rgba(0, 229, 255, 0.35);
+      color: var(--accent-cyan);
+      box-shadow: 0 4px 14px rgba(0, 229, 255, 0.18);
+    }
+
+    /* === BENTO GRID MODERN HUB STYLES === */
+    .bento-hero {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(14, 25, 45, 0.8) 0%, rgba(8, 12, 22, 0.9) 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 22px 20px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+    }
+    .bento-hero::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(0, 229, 255, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .bento-hero-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 30%, #00e5ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.25;
+    }
+    .bento-hero-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+    .bento-hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 14px;
+      padding: 4px 12px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #34d399;
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+    @media (max-width: 580px) {
+      .bento-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .bento-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.22s var(--ease-snappy);
+    }
+    .bento-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    }
+    .bento-card.vocal:hover { border-color: rgba(0, 229, 255, 0.45); }
+    .bento-card.memory:hover { border-color: rgba(168, 85, 247, 0.45); }
+    .bento-card.diction:hover { border-color: rgba(240, 136, 62, 0.45); }
+    .bento-card.timbre:hover { border-color: rgba(16, 185, 129, 0.45); }
+
+    .bento-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .bento-card-icon {
+      font-size: 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .bento-card-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 14px;
+      border: 1px solid;
+    }
+    .bento-card-title {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+      letter-spacing: -0.01em;
+    }
+    .bento-card-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .bento-btn {
+      width: 100%;
+      border: none;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.18s var(--ease-snappy);
+      touch-action: manipulation;
+    }
+    .bento-btn:active { transform: scale(0.98); }
+
+    .bento-stat-val {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
     }
 
     /* Tab Contents */
@@ -84,30 +288,34 @@
       align-items: center;
       margin-bottom: 8px;
     }
-    .app-title { font-size: 16px; font-weight: 800; color: #58a6ff; }
+    .app-title { font-family: var(--font-display); font-size: 17px; font-weight: 700; color: #fff; letter-spacing: -0.01em; }
     
     .btn-main {
       width: 100%;
-      background: #238636;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       color: white;
-      border: none;
+      border: 1px solid rgba(255, 255, 255, 0.15);
       padding: 14px;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 14px;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 4px 14px rgba(35, 134, 54, 0.4);
-      transition: all 0.1s;
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+      transition: all 0.18s var(--ease-snappy);
       margin-bottom: 8px;
       touch-action: manipulation;
     }
     .btn-main.recording {
-      background: #da3633;
-      box-shadow: 0 4px 14px rgba(218, 54, 51, 0.4);
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    }
+    .btn-main:hover {
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.45);
+      transform: translateY(-1px);
     }
     .btn-main:active { transform: scale(0.98); }
 
@@ -115,55 +323,58 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      background: #161b22;
-      padding: 4px 8px;
-      border-radius: 8px;
-      border: 1px solid #30363d;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 5px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
     }
-    .vu-label { font-size: 11px; color: #8b949e; font-weight: 600; }
+    .vu-label { font-size: 11px; color: var(--text-muted); font-weight: 600; }
     .vu-bg {
       width: 48px;
       height: 8px;
-      background: #21262d;
+      background: rgba(255, 255, 255, 0.08);
       border-radius: 4px;
       overflow: hidden;
     }
     .vu-fill {
       width: 0%;
       height: 100%;
-      background: #2ea043;
+      background: var(--accent-green);
       transition: width 0.05s ease-out;
     }
 
     .info-card {
       width: 100%;
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 12px;
-      padding: 10px 14px;
+      background: var(--bg-card);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 14px 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
     }
     .note-info { display: flex; flex-direction: column; }
-    .note-val { font-size: 32px; font-weight: 900; color: #2ea043; line-height: 1; }
-    .freq-val { font-size: 12px; color: #8b949e; margin-top: 3px; font-family: monospace; }
+    .note-val { font-family: var(--font-display); font-size: 36px; font-weight: 900; color: var(--accent-green); line-height: 1; }
+    .freq-val { font-size: 13px; color: var(--text-muted); margin-top: 4px; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
     
     .status-col { display: flex; flex-direction: column; align-items: flex-end; }
     .badge {
       font-size: 12px;
       font-weight: 700;
-      padding: 4px 10px;
+      padding: 5px 12px;
       border-radius: 20px;
-      background: #21262d;
-      color: #8b949e;
-      border: 1px solid #30363d;
-      transition: all 0.15s;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-muted);
+      border: 1px solid var(--card-border);
+      transition: all 0.2s var(--ease-snappy);
     }
-    .badge.perfect { background: rgba(46, 160, 67, 0.2); color: #3fb950; border-color: #2ea043; }
-    .badge.too-high { background: rgba(210, 153, 34, 0.2); color: #d29922; border-color: #d29922; }
-    .badge.too-low { background: rgba(31, 111, 235, 0.2); color: #58a6ff; border-color: #1f6feb; }
+    .badge.perfect { background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 0 14px rgba(16, 185, 129, 0.3); }
+    .badge.too-high { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(245, 158, 11, 0.4); }
+    .badge.too-low { background: rgba(0, 229, 255, 0.15); color: #38bdf8; border-color: rgba(0, 229, 255, 0.4); }
 
     /* Octave Bar */
     .octave-bar {
@@ -1159,130 +1370,144 @@
   </div>
 
   
-  <!-- TAB 0: HOME / WELCOME DASHBOARD (ГЛАВНАЯ СТРАНИЦА ХАБА) -->
+  <!-- TAB 0: HOME / WELCOME DASHBOARD (BENTO GRID DESIGN) -->
   <div class="tab-content active" id="tabContent0">
-    <div style="width: 100%; text-align: center; padding: 10px 0 16px;">
-      <div id="portalMainTitle" style="font-size: 24px; font-weight: 900; background: linear-gradient(135deg, #58a6ff, #3fb950); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-        Нейро-Атлас Мастерства
+    <!-- Hero Bento Card -->
+    <div class="bento-hero">
+      <div id="portalMainTitle" class="bento-hero-title">
+        🌌 Нейро-Атлас Мастерства
       </div>
-      <div id="portalMainSub" style="font-size: 13px; color: #8b949e; margin-top: 6px; line-height: 1.4;">
-        Комплексная система тренировки оперативной памяти, точного интонирования голоса и сценической речи
+      <div id="portalMainSub" class="bento-hero-sub">
+        Комплексная система синхронизации моторной коры, рабочей памяти, точного интонирования и сценической речи.
+      </div>
+      <div class="bento-hero-pill">
+        <span>🟢 100% On-Device & Zero Cloud</span>
+        <span style="opacity: 0.5;">•</span>
+        <span>Скользящий цикл 7 дней</span>
       </div>
     </div>
 
-    <!-- Hub Cards Navigation Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; width: 100%;">
+    <!-- 4 Modules Bento Grid -->
+    <div class="bento-grid">
       
-      <!-- Card 1: Vocal -->
-      <div class="mem-card" style="cursor: pointer; border-color: rgba(88, 166, 255, 0.4); transition: transform 0.15s, border-color 0.15s;" onclick="switchTab(1)" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-size: 28px;">🎙️</span>
-          <span class="badge-pill" id="card1Sub" style="color: #58a6ff; border-color: #58a6ff;">Тюнер & Распевка</span>
+      <!-- Card 1: Vocal Lab -->
+      <div class="bento-card vocal" onclick="switchTab(1)">
+        <div>
+          <div class="bento-card-top">
+            <span class="bento-card-icon">🎙️</span>
+            <span class="bento-card-badge" id="card1Sub" style="color: var(--accent-cyan); border-color: rgba(0, 229, 255, 0.4); background: rgba(0, 229, 255, 0.08);">Тюнер & Распевка</span>
+          </div>
+          <div class="bento-card-title" id="card1Title">Вокальная Лаборатория</div>
+          <div class="bento-card-desc" id="card1Desc">
+            Студийный тюнер центов (±15¢) в реальном времени. Распевка на фортепиано под баритон, тенор, бас, меццо или сопрано.
+          </div>
         </div>
-        <div id="card1Title" style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">Вокальная Лаборатория</div>
-        <div id="card1Desc" style="font-size: 12px; color: #8b949e; line-height: 1.4;">
-          Точный тюнер с определением нот и центов на лету. Персональная распевка на фортепиано под баритон, тенор, бас, меццо или сопрано.
-        </div>
-        <button class="btn-main" id="card1Btn" style="margin-top: 6px; padding: 10px; font-size: 13px;" onclick="event.stopPropagation(); switchTab(1);">
+        <button class="bento-btn" id="card1Btn" style="background: rgba(0, 229, 255, 0.15); color: #00e5ff; border: 1px solid rgba(0, 229, 255, 0.4);" onclick="event.stopPropagation(); switchTab(1);">
           Открыть Вокал ➔
         </button>
       </div>
 
-      <!-- Card 2: Memory -->
-      <div class="mem-card" style="cursor: pointer; border-color: rgba(63, 185, 80, 0.4); transition: transform 0.15s, border-color 0.15s;" onclick="switchTab(2)" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-size: 28px;">🧠</span>
-          <span class="badge-pill" id="card2Sub" style="color: #3fb950; border-color: #3fb950;">Память & Счёт</span>
+      <!-- Card 2: Memory & Math -->
+      <div class="bento-card memory" onclick="switchTab(2)">
+        <div>
+          <div class="bento-card-top">
+            <span class="bento-card-icon">🧠</span>
+            <span class="bento-card-badge" id="card2Sub" style="color: var(--accent-purple); border-color: rgba(168, 85, 247, 0.4); background: rgba(168, 85, 247, 0.08);">Память & Счёт</span>
+          </div>
+          <div class="bento-card-title" id="card2Title">Тренировка Памяти & Счёт</div>
+          <div class="bento-card-desc" id="card2Desc">
+            4 когнитивных тренажёра: Тест Аюму (фотографический спан), Числовая цепочка, Блоки Корси и слепой устный счёт в уме.
+          </div>
         </div>
-        <div id="card2Title" style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">Тренировка Памяти & Счёт</div>
-        <div id="card2Desc" style="font-size: 12px; color: #8b949e; line-height: 1.4;">
-          4 когнитивных режима: Тест Аюму (зрительная фиксация), Числовая цепочка (прямо и задом наперёд), Блоки Корси и слепой устный счёт от 2 до 7 знаков.
-        </div>
-        <button class="btn-main" id="card2Btn" style="margin-top: 6px; padding: 10px; font-size: 13px; background: #238636;" onclick="event.stopPropagation(); switchTab(2);">
+        <button class="bento-btn" id="card2Btn" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4);" onclick="event.stopPropagation(); switchTab(2);">
           Тренировать Память ➔
         </button>
       </div>
 
-      <!-- Card 3: Diction -->
-      <div class="mem-card" style="cursor: pointer; border-color: rgba(240, 136, 62, 0.4); transition: transform 0.15s, border-color 0.15s;" onclick="switchTab(3)" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-size: 28px;">🗣️</span>
-          <span class="badge-pill" id="card3Sub" style="color: #f0883e; border-color: #f0883e;">Речь & Скороговорки</span>
+      <!-- Card 3: Diction & Speech -->
+      <div class="bento-card diction" onclick="switchTab(3)">
+        <div>
+          <div class="bento-card-top">
+            <span class="bento-card-icon">🗣️</span>
+            <span class="bento-card-badge" id="card3Sub" style="color: var(--accent-orange); border-color: rgba(240, 136, 62, 0.4); background: rgba(240, 136, 62, 0.08);">Речь & Скороговорки</span>
+          </div>
+          <div class="bento-card-title" id="card3Title">Дикция & Артикуляция</div>
+          <div class="bento-card-desc" id="card3Desc">
+            Библиотека из 110 скороговорок с быстрыми буквами, метод винной пробки, взрывные дикторские слоги и встроенный метроном.
+          </div>
         </div>
-        <div id="card3Title" style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">Дикция & Артикуляция</div>
-        <div id="card3Desc" style="font-size: 12px; color: #8b949e; line-height: 1.4;">
-          Большая библиотека из 110 скороговорок с удобной пагинацией по группам звуков (Б-П-В-Ф, Р-Л-М-Н, З-С-Ж-Ш-Ч-Щ), метод пробки и снятие зажимов.
-        </div>
-        <button class="btn-main" id="card3Btn" style="margin-top: 6px; padding: 10px; font-size: 13px; background: #b05012;" onclick="event.stopPropagation(); switchTab(3);">
+        <button class="bento-btn" id="card3Btn" style="background: rgba(240, 136, 62, 0.15); color: #fb923c; border: 1px solid rgba(240, 136, 62, 0.4);" onclick="event.stopPropagation(); switchTab(3);">
           Перейти к Дикции ➔
         </button>
       </div>
 
-      <!-- Card 4: Range Diagnostics -->
-      <div class="mem-card" style="cursor: pointer; border-color: rgba(163, 113, 247, 0.4); transition: transform 0.15s, border-color 0.15s;" onclick="switchTab(4)" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-size: 28px;">📊</span>
-          <span class="badge-pill" id="card4Sub" style="color: #a371f7; border-color: #a371f7;">Атлас & Диктофон</span>
+      <!-- Card 4: Range & Timbre Diagnostics -->
+      <div class="bento-card timbre" onclick="switchTab(4)">
+        <div>
+          <div class="bento-card-top">
+            <span class="bento-card-icon">📊</span>
+            <span class="bento-card-badge" id="card4Sub" style="color: var(--accent-green); border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.08);">Атлас & Диктофон</span>
+          </div>
+          <div class="bento-card-title" id="card4Title">Диапазон & Тембр Голоса</div>
+          <div class="bento-card-desc" id="card4Desc">
+            Запись эталона и контрольных проб «ДО / ПОСЛЕ», расчет диапазона нот, спектральный анализ и акустический атлас 10 типов голоса.
+          </div>
         </div>
-        <div id="card4Title" style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">Диапазон & Тембр Голоса</div>
-        <div id="card4Desc" style="font-size: 12px; color: #8b949e; line-height: 1.4;">
-          Запись гласной с мгновенным прослушиванием «ДО / ПОСЛЕ», расчет крайних нот и полный акустический справочник 10 типов певческого голоса.
-        </div>
-        <button class="btn-main" id="card4Btn" style="margin-top: 6px; padding: 10px; font-size: 13px; background: #6e40c9;" onclick="event.stopPropagation(); switchTab(4);">
+        <button class="bento-btn" id="card4Btn" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4);" onclick="event.stopPropagation(); switchTab(4);">
           Диагностика Голоса ➔
         </button>
       </div>
 
     </div>
 
-    <!-- 7-DAY PROGRESS & LOCAL STORAGE WIDGET -->
-    <div class="mem-card" style="margin-top: 14px; border: 1px solid #30363d; background: #0d1117; width: 100%;">
+    <!-- 7-DAY PROGRESS & LOCAL STORAGE BENTO DECK -->
+    <div class="bento-card" style="margin-top: 14px; width: 100%; cursor: default;">
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 20px;">🏆</span>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 22px;">🏆</span>
           <div>
-            <div style="font-size: 15px; font-weight: 800; color: #fff;" id="storageTitleText">Твой прогресс за неделю</div>
-            <div style="font-size: 11px; color: #8b949e;" id="storageTtlNotice">Срок хранения: скользящие 7 дней с последнего визита</div>
+            <div style="font-family: var(--font-display); font-size: 16px; font-weight: 700; color: #fff;" id="storageTitleText">Твой прогресс за неделю</div>
+            <div style="font-size: 11px; color: var(--text-muted);" id="storageTtlNotice">Срок хранения: скользящие 7 дней с последнего визита</div>
           </div>
         </div>
-        <button class="btn-secondary" style="font-size: 11px; padding: 5px 10px; border-color: #da3633; color: #f85149;" onclick="userClearStorage()" id="storageClearBtn">
+        <button class="btn-secondary" style="font-size: 11px; padding: 6px 12px; border-color: rgba(239, 68, 68, 0.35); color: #f87171; background: rgba(239, 68, 68, 0.08);" onclick="userClearStorage()" id="storageClearBtn">
           🗑️ Очистить кэш
         </button>
       </div>
 
-      <!-- Quick Stats Pills Grid -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-top: 12px;">
-        <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px; text-align: center;">
-          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase; font-weight: bold;" id="dashLabelAyumu">🐒 Тест Аюму</div>
-          <div style="font-size: 15px; font-weight: 800; color: #58a6ff; margin-top: 2px;" id="dashAyumuStat">—</div>
-          <div style="font-size: 10px; color: #8b949e;" id="dashAyumuAcc">—</div>
+      <!-- Quick Stats Metrics Grid with Tabular Monospace Numerals -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-top: 6px;">
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border); border-radius: 12px; padding: 10px; text-align: center;">
+          <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" id="dashLabelAyumu">🐒 Тест Аюму</div>
+          <div class="bento-stat-val" style="font-size: 17px; font-weight: 800; color: var(--accent-cyan); margin-top: 4px;" id="dashAyumuStat">—</div>
+          <div class="bento-stat-val" style="font-size: 11px; color: var(--text-muted);" id="dashAyumuAcc">—</div>
         </div>
 
-        <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px; text-align: center;">
-          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase; font-weight: bold;" id="dashLabelMath">🧮 Устный счёт</div>
-          <div style="font-size: 15px; font-weight: 800; color: #3fb950; margin-top: 2px;" id="dashMathStat">—</div>
-          <div style="font-size: 10px; color: #8b949e;" id="dashMathTime">—</div>
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border); border-radius: 12px; padding: 10px; text-align: center;">
+          <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" id="dashLabelMath">🧮 Устный счёт</div>
+          <div class="bento-stat-val" style="font-size: 17px; font-weight: 800; color: var(--accent-purple); margin-top: 4px;" id="dashMathStat">—</div>
+          <div class="bento-stat-val" style="font-size: 11px; color: var(--text-muted);" id="dashMathTime">—</div>
         </div>
 
-        <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px; text-align: center;">
-          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase; font-weight: bold;" id="dashLabelVoice">🎙️ Голос</div>
-          <div style="font-size: 15px; font-weight: 800; color: #f0883e; margin-top: 2px;" id="dashVoiceType">—</div>
-          <div style="font-size: 10px; color: #8b949e;" id="dashVoiceRange">—</div>
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border); border-radius: 12px; padding: 10px; text-align: center;">
+          <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" id="dashLabelVoice">🎙️ Голос</div>
+          <div class="bento-stat-val" style="font-size: 17px; font-weight: 800; color: var(--accent-green); margin-top: 4px;" id="dashVoiceType">—</div>
+          <div class="bento-stat-val" style="font-size: 11px; color: var(--text-muted);" id="dashVoiceRange">—</div>
         </div>
 
-        <div style="background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px; text-align: center;">
-          <div style="font-size: 10px; color: #8b949e; text-transform: uppercase; font-weight: bold;" id="dashLabelTwisters">🗣️ Скороговорки</div>
-          <div style="font-size: 15px; font-weight: 800; color: #a371f7; margin-top: 2px;" id="dashTwisterStat">—</div>
-          <div style="font-size: 10px; color: #8b949e;" id="dashTwisterSub">110 в базе</div>
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--card-border); border-radius: 12px; padding: 10px; text-align: center;">
+          <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;" id="dashLabelTwisters">🗣️ Скороговорки</div>
+          <div class="bento-stat-val" style="font-size: 17px; font-weight: 800; color: var(--accent-orange); margin-top: 4px;" id="dashTwisterStat">—</div>
+          <div class="bento-stat-val" style="font-size: 11px; color: var(--text-muted);" id="dashTwisterSub">110 в базе</div>
         </div>
       </div>
 
-      <div style="font-size: 11px; color: #8b949e; margin-top: 10px; line-height: 1.4; border-top: 1px solid #21262d; padding-top: 8px;" id="storageExplainer">
+      <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px; line-height: 1.45; border-top: 1px solid var(--card-border); padding-top: 8px;" id="storageExplainer">
         ℹ️ <b>Как работает память и хранение:</b> Все твои результаты и рекорды сохраняются на 100% локально на твоем устройстве. Если ты не заходишь <b>более 7 дней</b>, кэш мягко сбрасывается для чистоты нового недельного цикла. При каждом посещении таймер автоматически продлевается на новую неделю! Аудиозаписи голоса хранятся исключительно в оперативной памяти (RAM) для защиты твоей приватности и не перегружают накопитель.
       </div>
     </div>
 
-    <div style="margin-top: 14px; text-align: center; font-size: 11px; color: #8b949e;" id="privacyFooterNotice">
+    <div style="margin-top: 14px; text-align: center; font-size: 11px; color: var(--text-muted);" id="privacyFooterNotice">
       💡 Все вычисления и обработка звука выполняются 100% локально на твоем устройстве без отправки в интернет.
     </div>
   </div>
